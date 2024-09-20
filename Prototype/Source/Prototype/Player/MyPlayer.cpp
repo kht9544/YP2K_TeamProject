@@ -32,6 +32,12 @@ AMyPlayer::AMyPlayer()
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
+
+	_dashDistance = 1000.f;
+	_dashSpeed = 3000.f;
+	bIsDashing = false;
+	DashDuration = _dashDistance / _dashSpeed;
+	DashTimeElapsed = 0.f;
 }
 
 // Called when the game starts or when spawned
@@ -42,10 +48,10 @@ void AMyPlayer::BeginPlay()
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Controlleroo"));
 		_skillWidgetInstance = MyController->SkillWidgetInstance;
 	}
 	SkillOnCooldown.Init(false, 4);
+	Equipment.Init(nullptr,6);
 }
 
 void AMyPlayer::PostInitializeComponents()
@@ -57,6 +63,10 @@ void AMyPlayer::PostInitializeComponents()
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bIsDashing)
+	{
+		PerformDash(DeltaTime);
+	}
 }
 
 // Called to bind functionality to input
@@ -84,10 +94,10 @@ bool AMyPlayer::CanSetArmor()
 
 void AMyPlayer::SetArmor(class AArmor_test *Armor)
 {
-	FName WeaponSocket(TEXT("spine_03Socket"));
+	FName ArmorSocket(TEXT("spine_03Socket"));
 	if (Armor != nullptr)
 	{
-		Armor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		Armor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, ArmorSocket);
 		Armor->SetOwner(this);
 	}
 }
@@ -129,8 +139,16 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 
 	if (isPressed && _skillWidgetInstance != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("skill1"));
-		_skillWidgetInstance->StartCooldown(0, 5.0f);
+		if (SkillOnCooldown[0])
+			return;
+		else
+		{
+			SkillOnCooldown[0] = true;
+			bIsDashing = true;
+			DashDirection = GetActorForwardVector();
+			DashTimeElapsed = 0.f;
+			_skillWidgetInstance->StartCooldown(0, 5.0f);
+		}
 	}
 }
 
@@ -140,8 +158,13 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 
 	if (isPressed && _skillWidgetInstance != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("skill2"));
-		_skillWidgetInstance->StartCooldown(1, 5.0f);
+		if (SkillOnCooldown[1])
+			return;
+		else
+		{
+			SkillOnCooldown[1] = true;
+			_skillWidgetInstance->StartCooldown(1, 5.0f);
+		}
 	}
 }
 
@@ -151,8 +174,13 @@ void AMyPlayer::Skill3(const FInputActionValue &value)
 
 	if (isPressed && _skillWidgetInstance != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("skill3"));
-		_skillWidgetInstance->StartCooldown(2, 5.0f);
+		if (SkillOnCooldown[2])
+			return;
+		else
+		{
+			SkillOnCooldown[2] = true;
+			_skillWidgetInstance->StartCooldown(2, 5.0f);
+		}
 	}
 }
 
@@ -162,8 +190,28 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 
 	if (isPressed && _skillWidgetInstance != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("skill4"));
-		_skillWidgetInstance->StartCooldown(3, 10.0f);
+		if (SkillOnCooldown[3])
+			return;
+		else
+		{
+			SkillOnCooldown[3] = true;
+			_skillWidgetInstance->StartCooldown(3, 10.0f);
+		}
+	}
+}
+
+void AMyPlayer::PerformDash(float DeltaTime)
+{
+	if (DashTimeElapsed < DashDuration)
+	{
+		FVector DashVelocity = DashDirection * _dashSpeed * DeltaTime;
+		AddActorWorldOffset(DashVelocity, true);
+
+		DashTimeElapsed += DeltaTime;
+	}
+	else
+	{
+		bIsDashing = false;
 	}
 }
 
