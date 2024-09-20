@@ -1,6 +1,7 @@
 #include "SkillWidget_test.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "../Player/MyPlayer.h"
 #include "TimerManager.h"
 
 void USkillWidget_test::NativeConstruct()
@@ -51,8 +52,6 @@ void USkillWidget_test::UpdateCooldownText(int32 SkillIndex, float RemainingTime
 
 void USkillWidget_test::StartCooldown(int32 SkillIndex, float InMaxCooldownTime)
 {
-    UE_LOG(LogTemp, Warning, TEXT("%d, %d"), SkillIndex, CooldownOverlays.Num());
-
     if (SkillIndex < 0 || SkillIndex >= CooldownOverlays.Num()) return;
 
     MaxCooldownTimes[SkillIndex] = InMaxCooldownTime;
@@ -79,6 +78,12 @@ void USkillWidget_test::StartCooldown(int32 SkillIndex, float InMaxCooldownTime)
             {
                 CooldownOverlays[SkillIndex]->SetOpacity(0.0f);
             }
+
+            AMyPlayer* Player = Cast<AMyPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+            if (Player)
+            {
+                Player->SetSkillOnCooldown(SkillIndex,false);
+            }
         }
     }, 0.1f, true);
 }
@@ -96,7 +101,6 @@ void USkillWidget_test::UpdateCooldown(int32 SkillIndex)
 
         if (CooldownOverlays[SkillIndex])
         {
-            // Reset size to full
             FSlateBrush Brush = CooldownOverlays[SkillIndex]->Brush;
             Brush.ImageSize = FVector2D(Brush.ImageSize.X, SkillImage1->GetDesiredSize().Y);
             CooldownOverlays[SkillIndex]->SetBrush(Brush);
@@ -110,7 +114,6 @@ void USkillWidget_test::UpdateCooldown(int32 SkillIndex)
 
         if (CooldownOverlays[SkillIndex])
         {
-            // Adjust size based on cooldown percentage
             FSlateBrush Brush = CooldownOverlays[SkillIndex]->Brush;
             Brush.ImageSize = FVector2D(Brush.ImageSize.X, SkillImage1->GetDesiredSize().Y * Percent);
             CooldownOverlays[SkillIndex]->SetBrush(Brush);
