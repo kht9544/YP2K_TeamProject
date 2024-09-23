@@ -85,6 +85,12 @@
     <Filter Include="Source\Prototype\Component">
       <UniqueIdentifier>{D8F75376-B795-358A-BC0B-73A0C5A48480}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Component\InventoryComponent.cpp">
+      <Filter>Source\Prototype\Component</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Component\InventoryComponent.h">
+      <Filter>Source\Prototype\Component</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Component\ParkourComponent_Test.cpp">
       <Filter>Source\Prototype\Component</Filter>
     </ClCompile>
@@ -190,6 +196,12 @@
     <Filter Include="Source\Prototype\UI">
       <UniqueIdentifier>{827D1D71-97A9-33A2-80BE-8FD75D929603}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\UI\InventoryWidget.cpp">
+      <Filter>Source\Prototype\UI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\UI\InventoryWidget.h">
+      <Filter>Source\Prototype\UI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\UI\SkillWidget_test.cpp">
       <Filter>Source\Prototype\UI</Filter>
     </ClCompile>
