@@ -61,11 +61,26 @@
     <Filter Include="Source\Prototype\Base">
       <UniqueIdentifier>{E6B37418-3C39-3D12-8144-7B04CCC92D7B}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Base\MyGameInstance.cpp">
+      <Filter>Source\Prototype\Base</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Base\MyGameInstance.h">
+      <Filter>Source\Prototype\Base</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Base\MyGameModeBase.cpp">
       <Filter>Source\Prototype\Base</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Base\MyGameModeBase.h">
       <Filter>Source\Prototype\Base</Filter>
+    </ClInclude>
+    <Filter Include="Source\Prototype\Base\Managers">
+      <UniqueIdentifier>{C4B05F69-C8B5-3C14-B67D-C8ED062C64A6}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Base\Managers\UIManager.cpp">
+      <Filter>Source\Prototype\Base\Managers</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Base\Managers\UIManager.h">
+      <Filter>Source\Prototype\Base\Managers</Filter>
     </ClInclude>
     <Filter Include="Source\Prototype\Component">
       <UniqueIdentifier>{D8F75376-B795-358A-BC0B-73A0C5A48480}</UniqueIdentifier>
@@ -102,6 +117,18 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Item\Equip\Armor_test.h">
       <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
+    <Filter Include="Source\Prototype\Monster">
+      <UniqueIdentifier>{881315DA-BC1F-383B-9D63-C6C450E5BF53}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Monster\NomarlMonster.cpp">
+      <Filter>Source\Prototype\Monster</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\NomarlMonster.h">
+      <Filter>Source\Prototype\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Prototype\Monster\test_monster.h">
+      <Filter>Source\Prototype\Monster</Filter>
     </ClInclude>
     <Filter Include="Source\Prototype\Player">
       <UniqueIdentifier>{83517824-5C32-3E62-8E44-C9D524CEF97F}</UniqueIdentifier>
