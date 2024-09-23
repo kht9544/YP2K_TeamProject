@@ -19,7 +19,7 @@ AEquipItem::AEquipItem()
 	_overlapSphere->SetSphereRadius(100.0f);
 	_overlapSphere->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 
-	AttachSocketName = FName(TEXT(""));
+
 }
 
 // Called when the game starts or when spawned
@@ -42,10 +42,12 @@ void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *Oth
 	AMyPlayer *Player = Cast<AMyPlayer>(OtherActor);
 	if (Player)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Overlapplayer"));
+		UE_LOG(LogTemp, Warning, TEXT("AttachSocketName is: %s"), *AttachSocketName.ToString());
 		AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachSocketName);
+		SetOwner(Player);
 
-		SetActorHiddenInGame(true);
 		SetActorEnableCollision(false);
+		//SetActorHiddenInGame(true);
+		//SetActorEnableCollision(false);
 	}
 }
