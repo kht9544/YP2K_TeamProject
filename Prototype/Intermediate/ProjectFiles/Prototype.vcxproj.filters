@@ -118,13 +118,55 @@
     <ClInclude Include="..\..\Source\Prototype\Item\Equip\Armor_test.h">
       <Filter>Source\Prototype\Item\Equip</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Equip\EquipItem.cpp">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Equip\EquipItem.h">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Equip\Helmet.cpp">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Equip\Helmet.h">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Equip\LowerArmor.cpp">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Equip\LowerArmor.h">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Equip\Shield.cpp">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Equip\Shield.h">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Equip\ShoulderGuard.cpp">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Equip\ShoulderGuard.h">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Equip\Sword.cpp">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Equip\Sword.h">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Equip\UpperArmor.cpp">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Equip\UpperArmor.h">
+      <Filter>Source\Prototype\Item\Equip</Filter>
+    </ClInclude>
     <Filter Include="Source\Prototype\Monster">
       <UniqueIdentifier>{881315DA-BC1F-383B-9D63-C6C450E5BF53}</UniqueIdentifier>
     </Filter>
-    <ClCompile Include="..\..\Source\Prototype\Monster\NomarlMonster.cpp">
+    <ClCompile Include="..\..\Source\Prototype\Monster\NormalMonster.cpp">
       <Filter>Source\Prototype\Monster</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\Source\Prototype\Monster\NomarlMonster.h">
+    <ClInclude Include="..\..\Source\Prototype\Monster\NormalMonster.h">
       <Filter>Source\Prototype\Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Prototype\Monster\test_monster.h">
@@ -153,6 +195,15 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\UI\SkillWidget_test.h">
       <Filter>Source\Prototype\UI</Filter>
+    </ClInclude>
+    <Filter Include="Source\Prototype\UI\Elements">
+      <UniqueIdentifier>{22D54B75-DC4D-36CE-90C7-A0A25369634D}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Prototype\UI\Elements\IndexedButton.cpp">
+      <Filter>Source\Prototype\UI\Elements</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\UI\Elements\IndexedButton.h">
+      <Filter>Source\Prototype\UI\Elements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
