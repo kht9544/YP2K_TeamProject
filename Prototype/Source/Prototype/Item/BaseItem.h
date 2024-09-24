@@ -13,16 +13,13 @@ enum class ItemType
 	Consume,
 };
 
-class UStaticMesh;
-class USphereComponent;
-
 USTRUCT()
 struct FItemData : public FTableRowBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 _Code;
+	int _Code;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString _Name;
@@ -34,10 +31,10 @@ struct FItemData : public FTableRowBase
 	FString _Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 _Price;
+	int _Price;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 _Value;
+	int _Value;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMesh* _Mesh;
@@ -55,29 +52,12 @@ public:
 	// Sets default values for this actor's properties
 	ABaseItem();
 
-	void SetItemWithCode(int32 itemCode);
-
-	void Init();
-	void Disable();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	class UStaticMeshComponent* _meshComponent;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-	USphereComponent* _trigger;
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
-	FString _Name;
-	ItemType _Type;
-	FString _Description;
-	int32 _Price;
-	int32 _Value;
-	UStaticMesh* _Mesh;
-	UTexture2D* _Texture;
 };
