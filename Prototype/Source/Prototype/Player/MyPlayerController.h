@@ -19,6 +19,8 @@ public:
 
 	UPROPERTY()
     class USkillWidget_test* SkillWidgetInstance;
+	
+
 
 protected:
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Input)
@@ -29,6 +31,9 @@ protected:
 private:
     UPROPERTY(EditAnywhere, Category = "UI")
     TSubclassOf<class USkillWidget_test> SkillWidgetClass;
+
+
+
 
 
 };
