@@ -67,7 +67,10 @@ protected:
 public:	
 	
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UStaticMeshComponent* _meshComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 	USphereComponent* _trigger;
 
 	FString _Name;
