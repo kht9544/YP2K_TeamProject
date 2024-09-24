@@ -16,20 +16,20 @@ ABaseItem::ABaseItem()
 	_trigger = CreateDefaultSubobject<USphereComponent>(TEXT("Trigger"));
 
 	//Setting Default Mesh and Texture
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> defaultMesh(
-		TEXT("/Script/Engine.StaticMesh'/Game/Kobo_Dungeon/Meshes/SM-Pottery-04.SM-Pottery-04'")
-	);
-	if (defaultMesh.Succeeded())
-	{
-		_meshComponent->SetStaticMesh(defaultMesh.Object);
-	}
-	static ConstructorHelpers::FObjectFinder<UTexture2D> defaultTexture(
-		TEXT("/Script/Engine.Texture2D'/Game/CraftResourcesIcons/Textures/Tex_container_03_b.Tex_container_03_b'")
-	);
-	if (defaultTexture.Succeeded())
-	{
-		_Texture = defaultTexture.Object;
-	}
+	// static ConstructorHelpers::FObjectFinder<UStaticMesh> defaultMesh(
+	// 	TEXT("/Script/Engine.StaticMesh'/Game/Kobo_Dungeon/Meshes/SM-Pottery-04.SM-Pottery-04'")
+	// );
+	// if (defaultMesh.Succeeded())
+	// {
+	// 	_meshComponent->SetStaticMesh(defaultMesh.Object);
+	// }
+	// static ConstructorHelpers::FObjectFinder<UTexture2D> defaultTexture(
+	// 	TEXT("/Script/Engine.Texture2D'/Game/CraftResourcesIcons/Textures/Tex_container_03_b.Tex_container_03_b'")
+	// );
+	// if (defaultTexture.Succeeded())
+	// {
+	// 	_Texture = defaultTexture.Object;
+	// }
 
 	_meshComponent->SetupAttachment(RootComponent);
 	_trigger->SetupAttachment(_meshComponent);
