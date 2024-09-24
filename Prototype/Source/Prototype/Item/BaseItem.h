@@ -52,12 +52,32 @@ public:
 	// Sets default values for this actor's properties
 	ABaseItem();
 
+	void SetItemWithCode(int32 itemCode);
+
+	void Init();
+	void Disable();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UStaticMeshComponent* _meshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+	class USphereComponent* _trigger;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	FString _Name;
+	ItemType _Type;
+	FString _Description;
+	int32 _Price;
+	int32 _Value;
+	UStaticMesh* _Mesh;
+	UTexture2D* _Texture;
 
 };
