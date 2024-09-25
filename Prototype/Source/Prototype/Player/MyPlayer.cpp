@@ -31,6 +31,17 @@ AMyPlayer::AMyPlayer()
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
+	// MiniMap test
+	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("<MiniSpringArm"));
+	_MiniMapcamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MiniCamera"));
+
+	_MiniMapspringArm->SetupAttachment(GetCapsuleComponent());
+	_MiniMapcamera->SetupAttachment(_MiniMapspringArm);
+
+	_MiniMapspringArm->TargetArmLength = 500.0f;
+	_MiniMapcamera->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+	_MiniMapcamera->SetRelativeLocation(FVector(100.0f, 50.0f, 200.0f));
+
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton/mesh/SK_Skeleton_base.SK_Skeleton_base'"));
 
 	if (PS.Succeeded())
@@ -42,7 +53,7 @@ AMyPlayer::AMyPlayer()
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
 
 	//cheol
-	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
+	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
 
 	static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
 	TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
@@ -91,11 +102,9 @@ void AMyPlayer::BeginPlay()
 void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+		
+	_StatCom->SetLevelInit(1);
 
-	if (_StatCom)
-	{
-		_StatCom->SetLevelInit(1);
-	}
 }
 
 // Called every frame
