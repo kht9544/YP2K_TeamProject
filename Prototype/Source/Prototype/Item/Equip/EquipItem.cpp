@@ -1,20 +1,22 @@
 #include "Item/Equip/EquipItem.h"
 #include "../../Player/MyPlayer.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
 AEquipItem::AEquipItem()
 {
     PrimaryActorTick.bCanEverTick = true;
-   // _meshComponent>SetSimulatePhysics(true);
-    _meshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-    RootComponent = _meshComponent;
+    // _meshComponent>SetSimulatePhysics(true);
 
+    _skeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal"));
+    _skeletalMesh->SetCollisionProfileName(TEXT("NoCollision"));
+    RootComponent = _skeletalMesh;
     //_trigger = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapSphere"));
-    _trigger->SetupAttachment(_meshComponent);
+    _trigger->SetupAttachment(_skeletalMesh);
     _trigger->SetSphereRadius(100.0f);
     _trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +37,7 @@ void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *Oth
     auto Player = Cast<AMyPlayer>(OtherActor);
     if (Player)
     {
-        UE_LOG(LogTemp, Warning, TEXT("%s"), *AttachSocketName.ToString());
+        UE_LOG(LogTemp, Warning, TEXT("socket:%s"), *AttachSocketName.ToString());
         //_meshComponent->SetSimulatePhysics(false);
         AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachSocketName);
         SetOwner(Player);
