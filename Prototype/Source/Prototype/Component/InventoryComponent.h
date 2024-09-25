@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "InventoryComponent.generated.h"
 
+class ABaseItem;
+class UInventoryWidget;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROTOTYPE_API UInventoryComponent : public UActorComponent
@@ -24,5 +26,29 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
+	void ExcuteItem(int32 slot, bool isDrop = true);
+	void EquipItem(int32 slot);
+
+	void SelectItem(int32 slot = 0);
+private:
+	//Trigger
+	bool _isSlotFull = false;
+	int32 _itemSlotMax = 12;
+	int32 _equipSlotMax = 6;
+
+	void SlotFullCheck();
+
+	//Property
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	TArray<ABaseItem*> _ItemSlots;
+
+	TArray<int32> _EmptySlots;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	TArray<class AEquipItem*> _EquipSlots;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	ABaseItem* _Selected;
+
 };

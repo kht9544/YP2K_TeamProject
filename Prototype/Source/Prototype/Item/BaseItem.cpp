@@ -4,6 +4,9 @@
 
 #include "Item/BaseItem.h"
 
+#include "Base/MyGameInstance.h"
+#include "Component/InventoryComponent.h"
+
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -43,7 +46,26 @@ ABaseItem::ABaseItem()
 
 void ABaseItem::SetItemWithCode(int32 itemCode)
 {
+	auto gameinstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	if (gameinstance != nullptr)
+	{
+		FItemData* data = gameinstance->GetItemDataByCode(itemCode);
+		if (data->_Name == TEXT(""))
+		{
+			UE_LOG(LogTemp, Error, TEXT("Data Load Faild!"));
+			return;
+		}
 
+		_Name = data->_Name;
+		_Type = data->_Type;
+		_Description = data->_Description;
+		_Price = data->_Price;
+		_Value = data->_Value;
+		_Mesh = data->_Mesh;
+		_Texture = data->_Texture;
+
+		_meshComponent->SetStaticMesh(_Mesh);
+	}
 }
 
 void ABaseItem::Init()
@@ -73,4 +95,16 @@ void ABaseItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ABaseItem::GetItem()
+{
+}
+
+void ABaseItem::UseItem()
+{
+}
+
+void ABaseItem::DropItem()
+{
 }

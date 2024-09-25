@@ -52,7 +52,7 @@ public:
 	// Sets default values for this actor's properties
 	ABaseItem();
 
-	void SetItemWithCode(int32 itemCode);
+	virtual void SetItemWithCode(int32 itemCode);
 
 	void Init();
 	void Disable();
@@ -62,6 +62,20 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	void GetItem();
+	void UseItem();
+	void DropItem();
+
+	//Item Data Getter
+	FString GetName() { return _Name; }
+	ItemType GetType() { return _Type; }
+	FString GetDesc() { return _Description; }
+	int32 GetPrice() { return _Price; }
+	int32 GetValue() { return _Value; }
+	UTexture2D* GetTexture() { return _Texture; }
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -69,8 +83,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 	class USphereComponent* _trigger;
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	FString _Name;
 	ItemType _Type;
