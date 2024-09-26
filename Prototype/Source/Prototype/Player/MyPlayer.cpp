@@ -18,7 +18,6 @@
 #include "GameFramework/Actor.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "PaperSpriteComponent.h"
-#include "ccgplugins.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -49,20 +48,6 @@ AMyPlayer::AMyPlayer()
 	_MiniMapCapture->ProjectionType = ECameraProjectionMode::Orthographic;
 	_MiniMapCapture->OrthoWidth = 3072;
 
-	/*ConstructorHelpers::FObjectFinder<UCanvasRenderTarget2D> FOBJ_RenderTarget2D(TEXT("랜더타겟"));
-	if (FOBJ_RenderTarget2D.Succeeded())
-	{
-		MinimapCapture->TextureTarget = FOBJ_RenderTarget2D.Object;
-	}*/
-
-	//_MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
-	//_MinimapSprite->SetupAttachment(RootComponent);
-	////Actor의 Foward방향과 일치화
-	//_MinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
-	//_MinimapSprite->SetWorldScale3D(FVector(0.5f));
-	//_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
-	////인게임에서 보이지 않게 하는 옵션(캡처에서만 보이게 하는)
-	//_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
 	_MiniMapspringArm->TargetArmLength = 500.0f;
 
@@ -315,14 +300,6 @@ void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 		}
 		else
 		{
-		
-			_statWidget->HPUpdate(_StatCom->GetMaxHp());
-			_statWidget->MPUpdate(_StatCom->GetMaxMp());
-			_statWidget->STRUpdate(_StatCom->GetStr());
-			_statWidget->DEXUpdate(_StatCom->GetDex());
-			_statWidget->INTUpdate(_StatCom->GetInt());
-			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
-			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
 
 		}
