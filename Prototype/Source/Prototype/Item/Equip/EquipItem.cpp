@@ -7,7 +7,7 @@
 AEquipItem::AEquipItem()
 {
     PrimaryActorTick.bCanEverTick = true;
-   // _meshComponent>SetSimulatePhysics(true);
+    //_meshComponent>SetSimulatePhysics(true);
     _meshComponent->SetCollisionProfileName(TEXT("NoCollision"));
     RootComponent = _meshComponent;
 

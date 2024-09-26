@@ -31,8 +31,6 @@ void AMyPlayerController::BeginPlay()
         }
     }
 
-
-
 }
 
 

@@ -13,8 +13,5 @@ UCLASS()
 class PROTOTYPE_API AHelmet : public AEquipItem
 {
 	GENERATED_BODY()
-
-public:
-	AHelmet();
 	
 };
