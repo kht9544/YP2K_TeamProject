@@ -6,7 +6,7 @@
 
 AShield::AShield()
 {
-    AttachSocketName = FName(TEXT("ik_hand_lSocket"));
+    AttachSocketName = FName(TEXT("lowerarm_twist_02_lSocket"));
 }
 
 
