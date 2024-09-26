@@ -3,6 +3,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
+#include "../Monster/NormalMonster.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MyPlayerController.h"
@@ -56,9 +57,6 @@ AMyPlayer::AMyPlayer()
 		_statWidget = CreateWidget<UStatWidget>(GetWorld(), StatClass.Class);
 	}
 
-	
-
-
 	_dashDistance = 1000.f;
 	_dashSpeed = 3000.f;
 	bIsDashing = false;
@@ -85,11 +83,6 @@ void AMyPlayer::BeginPlay()
 	}
 	SkillOnCooldown.Init(false, 4);
 	Equipment.Init(nullptr,6);
-
-
-
-	
-
 }
 
 void AMyPlayer::PostInitializeComponents()
@@ -148,6 +141,16 @@ void AMyPlayer::SetArmor(class AArmor_test *Armor)
 		Armor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, ArmorSocket);
 		Armor->SetOwner(this);
 	}
+}
+
+
+void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit)
+{
+    if (HitMonster)
+    {
+        FVector LaunchDirection = (HitMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+        HitMonster->LaunchFromPlayer(LaunchDirection);
+    }
 }
 
 void AMyPlayer::Move(const FInputActionValue &value)

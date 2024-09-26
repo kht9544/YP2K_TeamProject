@@ -3,3 +3,10 @@
 
 #include "Shield.h"
 
+
+AShield::AShield()
+{
+    AttachSocketName = FName(TEXT("ik_hand_lSocket"));
+}
+
+

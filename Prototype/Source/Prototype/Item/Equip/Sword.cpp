@@ -3,3 +3,8 @@
 
 #include "Sword.h"
 
+
+ASword::ASword()
+{
+    AttachSocketName = FName(TEXT("hand_rSocket"));
+}

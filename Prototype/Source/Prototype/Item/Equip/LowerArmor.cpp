@@ -3,3 +3,8 @@
 
 #include "LowerArmor.h"
 
+
+ALowerArmor::ALowerArmor()
+{
+    AttachSocketName = FName(TEXT("spine_01Socket"));
+}

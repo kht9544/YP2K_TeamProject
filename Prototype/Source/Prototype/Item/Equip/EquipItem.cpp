@@ -1,18 +1,18 @@
 #include "Item/Equip/EquipItem.h"
 #include "../../Player/MyPlayer.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
 AEquipItem::AEquipItem()
 {
     PrimaryActorTick.bCanEverTick = true;
-   // _meshComponent>SetSimulatePhysics(true);
-    _meshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-    RootComponent = _meshComponent;
+    _skeletalComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal"));
+    _skeletalComponent->SetCollisionProfileName(TEXT("NoCollision"));
+    _skeletalComponent->SetupAttachment(_meshComponent);
 
     //_trigger = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapSphere"));
-    _trigger->SetupAttachment(_meshComponent);
+
     _trigger->SetSphereRadius(100.0f);
     _trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }

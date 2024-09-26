@@ -3,3 +3,8 @@
 
 #include "ShoulderGuard.h"
 
+
+AShoulderGuard::AShoulderGuard()
+{
+    AttachSocketName = FName(TEXT("chest_playeSocket"));
+}

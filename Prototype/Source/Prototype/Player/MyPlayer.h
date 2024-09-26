@@ -35,15 +35,21 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	bool IsDashing(){return bIsDashing;}
+
 	bool CanSetArmor();
 
 	void SetArmor(class AArmor_test* Armor);
+	void OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit);
 
 	void SetSkillOnCooldown(int32 index,bool cool){SkillOnCooldown[index] = cool;}
 
 	// Animation
 	float GetVertical() { return _vertical; }
 	float GetHorizontal() { return _horizontal; }
+
+
+
 
 private:
 	void Move(const FInputActionValue& value);
@@ -58,6 +64,8 @@ private:
 	//cheol
 	void StatUIOpen(const FInputActionValue& value);
 
+
+	
 	//void CheckForClimbableWall();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
     TArray<bool> SkillOnCooldown;
@@ -71,7 +79,7 @@ private:
     float DashDuration;
 
     void PerformDash(float DeltaTime);
-
+	
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
