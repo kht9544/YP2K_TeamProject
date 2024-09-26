@@ -34,10 +34,6 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
 
-	bool CanSetArmor();
-
-	void SetArmor(class AArmor_test *Armor);
-
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
 
 	bool IsDashing() { return bIsDashing; }

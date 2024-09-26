@@ -8,7 +8,6 @@
 #include "InputActionValue.h"
 #include "MyPlayerController.h"
 #include "Kismet/GameplayStatics.h"
-#include "../Item/Equip/Armor_test.h"
 #include "../UI/SkillWidget_test.h"
 #include "../Monster/NormalMonster.h"
 
@@ -93,21 +92,6 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_skill2Action, ETriggerEvent::Started, this, &AMyPlayer::Skill2);
 		EnhancedInputComponent->BindAction(_skill3Action, ETriggerEvent::Started, this, &AMyPlayer::Skill3);
 		EnhancedInputComponent->BindAction(_skill4Action, ETriggerEvent::Started, this, &AMyPlayer::Skill4);
-	}
-}
-
-bool AMyPlayer::CanSetArmor()
-{
-	return true;
-}
-
-void AMyPlayer::SetArmor(class AArmor_test *Armor)
-{
-	FName ArmorSocket(TEXT("spine_03Socket"));
-	if (Armor != nullptr)
-	{
-		Armor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, ArmorSocket);
-		Armor->SetOwner(this);
 	}
 }
 
@@ -223,32 +207,27 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 
 void AMyPlayer::StartScreenShake()
 {
-	  static float InitialShakeStrength = 0.1f;
+	static float InitialShakeStrength = 0.1f;
     static float MaxShakeStrength = 10.0f;
-    static float IncreaseAmount = 3.0f; // 강도를 3초 동안 점진적으로 증가시키기 위한 값
-    static float Duration = 1.0f; // 지속 시간
+    static float IncreaseAmount = 3.0f; 
+    static float Duration = 1.0f;
     static float ElapsedTime = 0.0f;
 
-    // 카메라 흔들기
     if (CameraShakeClass)
     {
         UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(CameraShakeClass, InitialShakeStrength);
     }
 
-    // 시간 증가
     ElapsedTime += GetWorld()->GetDeltaSeconds();
 
-    // 강도 증가 계산
     float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, ElapsedTime / Duration);
 
-    // 강도 제한
     if (ElapsedTime < Duration)
     {
         UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(CameraShakeClass, CurrentShakeStrength);
     }
     else
     {
-        // 3초 후 초기화
         GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
         ElapsedTime = 0.0f;
     }
