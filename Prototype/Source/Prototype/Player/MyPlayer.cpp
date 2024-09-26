@@ -2,15 +2,20 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Camera/CameraShakeBase.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MyPlayerController.h"
-#include "Kismet/GameplayStatics.h"
 #include "../Item/Equip/Armor_test.h"
 #include "../UI/SkillWidget_test.h"
-#include "../Monster/NormalMonster.h"
+
+//chelo
+#include "Component/StatComponent.h"
+#include "UI/StatWidget.h"
+#include "Components/WidgetComponent.h"
+
+//te
+ #include "GameFramework/Actor.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -26,21 +31,40 @@ AMyPlayer::AMyPlayer()
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
-	 static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Meshes/Greystone.Greystone'"));
+	// MiniMap test
+	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("<MiniSpringArm"));
+	_MiniMapcamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MiniCamera"));
 
-	 if (PS.Succeeded())
-	 {
-	 	GetMesh()->SetSkeletalMesh(PS.Object);
-	 }
+	_MiniMapspringArm->SetupAttachment(GetCapsuleComponent());
+	_MiniMapcamera->SetupAttachment(_MiniMapspringArm);
+
+	_MiniMapspringArm->TargetArmLength = 500.0f;
+	_MiniMapcamera->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+	_MiniMapcamera->SetRelativeLocation(FVector(100.0f, 50.0f, 200.0f));
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton/mesh/SK_Skeleton_base.SK_Skeleton_base'"));
+
+	if (PS.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(PS.Object);
+	}
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
-	static ConstructorHelpers::FClassFinder<UCameraShakeBase> CS(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Player/LegacyCamera_BP.LegacyCamera_BP_C'"));
-	if (CS.Succeeded())
+	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
+
+	//cheol
+	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
+
+	static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
+	TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
+
+	if (StatClass.Succeeded())
 	{
-		CameraShakeClass = CS.Class;
+		_statWidget = CreateWidget<UStatWidget>(GetWorld(), StatClass.Class);
 	}
 
-	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
+	
+
 
 	_dashDistance = 1000.f;
 	_dashSpeed = 3000.f;
@@ -53,19 +77,34 @@ AMyPlayer::AMyPlayer()
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	
+
+	if (_statWidget)
+	{
+		_statWidget->AddToViewport();
+		_statWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
 	{
 		_skillWidgetInstance = MyController->SkillWidgetInstance;
 	}
+	SkillOnCooldown.Init(false, 4);
+	Equipment.Init(nullptr,6);
+
+
+
+	
+
 }
 
 void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+		
+	_StatCom->SetLevelInit(1);
 
-	SkillOnCooldown.Init(false, 4);
-	Equipment.Init(nullptr, 6);
 }
 
 // Called every frame
@@ -76,6 +115,8 @@ void AMyPlayer::Tick(float DeltaTime)
 	{
 		PerformDash(DeltaTime);
 	}
+
+
 }
 
 // Called to bind functionality to input
@@ -93,6 +134,9 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_skill2Action, ETriggerEvent::Started, this, &AMyPlayer::Skill2);
 		EnhancedInputComponent->BindAction(_skill3Action, ETriggerEvent::Started, this, &AMyPlayer::Skill3);
 		EnhancedInputComponent->BindAction(_skill4Action, ETriggerEvent::Started, this, &AMyPlayer::Skill4);
+		EnhancedInputComponent->BindAction(_mouseAction, ETriggerEvent::Triggered, this, &AMyPlayer::Mouse);
+		EnhancedInputComponent->BindAction(_StatOpenAction, ETriggerEvent::Started, this, &AMyPlayer::StatUIOpen);
+
 	}
 }
 
@@ -108,16 +152,6 @@ void AMyPlayer::SetArmor(class AArmor_test *Armor)
 	{
 		Armor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, ArmorSocket);
 		Armor->SetOwner(this);
-	}
-}
-
-void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit)
-{
-	if (HitMonster)
-	{
-		FVector LaunchDirection = (HitMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-		float LaunchStrength = HitMonster->GetLaunchLength();
-		HitMonster->LaunchFromPlayer(LaunchDirection, LaunchStrength); // 몬스터 튕겨나가기
 	}
 }
 
@@ -182,8 +216,6 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 		else
 		{
 			SkillOnCooldown[1] = true;
-			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
-			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);
 			_skillWidgetInstance->StartCooldown(1, 5.0f);
 		}
 	}
@@ -221,41 +253,54 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 	}
 }
 
-void AMyPlayer::StartScreenShake()
+void AMyPlayer::Mouse(const FInputActionValue& value)
 {
-	  static float InitialShakeStrength = 0.1f;
-    static float MaxShakeStrength = 10.0f;
-    static float IncreaseAmount = 3.0f; // 강도를 3초 동안 점진적으로 증가시키기 위한 값
-    static float Duration = 1.0f; // 지속 시간
-    static float ElapsedTime = 0.0f;
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 
-    // 카메라 흔들기
-    if (CameraShakeClass)
-    {
-        UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(CameraShakeClass, InitialShakeStrength);
-    }
+	if (PlayerController)
+	{
+		bool bIsCursorVisible = PlayerController->bShowMouseCursor;
 
-    // 시간 증가
-    ElapsedTime += GetWorld()->GetDeltaSeconds();
-
-    // 강도 증가 계산
-    float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, ElapsedTime / Duration);
-
-    // 강도 제한
-    if (ElapsedTime < Duration)
-    {
-        UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(CameraShakeClass, CurrentShakeStrength);
-    }
-    else
-    {
-        // 3초 후 초기화
-        GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
-        ElapsedTime = 0.0f;
-    }
+		if (bIsCursorVisible)
+		{
+			PlayerController->bShowMouseCursor = false;
+			PlayerController->SetInputMode(FInputModeGameOnly());
+		}
+		else
+		{
+			PlayerController->bShowMouseCursor = true;
+			PlayerController->SetInputMode(FInputModeGameAndUI().SetHideCursorDuringCapture(false));
+		}
+	}
 }
 
-void AMyPlayer::CastMeteor()
+//cheol
+void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 {
+	bool isPressed = value.Get<bool>();
+	
+	UE_LOG(LogTemp, Error, TEXT("StatUI Errow"));
+
+	if (isPressed && _statWidget != nullptr)
+	{
+		if (_statWidget->IsVisible())
+		{
+			_statWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else
+		{
+		
+			_statWidget->HPUpdate(_StatCom->GetMaxHp());
+			_statWidget->MPUpdate(_StatCom->GetMaxMp());
+			_statWidget->STRUpdate(_StatCom->GetStr());
+			_statWidget->DEXUpdate(_StatCom->GetDex());
+			_statWidget->INTUpdate(_StatCom->GetInt());
+			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
+			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
+			_statWidget->SetVisibility(ESlateVisibility::Visible);
+
+		}
+	}
 }
 
 void AMyPlayer::PerformDash(float DeltaTime)
