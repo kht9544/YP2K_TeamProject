@@ -15,9 +15,11 @@
 #include "Components/WidgetComponent.h"
 
 //te
-#include "GameFramework/Actor.h"
-#include "Components/SceneCaptureComponent2D.h"
-#include "PaperSpriteComponent.h"
+ #include "GameFramework/Actor.h"
+
+// Animation
+#include "../Animation/PlayerAnimInstance.h"
+#include "../Animation/Knight_AnimInstance.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -33,27 +35,7 @@ AMyPlayer::AMyPlayer()
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
-	// MiniMap test
-	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MiniSpringArm"));
-	_MiniMapspringArm->SetupAttachment(RootComponent);
-	_MiniMapspringArm->SetWorldRotation(FRotator::MakeFromEuler(FVector(0.0f, -90.0f, 0.0f)));
-	_MiniMapspringArm->bUsePawnControlRotation = false;
-	_MiniMapspringArm->bInheritPitch = false;
-	_MiniMapspringArm->bInheritRoll = false;
-	_MiniMapspringArm->bInheritYaw = false;
-	
-	_MiniMapCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MiniCapture"));
-	_MiniMapCapture->SetupAttachment(_MiniMapspringArm);
-
-	_MiniMapCapture->ProjectionType = ECameraProjectionMode::Orthographic;
-	_MiniMapCapture->OrthoWidth = 3072;
-
-
-	_MiniMapspringArm->TargetArmLength = 500.0f;
-
-
-
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton/mesh/SK_Skeleton_base.SK_Skeleton_base'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Skins/WhiteTiger/Meshes/Greystone_WhiteTiger.Greystone_WhiteTiger'"));
 
 	if (PS.Succeeded())
 	{
@@ -64,7 +46,7 @@ AMyPlayer::AMyPlayer()
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
 
 	//cheol
-	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
+	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
 
 	static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
 	TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
@@ -113,9 +95,11 @@ void AMyPlayer::BeginPlay()
 void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-		
-	_StatCom->SetLevelInit(1);
 
+	if (_StatCom)
+	{
+		_StatCom->SetLevelInit(1);
+	}
 }
 
 // Called every frame
@@ -300,6 +284,14 @@ void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 		}
 		else
 		{
+		
+			_statWidget->HPUpdate(_StatCom->GetMaxHp());
+			_statWidget->MPUpdate(_StatCom->GetMaxMp());
+			_statWidget->STRUpdate(_StatCom->GetStr());
+			_statWidget->DEXUpdate(_StatCom->GetDex());
+			_statWidget->INTUpdate(_StatCom->GetInt());
+			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
+			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
 
 		}
