@@ -7,12 +7,14 @@
 AEquipItem::AEquipItem()
 {
     PrimaryActorTick.bCanEverTick = true;
-   // _meshComponent>SetSimulatePhysics(true);
-    _meshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-    RootComponent = _meshComponent;
+    //_meshComponent>SetSimulatePhysics(true);
+
+	_skeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal"));
+    _skeletalMesh->SetCollisionProfileName(TEXT("NoCollision"));
+    _skeletalMesh->SetupAttachment(_meshComponent);
 
     //_trigger = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapSphere"));
-    _trigger->SetupAttachment(_meshComponent);
+    
     _trigger->SetSphereRadius(100.0f);
     _trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }
