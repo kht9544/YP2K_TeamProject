@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "Base/MyGameInstance.h"
 #include "Component/StatComponent.h"
 #include "Player/MyPlayerController.h"
 
@@ -11,25 +12,18 @@ UStatComponent::UStatComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> StatData
-	(TEXT("/Script/Engine.DataTable'/Game/Data/StatDataTable_test.StatDataTable_test'"));
 
-	if (StatData.Succeeded())
-	{
-		StatDataTable = StatData.Object;
-
-	}
 
 	// 임시 게임인스턴스 아직 구현전이라 임시로 작성 
-	_level = 1; 
-	_maxHp = 100; 
-	_curHp = _maxHp; 
-	_maxMp = 50; 
-	_curMp = _maxMp; 
-	_str = 10; 
-	_dex = 10; 
-	_int = 10; 
-	_bonusPoint = 3;
+	//_level = 1; 
+	//_maxHp = 100; 
+	//_curHp = _maxHp; 
+	//_maxMp = 50; 
+	//_curMp = _maxMp; 
+	//_str = 10; 
+	//_dex = 10; 
+	//_int = 10; 
+	//_bonusPoint = 3;
 }
 
 
@@ -84,74 +78,109 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
+void UStatComponent::Reset()
+{
+	_curHp = _maxHp;
+}
 
+void UStatComponent::SetLevelInit(int level)
+{
+	// StatCom에서 스탯들을 인식못해서 현재 0 으로 출력 
+	// 실행하고 중단점 잡고 데이터테이블 값은 몇으로 나오는지 실행해볼것
+	// 스탯데이터테이블도 다시 만들어보기
+
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
+
+	if (myGameInstance)
+	{
+		Data = myGameInstance->GetStatDataByLevel(level);
+		_level = level;
+		_maxHp = Data->MaxHP;
+		_curHp = 0;
+		_maxMp = Data->MaxMP;
+		_curMp = 0;
+		_str = Data->STR;
+		_dex = Data->DEX;
+		_int = Data->INT;
+		_nextExp = Data->EXP;
+		_curExp = 0;
+		SetHp(_maxHp);
+		SetMp(_maxMp);
+		_bonusPoint = Data->BonusPoint;
+		_PILevelDelegate.Broadcast(_level);
+
+	}
+
+}
 
 
 void UStatComponent::SetMaxHp(int32 newMaxHp)
 {
-	TArray<FMyStatData*> AllRows;
-	StatDataTable->GetAllRows(TEXT(""), AllRows);
 
-	const FMyStatData& Data = *AllRows[_level - 1];
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
 
-	_maxHp = Data.MaxHP;
+	_maxHp = Data->MaxHP;
 	_maxHp = FMath::Clamp(newMaxHp, 0, 10000);
 
 }
 
 void UStatComponent::SetMaxMp(int32 newMaxMp)
 {
-	TArray<FMyStatData*> AllRows;
-	StatDataTable->GetAllRows(TEXT(""), AllRows);
 
-	const FMyStatData& Data = *AllRows[_level - 1];
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
 
-	_maxMp = Data.MaxMP;
+
+	_maxMp = Data->MaxMP;
 	_maxMp = FMath::Clamp(newMaxMp, 0, 10000);
 
 }
 
 void UStatComponent::SetBonusPoint(int32 newBp)
 {
-	TArray<FMyStatData*> AllRows;
-	StatDataTable->GetAllRows(TEXT(""), AllRows);
+	//TArray<FMyStatData*> AllRows;
+	//StatDataTable->GetAllRows(TEXT(""), AllRows);
 
-		const FMyStatData& Data = *AllRows[_level - 1];
+	//	const FMyStatData& Data = *AllRows[_level - 1];
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
 
-		_bonusPoint = Data.BonusPoint;
+		_bonusPoint = Data->BonusPoint;
 		_bonusPoint = FMath::Clamp(newBp, 0, 10);
 }
 
 void UStatComponent::SetStr(int32 newstr)
 {
-	TArray<FMyStatData*> AllRows;
-	StatDataTable->GetAllRows(TEXT(""), AllRows);
 
-	const FMyStatData& Data = *AllRows[_level - 1];
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
 
-	_str = Data.STR;
+
+	_str = Data->STR;
 	_str = FMath::Clamp(newstr, 0, 100);
 }
 
 void UStatComponent::SetDex(int32 newdex)
 {
-	TArray<FMyStatData*> AllRows;
-	StatDataTable->GetAllRows(TEXT(""), AllRows);
 
-	const FMyStatData& Data = *AllRows[_level - 1];
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
 
-	_dex = Data.DEX;
+
+	_dex = Data->DEX;
 	_dex = FMath::Clamp(newdex, 0, 100);
 }
 
 void UStatComponent::SetInt(int32 newint)
 {
-	TArray<FMyStatData*> AllRows;
-	StatDataTable->GetAllRows(TEXT(""), AllRows);
 
-	const FMyStatData& Data = *AllRows[_level - 1];
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
 
-	_int = Data.INT;
+
+	_int = Data->INT;
 	_int = FMath::Clamp(newint, 0, 100);
 }
 
@@ -238,10 +267,9 @@ void UStatComponent::AddExp(int32 amount)
 	_PlEXPDelegate.Broadcast(ratio);
 }
 
-void UStatComponent::SetLevelInit(int32 level)
-{
-	_level = level;
-	if (StatDataTable != nullptr)
+
+
+	/*if (StatDataTable != nullptr)
 	{
 		TArray<FMyStatData*> AllRows;
 		StatDataTable->GetAllRows(TEXT(""), AllRows);
@@ -264,7 +292,8 @@ void UStatComponent::SetLevelInit(int32 level)
 
 			}
 		}
-	}
-}
+	}*/
+
+
 
 

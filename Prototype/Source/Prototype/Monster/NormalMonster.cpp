@@ -51,11 +51,11 @@ void ANormalMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ANormalMonster::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	AMyPlayer* Player = Cast<AMyPlayer>(OtherActor);
-    if (Player && Player->IsDashing())
-    {
-        Player->OnMonsterHit(this, Hit);
-    }
+	//AMyPlayer* Player = Cast<AMyPlayer>(OtherActor);
+ //   if (Player && Player->IsDashing())
+ //   {
+ //       Player->OnMonsterHit(this, Hit);
+ //   }
 }
 
 void ANormalMonster::LaunchFromPlayer(FVector LaunchDirection, float LaunchStrength)
