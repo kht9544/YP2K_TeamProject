@@ -29,9 +29,6 @@ protected:
     // UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
     // class USphereComponent* _overlapSphere;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-    class USkeletalMeshComponent* _skeletalMesh;
-
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment")
     FName AttachSocketName;
 

@@ -15,7 +15,10 @@
 #include "Components/WidgetComponent.h"
 
 //te
- #include "GameFramework/Actor.h"
+#include "GameFramework/Actor.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "PaperSpriteComponent.h"
+#include "ccgplugins.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -32,15 +35,38 @@ AMyPlayer::AMyPlayer()
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
 	// MiniMap test
-	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("<MiniSpringArm"));
-	_MiniMapcamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MiniCamera"));
+	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MiniSpringArm"));
+	_MiniMapspringArm->SetupAttachment(RootComponent);
+	_MiniMapspringArm->SetWorldRotation(FRotator::MakeFromEuler(FVector(0.0f, -90.0f, 0.0f)));
+	_MiniMapspringArm->bUsePawnControlRotation = false;
+	_MiniMapspringArm->bInheritPitch = false;
+	_MiniMapspringArm->bInheritRoll = false;
+	_MiniMapspringArm->bInheritYaw = false;
+	
+	_MiniMapCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MiniCapture"));
+	_MiniMapCapture->SetupAttachment(_MiniMapspringArm);
 
-	_MiniMapspringArm->SetupAttachment(GetCapsuleComponent());
-	_MiniMapcamera->SetupAttachment(_MiniMapspringArm);
+	_MiniMapCapture->ProjectionType = ECameraProjectionMode::Orthographic;
+	_MiniMapCapture->OrthoWidth = 3072;
+
+	/*ConstructorHelpers::FObjectFinder<UCanvasRenderTarget2D> FOBJ_RenderTarget2D(TEXT("랜더타겟"));
+	if (FOBJ_RenderTarget2D.Succeeded())
+	{
+		MinimapCapture->TextureTarget = FOBJ_RenderTarget2D.Object;
+	}*/
+
+	//_MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
+	//_MinimapSprite->SetupAttachment(RootComponent);
+	////Actor의 Foward방향과 일치화
+	//_MinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
+	//_MinimapSprite->SetWorldScale3D(FVector(0.5f));
+	//_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	////인게임에서 보이지 않게 하는 옵션(캡처에서만 보이게 하는)
+	//_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
 	_MiniMapspringArm->TargetArmLength = 500.0f;
-	_MiniMapcamera->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
-	_MiniMapcamera->SetRelativeLocation(FVector(100.0f, 50.0f, 200.0f));
+
+
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton/mesh/SK_Skeleton_base.SK_Skeleton_base'"));
 
