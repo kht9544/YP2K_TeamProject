@@ -30,7 +30,6 @@ public:
 	void ExcuteItem(int32 slot, bool isDrop = true);
 	void EquipItem(int32 slot);
 
-	void SelectItem(int32 slot = 0);
 private:
 	void UIupdate_Add(int32 slot, ABaseItem* item);
 	void UIupdate_Pop(int32 slot);
@@ -49,9 +48,6 @@ private:
 	TArray<int32> _EmptySlots;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	TArray<class AEquipItem*> _EquipSlots;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	ABaseItem* _Selected;
-
+	TMap<FString, class AEquipItem*> _EquipSlots;
+	void TryEquip(FString part, int32 slot);
 };
