@@ -17,6 +17,10 @@
 //te
  #include "GameFramework/Actor.h"
 
+// Animation
+#include "../Animation/PlayerAnimInstance.h"
+#include "../Animation/Knight_AnimInstance.h"
+
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
@@ -31,7 +35,7 @@ AMyPlayer::AMyPlayer()
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton/mesh/SK_Skeleton_base.SK_Skeleton_base'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Skins/WhiteTiger/Meshes/Greystone_WhiteTiger.Greystone_WhiteTiger'"));
 
 	if (PS.Succeeded())
 	{

@@ -3,3 +3,8 @@
 
 #include "Helmet.h"
 
+
+AHelmet::AHelmet()
+{
+     AttachSocketName = FName(TEXT("headSocket"));
+}

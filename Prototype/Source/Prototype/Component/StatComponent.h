@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/DataTable.h"
 #include "StatComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(DeathDelegate)
@@ -42,15 +43,15 @@ struct FMyStatData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 EXP;
 
-	FMyStatData()
-		: level(1)
-		, MaxHP(100)
-		, MaxMP(50)
-		, STR(10)
-		, DEX(10)
-		, INT(10)
-		,BonusPoint(3)
-		,EXP(100) {}
+	//FMyStatData()
+	//	: level(1)
+	//	, MaxHP(100)
+	//	, MaxMP(50)
+	//	, STR(10)
+	//	, DEX(10)
+	//	, INT(10)
+	//	,BonusPoint(3)
+	//	,EXP(100) {}
 
 };
 
@@ -63,8 +64,6 @@ public:
 	// Sets default values for this component's properties
 	UStatComponent();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Item")
-	TArray<FMyStatData> _statData;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -73,6 +72,7 @@ public:
 	/*void SetStat();*/
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void Reset();
 
 	int32 GetCurHp() { return _curHp; }
 	int32 GetMaxHp() { return _maxHp; }
@@ -104,7 +104,7 @@ public:
 	void AddAttackDamage(float amount);
 	void AddExp(int32 amount);
 
-	void SetLevelInit(int32 level);
+	void SetLevelInit(int level);
 
 	bool IsDead() { return _curHp <= 0; }
 
