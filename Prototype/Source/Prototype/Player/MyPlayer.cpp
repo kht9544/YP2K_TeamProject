@@ -19,7 +19,6 @@
 
 // Animation
 #include "../Animation/PlayerAnimInstance.h"
-#include "../Animation/Knight_AnimInstance.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -100,6 +99,16 @@ void AMyPlayer::PostInitializeComponents()
 	{
 		_StatCom->SetLevelInit(1);
 	}
+
+	_KnightanimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	if (_KnightanimInstance->IsValidLowLevelFast())
+	{
+		_KnightanimInstance->OnMontageEnded.AddDynamic(this, &AMyPlayer::OnAttackEnded);
+		/*_KnightanimInstance->_attackDelegate.AddUObject(this, &AMyCreature::Attackhit);
+		_KnightanimInstance->_deathDelegate_Knight.AddUObject(this, &AMyPlayer::Disable);*/
+	}
+
+
 }
 
 // Called every frame
@@ -150,6 +159,11 @@ void AMyPlayer::SetArmor(class AArmor_test *Armor)
 	}
 }
 
+void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	_isAttcking = false;
+}
+
 void AMyPlayer::Move(const FInputActionValue &value)
 {
 	FVector2D MovementVector = value.Get<FVector2D>();
@@ -179,6 +193,18 @@ void AMyPlayer::JumpA(const FInputActionValue &value)
 void AMyPlayer::AttackA(const FInputActionValue &value)
 {
 	bool isPressed = value.Get<bool>();
+
+	if (isPressed && _isAttcking == false && _KnightanimInstance != nullptr)
+	{
+		_KnightanimInstance->PlayAttackMontage();
+		_isAttcking = true;
+
+		_curAttackIndex %= 4;
+		_curAttackIndex++;
+
+		_KnightanimInstance->JumpToSection(_curAttackIndex);
+	}
+
 }
 
 void AMyPlayer::Skill1(const FInputActionValue &value)

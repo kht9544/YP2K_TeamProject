@@ -8,6 +8,14 @@
 
 UPlayerAnimInstance::UPlayerAnimInstance()
 {
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Knignt
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/Knight_Montage.Knight_Montage'"));
+
+	if (Knignt.Succeeded())
+	{
+		_myAnimMontage = Knignt.Object;
+	}
+
 	_isFalling = false;
 	_isDead = false;
 
@@ -22,6 +30,8 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
    /* Super::NativeUpdateAnimation(DeltaSeconds);
 
 	auto Pawn = TryGetPawnOwner();*/
+
+	Super::NativeUpdateAnimation(DeltaSeconds);
 
 	AMyPlayer* myCharacter = Cast<AMyPlayer>(TryGetPawnOwner());
 
