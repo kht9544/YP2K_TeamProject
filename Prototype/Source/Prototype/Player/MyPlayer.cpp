@@ -15,11 +15,12 @@
 #include "Components/WidgetComponent.h"
 
 //te
- #include "GameFramework/Actor.h"
+#include "GameFramework/Actor.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "PaperSpriteComponent.h"
 
-// Animation
-#include "../Animation/PlayerAnimInstance.h"
-#include "../Animation/Knight_AnimInstance.h"
+//tw
+#include "UI/MiniMapWidget.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -35,7 +36,38 @@ AMyPlayer::AMyPlayer()
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Skins/WhiteTiger/Meshes/Greystone_WhiteTiger.Greystone_WhiteTiger'"));
+	// MiniMap test
+	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MiniSpringArm"));
+	_MiniMapspringArm->SetupAttachment(RootComponent);
+	_MiniMapspringArm->SetWorldRotation(FRotator::MakeFromEuler(FVector(0.0f, -90.0f, 0.0f)));
+	_MiniMapspringArm->bUsePawnControlRotation = false;
+	_MiniMapspringArm->bInheritPitch = false;
+	_MiniMapspringArm->bInheritRoll = false;
+	_MiniMapspringArm->bInheritYaw = false;
+	
+	_MiniMapCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MiniCapture"));
+	_MiniMapCapture->SetupAttachment(_MiniMapspringArm);
+
+	_MiniMapCapture->ProjectionType = ECameraProjectionMode::Orthographic;
+	_MiniMapCapture->OrthoWidth = 1024;
+
+	_MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
+	_MinimapSprite->SetupAttachment(RootComponent);
+	//Actor의 Foward방향과 일치화
+	_MinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
+	_MinimapSprite->SetWorldScale3D(FVector(0.5f));
+	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	//인게임에서 보이지 않게 하는 옵션(캡처에서만 보이게 하는)
+	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
+
+	//ConstructorHelpers::FObjectFinder<UPaperSprite> FOBJ_PaperSprite(TEXT("스프라이트"));
+	//if (FOBJ_PaperSprite.Succeeded())
+	//{
+	//	_MinimapSprite->SetSprite(FOBJ_PaperSprite.Object);
+	//}
+
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton/mesh/SK_Skeleton_base.SK_Skeleton_base'"));
 
 	if (PS.Succeeded())
 	{
@@ -46,7 +78,7 @@ AMyPlayer::AMyPlayer()
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
 
 	//cheol
-	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
+	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
 
 	static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
 	TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
@@ -56,7 +88,13 @@ AMyPlayer::AMyPlayer()
 		_statWidget = CreateWidget<UStatWidget>(GetWorld(), StatClass.Class);
 	}
 
-	
+	static ConstructorHelpers::FClassFinder<UMiniMapWidget> MinuMap(
+		TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/MiniMap_UI.MiniMap_UI_C'"));
+
+	if (MinuMap.Succeeded())
+	{
+		_MiniMap = CreateWidget<UMiniMapWidget>(GetWorld(), MinuMap.Class);
+	}
 
 
 	_dashDistance = 1000.f;
@@ -78,6 +116,10 @@ void AMyPlayer::BeginPlay()
 		_statWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 
+	if (_MiniMap)
+	{
+		_MiniMap->AddToViewport();
+	}
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
 	{
@@ -95,11 +137,9 @@ void AMyPlayer::BeginPlay()
 void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+		
+	_StatCom->SetLevelInit(1);
 
-	if (_StatCom)
-	{
-		_StatCom->SetLevelInit(1);
-	}
 }
 
 // Called every frame
@@ -292,6 +332,7 @@ void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 			_statWidget->INTUpdate(_StatCom->GetInt());
 			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
 			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
+			
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
 
 		}
