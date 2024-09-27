@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Creature.h"
 #include "MyPlayer.generated.h"
 
 struct FInputActionValue;
@@ -16,7 +17,7 @@ enum class EPlayerState : uint8
 };
 
 UCLASS()
-class PROTOTYPE_API AMyPlayer : public ACharacter
+class PROTOTYPE_API AMyPlayer : public ACreature
 {
 	GENERATED_BODY()
 
@@ -163,11 +164,6 @@ public:
 	FVector2D _moveVector;
 
 	// Animation
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	float _vertical = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	float _horizontal = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCameraShakeBase> _cameraShakeClass;
