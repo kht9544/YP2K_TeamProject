@@ -61,4 +61,5 @@ void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *Oth
     {
         EquipPlayer(Player);
     }
+    Destroy();
 }
