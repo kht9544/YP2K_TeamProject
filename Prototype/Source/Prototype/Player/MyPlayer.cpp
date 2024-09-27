@@ -14,8 +14,11 @@
 #include "UI/StatWidget.h"
 #include "Components/WidgetComponent.h"
 
-//te
- #include "GameFramework/Actor.h"
+//MiniMap
+#include "GameFramework/Actor.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "PaperSpriteComponent.h"
+#include "UI/MiniMapWidget.h"
 
 // Animation
 #include "../Animation/PlayerAnimInstance.h"
@@ -34,6 +37,28 @@ AMyPlayer::AMyPlayer()
 
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
+
+	// MiniMap test
+	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MiniSpringArm"));
+	_MiniMapspringArm->SetupAttachment(RootComponent);
+	_MiniMapspringArm->SetWorldRotation(FRotator::MakeFromEuler(FVector(0.0f, -90.0f, 0.0f)));
+	_MiniMapspringArm->bUsePawnControlRotation = false;
+	_MiniMapspringArm->bInheritPitch = false;
+	_MiniMapspringArm->bInheritRoll = false;
+	_MiniMapspringArm->bInheritYaw = false;
+
+	_MiniMapCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MiniCapture"));
+	_MiniMapCapture->SetupAttachment(_MiniMapspringArm);
+
+	_MiniMapCapture->ProjectionType = ECameraProjectionMode::Orthographic;
+	_MiniMapCapture->OrthoWidth = 1024;
+
+	_MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
+	_MinimapSprite->SetupAttachment(RootComponent);
+	_MinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
+	_MinimapSprite->SetWorldScale3D(FVector(0.5f));
+	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Skins/WhiteTiger/Meshes/Greystone_WhiteTiger.Greystone_WhiteTiger'"));
 
@@ -56,7 +81,14 @@ AMyPlayer::AMyPlayer()
 		_statWidget = CreateWidget<UStatWidget>(GetWorld(), StatClass.Class);
 	}
 
-	
+	static ConstructorHelpers::FClassFinder<UMiniMapWidget> MinuMap(
+		TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/MiniMap_UI.MiniMap_UI_C'"));
+
+	if (MinuMap.Succeeded())
+	{
+		_MiniMap = CreateWidget<UMiniMapWidget>(GetWorld(), MinuMap.Class);
+	}
+
 
 
 	_dashDistance = 1000.f;
@@ -77,7 +109,10 @@ void AMyPlayer::BeginPlay()
 		_statWidget->AddToViewport();
 		_statWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
-
+	if (_MiniMap)
+	{
+		_MiniMap->AddToViewport();
+	}
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
 	{
@@ -284,14 +319,8 @@ void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 		}
 		else
 		{
-		
-			_statWidget->HPUpdate(_StatCom->GetMaxHp());
-			_statWidget->MPUpdate(_StatCom->GetMaxMp());
-			_statWidget->STRUpdate(_StatCom->GetStr());
-			_statWidget->DEXUpdate(_StatCom->GetDex());
-			_statWidget->INTUpdate(_StatCom->GetInt());
-			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
-			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
+			
+			_statWidget->UpdateStatDisplay();
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
 
 		}
