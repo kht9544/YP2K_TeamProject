@@ -43,7 +43,15 @@ struct FMyStatData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 EXP;
 
-
+	//FMyStatData()
+	//	: level(1)
+	//	, MaxHP(100)
+	//	, MaxMP(50)
+	//	, STR(10)
+	//	, DEX(10)
+	//	, INT(10)
+	//	,BonusPoint(3)
+	//	,EXP(100) {}
 
 };
 
@@ -61,6 +69,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	/*void SetStat();*/
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void Reset();

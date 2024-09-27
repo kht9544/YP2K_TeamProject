@@ -12,6 +12,18 @@ UStatComponent::UStatComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+
+
+	// 임시 게임인스턴스 아직 구현전이라 임시로 작성 
+	//_level = 1; 
+	//_maxHp = 100; 
+	//_curHp = _maxHp; 
+	//_maxMp = 50; 
+	//_curMp = _maxMp; 
+	//_str = 10; 
+	//_dex = 10; 
+	//_int = 10; 
+	//_bonusPoint = 3;
 }
 
 
@@ -30,6 +42,33 @@ void UStatComponent::BeginPlay()
 }
 
 
+//void UStatComponent::SetStat()
+//{
+//	// 무슨 문제? 
+//	if (StatDataTable != nullptr)
+//	{
+//		TArray<FMyStatData*> AllRows;
+//		StatDataTable->GetAllRows(TEXT(""), AllRows);
+//
+//		if (AllRows.IsValidIndex(_level - 1)) 
+//		{
+//			const FMyStatData& Data = *AllRows[_level - 1];
+//
+//		
+//			if (&Data != nullptr) 
+//			{
+//				_maxHp = Data.MaxHP;
+//				_curHp = _maxHp;
+//				_maxMp = Data.MaxMP;
+//				_curMp = _maxMp;
+//				_str = Data.STR;
+//				_dex = Data.DEX;
+//				_int = Data.INT;
+//				
+//			}
+//		}
+//	}
+//}
 
 // Called every frame
 void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -46,6 +85,9 @@ void UStatComponent::Reset()
 
 void UStatComponent::SetLevelInit(int level)
 {
+	// StatCom에서 스탯들을 인식못해서 현재 0 으로 출력 
+	// 실행하고 중단점 잡고 데이터테이블 값은 몇으로 나오는지 실행해볼것
+	// 스탯데이터테이블도 다시 만들어보기
 
 	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	FMyStatData* Data = nullptr;
@@ -98,7 +140,10 @@ void UStatComponent::SetMaxMp(int32 newMaxMp)
 
 void UStatComponent::SetBonusPoint(int32 newBp)
 {
+	//TArray<FMyStatData*> AllRows;
+	//StatDataTable->GetAllRows(TEXT(""), AllRows);
 
+	//	const FMyStatData& Data = *AllRows[_level - 1];
 	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	FMyStatData* Data = nullptr;
 
@@ -221,6 +266,34 @@ void UStatComponent::AddExp(int32 amount)
 	float ratio = EXpRatio();
 	_PlEXPDelegate.Broadcast(ratio);
 }
+
+
+
+	/*if (StatDataTable != nullptr)
+	{
+		TArray<FMyStatData*> AllRows;
+		StatDataTable->GetAllRows(TEXT(""), AllRows);
+
+		if (AllRows.IsValidIndex(_level - 1))
+		{
+			const FMyStatData& Data = *AllRows[_level - 1];
+
+
+			if (&Data != nullptr)
+			{
+				_maxHp = Data.MaxHP;
+				_curHp = _maxHp;
+				_maxMp = Data.MaxMP;
+				_curMp = _maxMp;
+				_str = Data.STR;
+				_dex = Data.DEX;
+				_int = Data.INT;
+				_bonusPoint = Data.BonusPoint;
+
+			}
+		}
+	}*/
+
 
 
 

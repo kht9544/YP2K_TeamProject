@@ -129,6 +129,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
 	class UPaperSpriteComponent* _MinimapSprite;
 
+	//test
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UMiniMapWidget* _MiniMap;
 

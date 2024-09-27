@@ -199,7 +199,9 @@ void UStatWidget::STRUpClick()
 			player->_StatCom->SetStr(plStr + 1);
 			player->_StatCom->SetBonusPoint(BonusPoints - 1);
 		}
+		// 클릭마다 ui 업데이트
 		UpdateStatDisplay();
+		//UpdateStatDisplay();
 		UE_LOG(LogTemp, Error, TEXT("test Errow"));
 	}
 }
@@ -219,7 +221,9 @@ void UStatWidget::DEXUpClick()
 			player->_StatCom->SetDex(StatDex + 1);
 			player->_StatCom->SetBonusPoint(StatBonusPoints - 1);
 		}
+		// 클릭마다 ui 업데이트
 		UpdateStatDisplay();
+		//UpdateStatDisplay();
 		UE_LOG(LogTemp, Error, TEXT("test Errow"));
 	}
 }
@@ -239,7 +243,9 @@ void UStatWidget::INTUpClick()
 			player->_StatCom->SetInt(StatInt + 1);
 			player->_StatCom->SetBonusPoint(StatBonusPoints - 1);
 		}
+		// 클릭마다 ui 업데이트
 		UpdateStatDisplay();
+		//UpdateStatDisplay();
 		UE_LOG(LogTemp, Error, TEXT("test Errow"));
 	}
 }
