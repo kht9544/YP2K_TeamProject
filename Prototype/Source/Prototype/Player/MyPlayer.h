@@ -41,6 +41,10 @@ public:
 
 	void SetSkillOnCooldown(int32 index,bool cool){SkillOnCooldown[index] = cool;}
 
+	// Animation
+	float GetVertical() { return _vertical; }
+	float GetHorizontal() { return _horizontal; }
+
 private:
 	void Move(const FInputActionValue& value);
 	void Look(const FInputActionValue& value);
@@ -129,16 +133,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
 	class UPaperSpriteComponent* _MinimapSprite;
 
-	//test
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
-	class UMiniMapWidget* _MiniMap;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Dash")
 	float _dashDistance;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Dash")
 	float _dashSpeed;
 
+	// Animation
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float _vertical = 0.0f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float _horizontal = 0.0f;
 
 };

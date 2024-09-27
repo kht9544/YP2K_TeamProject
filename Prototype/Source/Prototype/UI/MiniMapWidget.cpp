@@ -3,6 +3,3 @@
 
 #include "UI/MiniMapWidget.h"
 
-void UMiniMapWidget::NativeConstruct()
-{
-}
