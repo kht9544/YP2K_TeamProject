@@ -3,21 +3,23 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Camera/CameraShakeBase.h"
 #include "EnhancedInputComponent.h"
 #include "../Monster/NormalMonster.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Kismet/GameplayStatics.h"
 #include "MyPlayerController.h"
 #include "../Item/Equip/Armor_test.h"
 #include "../UI/SkillWidget_test.h"
 
-//chelo
+// chelo
 #include "Component/StatComponent.h"
 #include "UI/StatWidget.h"
 #include "Components/WidgetComponent.h"
 
-//te
- #include "GameFramework/Actor.h"
+// te
+#include "GameFramework/Actor.h"
 
 // Animation
 #include "../Animation/PlayerAnimInstance.h"
@@ -37,7 +39,6 @@ AMyPlayer::AMyPlayer()
 	_swordBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SwordSkeletal"));
 	_shieldBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ShieldSkeletal"));
 
-
 	_springArm->SetupAttachment(GetCapsuleComponent());
 	_camera->SetupAttachment(_springArm);
 
@@ -53,7 +54,7 @@ AMyPlayer::AMyPlayer()
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> LSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Bottom_Pos.Free_Body_Bottom_Pos'"));
 	if (LSM.Succeeded())
 	{
-	 	_lowerBodyMesh->SetSkeletalMesh(LSM.Object);
+		_lowerBodyMesh->SetSkeletalMesh(LSM.Object);
 	}
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SHSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Arms_Pos.Free_Body_Arms_Pos'"));
@@ -65,7 +66,7 @@ AMyPlayer::AMyPlayer()
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SWSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Sward_Pos.Sward_Pos'"));
 	if (SWSM.Succeeded())
 	{
-	 	_swordBodyMesh->SetSkeletalMesh(SWSM.Object);
+		_swordBodyMesh->SetSkeletalMesh(SWSM.Object);
 	}
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Shield_Pos.Shield_Pos'"));
@@ -79,20 +80,24 @@ AMyPlayer::AMyPlayer()
 	_swordBodyMesh->SetupAttachment(GetMesh());
 	_shieldBodyMesh->SetupAttachment(GetMesh());
 
-
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
 
-	//cheol
+	// cheol
 	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
 
 	static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
-	TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
-
+		TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
 	if (StatClass.Succeeded())
 	{
 		_statWidget = CreateWidget<UStatWidget>(GetWorld(), StatClass.Class);
+	}
+
+	static ConstructorHelpers::FClassFinder<UCameraShakeBase> CS(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Player/CamerShake_BP.CamerShake_BP_C'"));
+	if (CS.Succeeded())
+	{
+		_cameraShakeClass = CS.Class;
 	}
 
 	_dashDistance = 1000.f;
@@ -106,7 +111,6 @@ AMyPlayer::AMyPlayer()
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
 
 	if (_statWidget)
 	{
@@ -120,7 +124,7 @@ void AMyPlayer::BeginPlay()
 		_skillWidgetInstance = MyController->SkillWidgetInstance;
 	}
 	SkillOnCooldown.Init(false, 4);
-	Equipment.Init(nullptr,6);
+	Equipment.Init(nullptr, 6);
 }
 
 void AMyPlayer::PostInitializeComponents()
@@ -141,8 +145,6 @@ void AMyPlayer::Tick(float DeltaTime)
 	{
 		PerformDash(DeltaTime);
 	}
-
-
 }
 
 // Called to bind functionality to input
@@ -162,7 +164,6 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_skill4Action, ETriggerEvent::Started, this, &AMyPlayer::Skill4);
 		EnhancedInputComponent->BindAction(_mouseAction, ETriggerEvent::Triggered, this, &AMyPlayer::Mouse);
 		EnhancedInputComponent->BindAction(_StatOpenAction, ETriggerEvent::Started, this, &AMyPlayer::StatUIOpen);
-
 	}
 }
 
@@ -181,20 +182,20 @@ void AMyPlayer::SetArmor(class AArmor_test *Armor)
 	}
 }
 
-
 void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit)
 {
-    if (HitMonster)
-    {
-        FVector LaunchDirection = (HitMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-        HitMonster->LaunchFromPlayer(LaunchDirection);
-    }
+	if (HitMonster)
+	{
+		FVector LaunchDirection = (HitMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+		HitMonster->LaunchFromPlayer(LaunchDirection);
+	}
 }
 
 void AMyPlayer::Move(const FInputActionValue &value)
 {
 	FVector2D MovementVector = value.Get<FVector2D>();
 
+	_moveVector = MovementVector;
 	AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 	AddMovementInput(GetActorRightVector(), MovementVector.X);
 }
@@ -234,7 +235,21 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 		{
 			SkillOnCooldown[0] = true;
 			bIsDashing = true;
-			DashDirection = GetActorForwardVector();
+
+			FVector2D MovementInput = _moveVector;
+			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
+
+			if (GetVelocity().Size() > 0.1f)
+			{
+				FVector Forward = GetActorForwardVector() * MovementInput.Y;
+				FVector Right = GetActorRightVector() * MovementInput.X;
+				DashDirection = (Forward + Right).GetSafeNormal();
+			}
+			else
+			{
+				DashDirection = GetActorForwardVector();
+			}
+
 			DashTimeElapsed = 0.f;
 			_skillWidgetInstance->StartCooldown(0, 5.0f);
 		}
@@ -252,6 +267,8 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 		else
 		{
 			SkillOnCooldown[1] = true;
+			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
+			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);
 			_skillWidgetInstance->StartCooldown(1, 5.0f);
 		}
 	}
@@ -289,9 +306,9 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 	}
 }
 
-void AMyPlayer::Mouse(const FInputActionValue& value)
+void AMyPlayer::Mouse(const FInputActionValue &value)
 {
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	APlayerController *PlayerController = Cast<APlayerController>(GetController());
 
 	if (PlayerController)
 	{
@@ -310,11 +327,11 @@ void AMyPlayer::Mouse(const FInputActionValue& value)
 	}
 }
 
-//cheol
-void AMyPlayer::StatUIOpen(const FInputActionValue& value)
+// cheol
+void AMyPlayer::StatUIOpen(const FInputActionValue &value)
 {
 	bool isPressed = value.Get<bool>();
-	
+
 	UE_LOG(LogTemp, Error, TEXT("StatUI Errow"));
 
 	if (isPressed && _statWidget != nullptr)
@@ -325,7 +342,7 @@ void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 		}
 		else
 		{
-		
+
 			_statWidget->HPUpdate(_StatCom->GetMaxHp());
 			_statWidget->MPUpdate(_StatCom->GetMaxMp());
 			_statWidget->STRUpdate(_StatCom->GetStr());
@@ -334,7 +351,6 @@ void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
 			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
-
 		}
 	}
 }
@@ -352,6 +368,45 @@ void AMyPlayer::PerformDash(float DeltaTime)
 	{
 		bIsDashing = false;
 	}
+}
+
+
+void AMyPlayer::StartScreenShake()
+{
+    static float InitialShakeStrength = 0.1f;
+    static float MaxShakeStrength = 10.0f;
+    static float IncreaseAmount = 3.0f; 
+    static float Duration = 1.0f;
+    static float ElapsedTime = 0.0f;
+
+    if (_cameraShakeClass)
+    {
+        // 화면 흔들기 시작
+        UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, InitialShakeStrength);
+    }
+
+    // 경과 시간 업데이트
+    ElapsedTime += GetWorld()->GetDeltaSeconds();
+
+    // 현재 흔들림 강도를 계산
+    float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f));
+
+    // 타이머가 끝나지 않았다면 화면 흔들기 계속
+    if (ElapsedTime < Duration)
+    {
+        UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, CurrentShakeStrength);
+    }
+    else
+    {
+        // 타이머 중지
+        GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
+        ElapsedTime = 0.0f; // 경과 시간 초기화
+    }
+}
+
+
+void AMyPlayer::CastMeteor()
+{
 }
 
 // void AMyPlayer::CheckForClimbableWall()

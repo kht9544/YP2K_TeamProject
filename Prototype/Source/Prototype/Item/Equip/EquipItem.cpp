@@ -60,6 +60,9 @@ void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *Oth
     if (Player)
     {
         EquipPlayer(Player);
+
+        _meshComponent->SetVisibility(false);
+        _meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
     }
     Destroy();
 }

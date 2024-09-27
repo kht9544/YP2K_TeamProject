@@ -25,6 +25,8 @@ public:
     // Sets default values for this actor's properties
     AEquipItem();
 
+    ItemType GetArmorType(){return _Type;}
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;

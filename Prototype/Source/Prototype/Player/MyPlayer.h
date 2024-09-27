@@ -73,6 +73,8 @@ private:
 	float DashDuration;
 
 	void PerformDash(float DeltaTime);
+	void StartScreenShake();
+	void CastMeteor();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -157,10 +159,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	float _dashSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
+	FVector2D _moveVector;
+
 	// Animation
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float _vertical = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float _horizontal = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UCameraShakeBase> _cameraShakeClass;
+
+
+	FTimerHandle ScreenShakeTimerHandle;
+	FTimerHandle MeteorTimerHandle;
 };
