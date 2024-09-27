@@ -54,18 +54,34 @@ void UInventoryComponent::AddItem(int32 slot, ABaseItem* item)
 	if (_isSlotFull)
 		return;
 	//TODO : Fill into EmptySlot First
-
+	if (!_EmptySlots.IsEmpty())
+	{
+		int32 emptyslot;
+		_EmptySlots.HeapPop(emptyslot, true);
+		SlotFullCheck();
+		UIupdate_Add(emptyslot, item);
+		return;
+	}
 	//Fill into Selected Slot
 	if (_ItemSlots[slot] == nullptr)
 	{
 		_ItemSlots[slot] = item;
-		//TODO : InventoryUI Update
+		UIupdate_Add(slot, item);
 		SlotFullCheck();
 	}
 	//if Already filled, fill into next slot
 	else
 	{
-		
+		for (int i = slot; i < _itemSlotMax; i++)
+		{
+			if (_ItemSlots[i] != nullptr)
+				continue;
+			_ItemSlots[i] = item;
+			UIupdate_Add(i, item);
+			SlotFullCheck();
+			return;
+		}
+		return;
 	}
 }
 
@@ -81,3 +97,14 @@ void UInventoryComponent::SelectItem(int32 slot)
 {
 }
 
+void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem* item)
+{
+}
+
+void UInventoryComponent::UIupdate_Pop(int32 slot)
+{
+}
+
+void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem* item)
+{
+}

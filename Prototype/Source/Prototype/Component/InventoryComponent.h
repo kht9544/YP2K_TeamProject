@@ -32,6 +32,9 @@ public:
 
 	void SelectItem(int32 slot = 0);
 private:
+	void UIupdate_Add(int32 slot, ABaseItem* item);
+	void UIupdate_Pop(int32 slot);
+	void UIupdate_equip(int32 slot, ABaseItem* item);
 	//Trigger
 	bool _isSlotFull = false;
 	int32 _itemSlotMax = 12;
