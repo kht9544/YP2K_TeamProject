@@ -1,8 +1,10 @@
 #include "MyPlayer.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
+#include "../Monster/NormalMonster.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MyPlayerController.h"
@@ -14,11 +16,8 @@
 #include "UI/StatWidget.h"
 #include "Components/WidgetComponent.h"
 
-//MiniMap
-#include "GameFramework/Actor.h"
-#include "Components/SceneCaptureComponent2D.h"
-#include "PaperSpriteComponent.h"
-#include "UI/MiniMapWidget.h"
+//te
+ #include "GameFramework/Actor.h"
 
 // Animation
 #include "../Animation/PlayerAnimInstance.h"
@@ -32,40 +31,55 @@ AMyPlayer::AMyPlayer()
 	_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
+	//_upperBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("UpperSkeletal"));
+	_lowerBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("LowerSkeletal"));
+	_shoulderBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ShoulderSkeletal"));
+	_swordBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SwordSkeletal"));
+	_shieldBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ShieldSkeletal"));
+
+
 	_springArm->SetupAttachment(GetCapsuleComponent());
 	_camera->SetupAttachment(_springArm);
 
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
-	// MiniMap test
-	_MiniMapspringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MiniSpringArm"));
-	_MiniMapspringArm->SetupAttachment(RootComponent);
-	_MiniMapspringArm->SetWorldRotation(FRotator::MakeFromEuler(FVector(0.0f, -90.0f, 0.0f)));
-	_MiniMapspringArm->bUsePawnControlRotation = false;
-	_MiniMapspringArm->bInheritPitch = false;
-	_MiniMapspringArm->bInheritRoll = false;
-	_MiniMapspringArm->bInheritYaw = false;
-
-	_MiniMapCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MiniCapture"));
-	_MiniMapCapture->SetupAttachment(_MiniMapspringArm);
-
-	_MiniMapCapture->ProjectionType = ECameraProjectionMode::Orthographic;
-	_MiniMapCapture->OrthoWidth = 1024;
-
-	_MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
-	_MinimapSprite->SetupAttachment(RootComponent);
-	_MinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
-	_MinimapSprite->SetWorldScale3D(FVector(0.5f));
-	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
-	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
-
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Skins/WhiteTiger/Meshes/Greystone_WhiteTiger.Greystone_WhiteTiger'"));
-
-	if (PS.Succeeded())
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> USM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Face_Pos.Free_Body_Face_Pos'"));
+	if (USM.Succeeded())
 	{
-		GetMesh()->SetSkeletalMesh(PS.Object);
+		GetMesh()->SetSkeletalMesh(USM.Object);
 	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> LSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Bottom_Pos.Free_Body_Bottom_Pos'"));
+	if (LSM.Succeeded())
+	{
+	 	_lowerBodyMesh->SetSkeletalMesh(LSM.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SHSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Arms_Pos.Free_Body_Arms_Pos'"));
+	if (SHSM.Succeeded())
+	{
+		_shoulderBodyMesh->SetSkeletalMesh(SHSM.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SWSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Sward_Pos.Sward_Pos'"));
+	if (SWSM.Succeeded())
+	{
+	 	_swordBodyMesh->SetSkeletalMesh(SWSM.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Shield_Pos.Shield_Pos'"));
+	if (SSM.Succeeded())
+	{
+		_shieldBodyMesh->SetSkeletalMesh(SSM.Object);
+	}
+
+	_lowerBodyMesh->SetupAttachment(GetMesh());
+	_shoulderBodyMesh->SetupAttachment(GetMesh());
+	_swordBodyMesh->SetupAttachment(GetMesh());
+	_shieldBodyMesh->SetupAttachment(GetMesh());
+
+
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
@@ -80,16 +94,6 @@ AMyPlayer::AMyPlayer()
 	{
 		_statWidget = CreateWidget<UStatWidget>(GetWorld(), StatClass.Class);
 	}
-
-	static ConstructorHelpers::FClassFinder<UMiniMapWidget> MinuMap(
-		TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/MiniMap_UI.MiniMap_UI_C'"));
-
-	if (MinuMap.Succeeded())
-	{
-		_MiniMap = CreateWidget<UMiniMapWidget>(GetWorld(), MinuMap.Class);
-	}
-
-
 
 	_dashDistance = 1000.f;
 	_dashSpeed = 3000.f;
@@ -109,10 +113,7 @@ void AMyPlayer::BeginPlay()
 		_statWidget->AddToViewport();
 		_statWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
-	if (_MiniMap)
-	{
-		_MiniMap->AddToViewport();
-	}
+
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
 	{
@@ -120,11 +121,6 @@ void AMyPlayer::BeginPlay()
 	}
 	SkillOnCooldown.Init(false, 4);
 	Equipment.Init(nullptr,6);
-
-
-
-	
-
 }
 
 void AMyPlayer::PostInitializeComponents()
@@ -183,6 +179,16 @@ void AMyPlayer::SetArmor(class AArmor_test *Armor)
 		Armor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, ArmorSocket);
 		Armor->SetOwner(this);
 	}
+}
+
+
+void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit)
+{
+    if (HitMonster)
+    {
+        FVector LaunchDirection = (HitMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+        HitMonster->LaunchFromPlayer(LaunchDirection);
+    }
 }
 
 void AMyPlayer::Move(const FInputActionValue &value)
@@ -319,8 +325,14 @@ void AMyPlayer::StatUIOpen(const FInputActionValue& value)
 		}
 		else
 		{
-			
-			_statWidget->UpdateStatDisplay();
+		
+			_statWidget->HPUpdate(_StatCom->GetMaxHp());
+			_statWidget->MPUpdate(_StatCom->GetMaxMp());
+			_statWidget->STRUpdate(_StatCom->GetStr());
+			_statWidget->DEXUpdate(_StatCom->GetDex());
+			_statWidget->INTUpdate(_StatCom->GetInt());
+			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
+			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
 
 		}

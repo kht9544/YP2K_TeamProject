@@ -11,10 +11,9 @@ struct FInputActionValue;
 UENUM(BlueprintType)
 enum class EPlayerState : uint8
 {
-    Normal UMETA(DisplayName = "Normal"),
-    Climbing UMETA(DisplayName = "Climbing")
+	Normal UMETA(DisplayName = "Normal"),
+	Climbing UMETA(DisplayName = "Climbing")
 };
-
 
 UCLASS()
 class PROTOTYPE_API AMyPlayer : public ACharacter
@@ -29,117 +28,133 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	virtual void PostInitializeComponents() override;
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
+
+	bool IsDashing() { return bIsDashing; }
 
 	bool CanSetArmor();
 
-	void SetArmor(class AArmor_test* Armor);
+	void SetArmor(class AArmor_test *Armor);
+	void OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit);
 
-	void SetSkillOnCooldown(int32 index,bool cool){SkillOnCooldown[index] = cool;}
+	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
 
 	// Animation
 	float GetVertical() { return _vertical; }
 	float GetHorizontal() { return _horizontal; }
 
 private:
-	void Move(const FInputActionValue& value);
-	void Look(const FInputActionValue& value);
-	void JumpA(const FInputActionValue& value);
-	void AttackA(const FInputActionValue& value);
-	void Skill1(const FInputActionValue& value);
-	void Skill2(const FInputActionValue& value);
-	void Skill3(const FInputActionValue& value);
-	void Skill4(const FInputActionValue& value);
-	 void Mouse(const FInputActionValue& value);
-	//cheol
-	void StatUIOpen(const FInputActionValue& value);
+	void Move(const FInputActionValue &value);
+	void Look(const FInputActionValue &value);
+	void JumpA(const FInputActionValue &value);
+	void AttackA(const FInputActionValue &value);
+	void Skill1(const FInputActionValue &value);
+	void Skill2(const FInputActionValue &value);
+	void Skill3(const FInputActionValue &value);
+	void Skill4(const FInputActionValue &value);
+	void Mouse(const FInputActionValue &value);
+	// cheol
+	void StatUIOpen(const FInputActionValue &value);
 
-	//void CheckForClimbableWall();
+	// void CheckForClimbableWall();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
-    TArray<bool> SkillOnCooldown;
+	TArray<bool> SkillOnCooldown;
 
-	//TODO:item으로 변경
-	TArray<class Armor_test*> Equipment; //0:하체 1:상체 2:검 3:견갑 4:방패 5:투구
+	// TODO:item으로 변경
+	TArray<class Armor_test *> Equipment; // 0:하체 1:상체 2:검 3:견갑 4:방패 5:투구
 
 	bool bIsDashing;
-    FVector DashDirection;
-    float DashTimeElapsed;
-    float DashDuration;
+	FVector DashDirection;
+	float DashTimeElapsed;
+	float DashDuration;
 
-    void PerformDash(float DeltaTime);
-
+	void PerformDash(float DeltaTime);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* _lookAction;
+	class UInputAction *_lookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _moveAction;
+	UInputAction *_moveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _jumpAction;
+	UInputAction *_jumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _attackAction;
+	UInputAction *_attackAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _skill1Action;
+	UInputAction *_skill1Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _skill2Action;
+	UInputAction *_skill2Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _skill3Action;
+	UInputAction *_skill3Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _skill4Action;
+	UInputAction *_skill4Action;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _mouseAction;
+	UInputAction *_mouseAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* _StatOpenAction;
+	UInputAction *_StatOpenAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* _springArm;
+	class USpringArmComponent *_springArm;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* _camera;
+	class UCameraComponent *_camera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
-    class USkillWidget_test* _skillWidgetInstance;
+	class USkillWidget_test *_skillWidgetInstance;
 
 	//  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Parkour, meta = (AllowPrivateAccess = "true"))
-    //  class UParkourComponent_Test* _parkourComp;
+	//  class UParkourComponent_Test* _parkourComp;
 
-	//cheol
+	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	// class USkeletalMeshComponent* _upperBodyMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	class USkeletalMeshComponent* _lowerBodyMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	class USkeletalMeshComponent* _shoulderBodyMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	class USkeletalMeshComponent* _swordBodyMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	class USkeletalMeshComponent* _shieldBodyMesh;
+
+
+
+	// cheol
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
-	class UStatComponent* _StatCom;
-	
+	class UStatComponent *_StatCom;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
-	class UStatWidget* _statWidget;
+	class UStatWidget *_statWidget;
 
 	// MiniMap
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MiniMap, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* _MiniMapspringArm;
+	class USpringArmComponent *_MiniMapspringArm;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MiniMap, meta = (AllowPrivateAccess = "true"))
-	class USceneCaptureComponent2D* _MiniMapCapture;
+	class USceneCaptureComponent2D *_MiniMapCapture;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
-	class UPaperSpriteComponent* _MinimapSprite;
+	class UPaperSpriteComponent *_MinimapSprite;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
-	class UMiniMapWidget* _MiniMap;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Dash")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	float _dashDistance;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Dash")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	float _dashSpeed;
 
 	// Animation
@@ -148,5 +163,4 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float _horizontal = 0.0f;
-
 };

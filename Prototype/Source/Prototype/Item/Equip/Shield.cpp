@@ -3,3 +3,11 @@
 
 #include "Shield.h"
 
+
+AShield::AShield()
+{
+    _equipItemType = EItemType::Shield;
+    AttachSocketName = FName(TEXT("lowerarm_twist_02_lSocket"));
+}
+
+

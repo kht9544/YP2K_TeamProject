@@ -3,3 +3,9 @@
 
 #include "Sword.h"
 
+
+ASword::ASword()
+{
+    _equipItemType = EItemType::Sword;
+    AttachSocketName = FName(TEXT("hand_rSocket"));
+}
