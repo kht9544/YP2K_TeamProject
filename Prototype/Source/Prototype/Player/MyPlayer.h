@@ -133,6 +133,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
 	class UPaperSpriteComponent* _MinimapSprite;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
+	class UMiniMapWidget* _MiniMap;
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Dash")
 	float _dashDistance;
 
