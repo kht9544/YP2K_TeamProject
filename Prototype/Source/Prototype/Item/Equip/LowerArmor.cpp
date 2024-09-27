@@ -6,5 +6,6 @@
 
 ALowerArmor::ALowerArmor()
 {
-    AttachSocketName = FName(TEXT("spine_01Socket"));
+    _equipItemType = EItemType::LowerArmor;
+    AttachSocketName = FName(TEXT("pelvisSocket"));
 }

@@ -6,6 +6,16 @@
 #include "../BaseItem.h" 
 #include "EquipItem.generated.h"
 
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+    UpperArmor,
+    LowerArmor,
+    ShoulderArmor,
+    Sword,
+    Shield
+};
+
 UCLASS()
 class PROTOTYPE_API AEquipItem : public ABaseItem 
 {
@@ -22,21 +32,18 @@ protected:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    //TODO: 스켈레톤으로 변경예정
-    // UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-    // UStaticMeshComponent* _itemMesh;
+    virtual void EquipPlayer(class AMyPlayer* Player);
 
-    // UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-    // class USphereComponent* _overlapSphere;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-    class USkeletalMeshComponent* _skeletalComponent;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Socket")
     FName AttachSocketName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EquipItem")
+    EItemType _equipItemType;
 
 public:  
     UFUNCTION()
     virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EquipItem")
+    class USkeletalMesh* _equipItem;
 };
