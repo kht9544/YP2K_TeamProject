@@ -13,5 +13,8 @@ UCLASS()
 class PROTOTYPE_API ALowerArmor : public AEquipItem
 {
 	GENERATED_BODY()
+
+public:
+	ALowerArmor();
 	
 };

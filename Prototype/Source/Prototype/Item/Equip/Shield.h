@@ -13,5 +13,8 @@ UCLASS()
 class PROTOTYPE_API AShield : public AEquipItem
 {
 	GENERATED_BODY()
+
+public:
+	AShield();
 	
 };

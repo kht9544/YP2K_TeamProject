@@ -1,18 +1,15 @@
 #include "Item/Equip/EquipItem.h"
 #include "../../Player/MyPlayer.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
 AEquipItem::AEquipItem()
 {
     PrimaryActorTick.bCanEverTick = true;
-   // _meshComponent>SetSimulatePhysics(true);
-    _meshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-    RootComponent = _meshComponent;
 
-    //_trigger = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapSphere"));
-    _trigger->SetupAttachment(_meshComponent);
+    _Type = ItemType::Equipment;
+
     _trigger->SetSphereRadius(100.0f);
     _trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }
@@ -30,16 +27,42 @@ void AEquipItem::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
+void AEquipItem::EquipPlayer(class AMyPlayer* Player)
+{
+   if (_equipItem)
+    {
+        switch (_equipItemType)
+        {
+            case EItemType::UpperArmor:
+                Player->GetMesh()->SetSkeletalMesh(_equipItem);
+                break;
+            case EItemType::LowerArmor:
+                Player->_lowerBodyMesh->SetSkeletalMesh(_equipItem);
+                break;
+            case EItemType::ShoulderArmor:
+                Player->_shoulderBodyMesh->SetSkeletalMesh(_equipItem);
+                break;
+            case EItemType::Sword:
+                Player->_swordBodyMesh->SetSkeletalMesh(_equipItem);
+                break;
+            case EItemType::Shield:
+                Player->_shieldBodyMesh->SetSkeletalMesh(_equipItem);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
     auto Player = Cast<AMyPlayer>(OtherActor);
     if (Player)
     {
-        UE_LOG(LogTemp, Warning, TEXT("%s"), *AttachSocketName.ToString());
-        //_meshComponent->SetSimulatePhysics(false);
-        AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachSocketName);
-        SetOwner(Player);
+        EquipPlayer(Player);
 
-        SetActorEnableCollision(false);
+        _meshComponent->SetVisibility(false);
+        _meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
     }
+    Destroy();
 }

@@ -3,3 +3,9 @@
 
 #include "LowerArmor.h"
 
+
+ALowerArmor::ALowerArmor()
+{
+    _equipItemType = EItemType::LowerArmor;
+    AttachSocketName = FName(TEXT("pelvisSocket"));
+}

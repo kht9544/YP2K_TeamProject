@@ -13,5 +13,8 @@ UCLASS()
 class PROTOTYPE_API AShoulderGuard : public AEquipItem
 {
 	GENERATED_BODY()
+
+public:
+	AShoulderGuard();
 	
 };
