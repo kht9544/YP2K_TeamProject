@@ -27,7 +27,7 @@ void ACreature::Tick(float DeltaTime)
 
 void ACreature::PostInitializeComponents()
 {
-	
+	Super::PostInitializeComponents();
 }
 
 void ACreature::Init()

@@ -32,6 +32,11 @@ void ANormalMonster::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ANormalMonster::PostInitializeComponents()
+{
+	 Super::PostInitializeComponents();
+}
+
 // Called every frame
 void ANormalMonster::Tick(float DeltaTime)
 {

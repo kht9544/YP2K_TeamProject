@@ -11,17 +11,17 @@ AMonster::AMonster()
 
 void AMonster::BeginPlay()
 {
-    
+    Super::BeginPlay();
 }
 
 void AMonster::PostInitializeComponents()
 {
-    
+    Super::PostInitializeComponents();
 }
 
 void AMonster::Disable()
 {
-    
+    Super::Disable();
 }
 
 void AMonster::DropReword()
