@@ -12,6 +12,8 @@
 #include "MyPlayerController.h"
 #include "../Item/Equip/Armor_test.h"
 #include "../UI/SkillWidget_test.h"
+#include "MyDecal.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // chelo
 #include "Component/StatComponent.h"
@@ -98,6 +100,12 @@ AMyPlayer::AMyPlayer()
 	if (CS.Succeeded())
 	{
 		_cameraShakeClass = CS.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder<AMyDecal> MD (TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Decal_BP.Decal_BP_C'"));
+	if (MD.Succeeded())
+	{
+		_decal = MD.Class;
 	}
 
 	_dashDistance = 1000.f;
@@ -267,6 +275,14 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 		else
 		{
 			SkillOnCooldown[1] = true;
+
+			FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = GetInstigator();
+			FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
+			DecalLocation.Z = 0.0f;
+
+			AMyDecal* Decal = GetWorld()->SpawnActor<AMyDecal>(_decal,DecalLocation, FRotator::ZeroRotator, SpawnParams);
 			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
 			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);
 			_skillWidgetInstance->StartCooldown(1, 5.0f);
@@ -374,34 +390,38 @@ void AMyPlayer::PerformDash(float DeltaTime)
 void AMyPlayer::StartScreenShake()
 {
     static float InitialShakeStrength = 0.1f;
-    static float MaxShakeStrength = 10.0f;
-    static float IncreaseAmount = 3.0f; 
-    static float Duration = 1.0f;
-    static float ElapsedTime = 0.0f;
+static float MaxShakeStrength = 10.0f;
+static float IncreaseAmount = 3.0f; 
+static float Duration = 1.0f;
+static float ElapsedTime = 0.0f;
 
-    if (_cameraShakeClass)
-    {
-        // 화면 흔들기 시작
-        UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, InitialShakeStrength);
-    }
+if (_cameraShakeClass)
+{
+    // 화면 흔들기 시작
+    UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, InitialShakeStrength);
+}
 
-    // 경과 시간 업데이트
-    ElapsedTime += GetWorld()->GetDeltaSeconds();
+// 경과 시간 업데이트
+ElapsedTime += GetWorld()->GetDeltaSeconds();
 
-    // 현재 흔들림 강도를 계산
-    float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f));
+// 현재 흔들림 강도를 계산
+float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f));
 
-    // 타이머가 끝나지 않았다면 화면 흔들기 계속
-    if (ElapsedTime < Duration)
-    {
-        UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, CurrentShakeStrength);
-    }
-    else
-    {
-        // 타이머 중지
-        GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
-        ElapsedTime = 0.0f; // 경과 시간 초기화
-    }
+// 타이머가 끝나지 않았다면 화면 흔들기 계속
+if (ElapsedTime < Duration)
+{
+    UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, CurrentShakeStrength);
+}
+else
+{
+    // 타이머가 끝났을 때 더 강하게 화면을 한 번 더 흔들리게 함
+    UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, MaxShakeStrength * 2.0f);
+
+    // 타이머 중지
+    GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
+    ElapsedTime = 0.0f; // 경과 시간 초기화
+}
+
 }
 
 
