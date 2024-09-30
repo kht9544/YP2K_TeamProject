@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Creature.h"
+#include "../Item/Equip/EquipItem.h"
 #include "MyPlayer.generated.h"
 
 struct FInputActionValue;
@@ -37,12 +38,12 @@ public:
 
 	bool IsDashing() { return bIsDashing; }
 
-	bool CanSetArmor();
-
-	void SetArmor(class AArmor_test *Armor);
+	//TODO: Monster로 변경
 	void OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit);
 
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
+
+	void SetEquipItem(EItemType equiptype, AEquipItem* equipitem);
 
 	// Animation
 	float GetVertical() { return _vertical; }
@@ -65,8 +66,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
 	TArray<bool> SkillOnCooldown;
 
-	// TODO:item으로 변경
-	TArray<class Armor_test *> Equipment; // 0:하체 1:상체 2:검 3:견갑 4:방패 5:투구
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment" , meta = (AllowPrivateAccess = "true"))
+    TMap<EItemType, AEquipItem*> _EquipItems;
 
 	bool bIsDashing;
 	FVector DashDirection;
@@ -135,7 +136,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class USkeletalMeshComponent* _shieldBodyMesh;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<class AMyDecal> _decal;
 
 	// cheol
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
