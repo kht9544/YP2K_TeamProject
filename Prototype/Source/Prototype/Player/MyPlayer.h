@@ -146,13 +146,16 @@ public:
 
 	// MiniMap
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MiniMap, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent *_MiniMapspringArm;
+	class USpringArmComponent* _MiniMapspringArm;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MiniMap, meta = (AllowPrivateAccess = "true"))
-	class USceneCaptureComponent2D *_MiniMapCapture;
+	class USceneCaptureComponent2D* _MiniMapCapture;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
-	class UPaperSpriteComponent *_MinimapSprite;
+	class UPaperSpriteComponent* _MinimapSprite;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
+	class UMiniMapWidget* _MiniMap;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	float _dashDistance;
