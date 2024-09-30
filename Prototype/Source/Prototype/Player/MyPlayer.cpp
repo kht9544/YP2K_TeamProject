@@ -10,7 +10,6 @@
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyPlayerController.h"
-#include "../Item/Equip/Armor_test.h"
 #include "../UI/SkillWidget_test.h"
 #include "MyDecal.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -65,17 +64,17 @@ AMyPlayer::AMyPlayer()
 		_shoulderBodyMesh->SetSkeletalMesh(SHSM.Object);
 	}
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SWSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Sward_Pos.Sward_Pos'"));
-	if (SWSM.Succeeded())
-	{
-		_swordBodyMesh->SetSkeletalMesh(SWSM.Object);
-	}
+	// static ConstructorHelpers::FObjectFinder<USkeletalMesh> SWSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Sward_Pos.Sward_Pos'"));
+	// if (SWSM.Succeeded())
+	// {
+	// 	_swordBodyMesh->SetSkeletalMesh(SWSM.Object);
+	// }
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Shield_Pos.Shield_Pos'"));
-	if (SSM.Succeeded())
-	{
-		_shieldBodyMesh->SetSkeletalMesh(SSM.Object);
-	}
+	// static ConstructorHelpers::FObjectFinder<USkeletalMesh> SSM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/WhiteTiger_Detach/Shield_Pos.Shield_Pos'"));
+	// if (SSM.Succeeded())
+	// {
+	// 	_shieldBodyMesh->SetSkeletalMesh(SSM.Object);
+	// }
 
 	_lowerBodyMesh->SetupAttachment(GetMesh());
 	_shoulderBodyMesh->SetupAttachment(GetMesh());
@@ -102,7 +101,7 @@ AMyPlayer::AMyPlayer()
 		_cameraShakeClass = CS.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<AMyDecal> MD (TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Decal_BP.Decal_BP_C'"));
+	static ConstructorHelpers::FClassFinder<AMyDecal> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Decal_BP.Decal_BP_C'"));
 	if (MD.Succeeded())
 	{
 		_decal = MD.Class;
@@ -132,7 +131,6 @@ void AMyPlayer::BeginPlay()
 		_skillWidgetInstance = MyController->SkillWidgetInstance;
 	}
 	SkillOnCooldown.Init(false, 4);
-	Equipment.Init(nullptr, 6);
 }
 
 void AMyPlayer::PostInitializeComponents()
@@ -175,20 +173,6 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 	}
 }
 
-bool AMyPlayer::CanSetArmor()
-{
-	return true;
-}
-
-void AMyPlayer::SetArmor(class AArmor_test *Armor)
-{
-	FName ArmorSocket(TEXT("spine_03Socket"));
-	if (Armor != nullptr)
-	{
-		Armor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, ArmorSocket);
-		Armor->SetOwner(this);
-	}
-}
 
 void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit)
 {
@@ -197,6 +181,20 @@ void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult 
 		FVector LaunchDirection = (HitMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 		HitMonster->LaunchFromPlayer(LaunchDirection);
 	}
+}
+
+void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
+{
+    if (_EquipItems.Contains(equiptype))
+    {
+        return;
+    }
+    else
+    {
+        _EquipItems.Add(equiptype, equipitem);
+	}
+
+	// Update UI
 }
 
 void AMyPlayer::Move(const FInputActionValue &value)
@@ -277,12 +275,12 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 			SkillOnCooldown[1] = true;
 
 			FActorSpawnParameters SpawnParams;
-            SpawnParams.Owner = this;
-            SpawnParams.Instigator = GetInstigator();
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
 			FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
 			DecalLocation.Z = 0.0f;
 
-			AMyDecal* Decal = GetWorld()->SpawnActor<AMyDecal>(_decal,DecalLocation, FRotator::ZeroRotator, SpawnParams);
+			AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
 			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
 			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);
 			_skillWidgetInstance->StartCooldown(1, 5.0f);
@@ -386,44 +384,41 @@ void AMyPlayer::PerformDash(float DeltaTime)
 	}
 }
 
-
 void AMyPlayer::StartScreenShake()
 {
-    static float InitialShakeStrength = 0.1f;
-static float MaxShakeStrength = 10.0f;
-static float IncreaseAmount = 3.0f; 
-static float Duration = 1.0f;
-static float ElapsedTime = 0.0f;
+	static float InitialShakeStrength = 0.1f;
+	static float MaxShakeStrength = 10.0f;
+	static float IncreaseAmount = 3.0f;
+	static float Duration = 1.0f;
+	static float ElapsedTime = 0.0f;
 
-if (_cameraShakeClass)
-{
-    // 화면 흔들기 시작
-    UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, InitialShakeStrength);
+	if (_cameraShakeClass)
+	{
+		// 화면 흔들기 시작
+		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, InitialShakeStrength);
+	}
+
+	// 경과 시간 업데이트
+	ElapsedTime += GetWorld()->GetDeltaSeconds();
+
+	// 현재 흔들림 강도를 계산
+	float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f));
+
+	// 타이머가 끝나지 않았다면 화면 흔들기 계속
+	if (ElapsedTime < Duration)
+	{
+		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, CurrentShakeStrength);
+	}
+	else
+	{
+		// 타이머가 끝났을 때 더 강하게 화면을 한 번 더 흔들리게 함
+		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, MaxShakeStrength * 2.0f);
+
+		// 타이머 중지
+		GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
+		ElapsedTime = 0.0f; // 경과 시간 초기화
+	}
 }
-
-// 경과 시간 업데이트
-ElapsedTime += GetWorld()->GetDeltaSeconds();
-
-// 현재 흔들림 강도를 계산
-float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f));
-
-// 타이머가 끝나지 않았다면 화면 흔들기 계속
-if (ElapsedTime < Duration)
-{
-    UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, CurrentShakeStrength);
-}
-else
-{
-    // 타이머가 끝났을 때 더 강하게 화면을 한 번 더 흔들리게 함
-    UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, MaxShakeStrength * 2.0f);
-
-    // 타이머 중지
-    GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
-    ElapsedTime = 0.0f; // 경과 시간 초기화
-}
-
-}
-
 
 void AMyPlayer::CastMeteor()
 {
