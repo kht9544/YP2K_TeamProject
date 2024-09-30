@@ -42,6 +42,7 @@ public:
 	void SetArmor(class AArmor_test *Armor);
 	void OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit);
 
+
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
 
 	// Animation
