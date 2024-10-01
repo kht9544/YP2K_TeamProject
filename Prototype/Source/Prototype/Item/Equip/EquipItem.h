@@ -26,6 +26,7 @@ public:
     AEquipItem();
 
     ItemType GetArmorType(){return _Type;}
+    EItemType GetEquipType(){return _equipItemType;}
 
 protected:
     // Called when the game starts or when spawned
