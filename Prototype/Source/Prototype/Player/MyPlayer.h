@@ -141,8 +141,8 @@ public:
     TSubclassOf<class AMyDecal> _decal;
 
 	// cheol
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
-	//class UStatComponent *_StatCom;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
+	class UStatComponent *_StatCom;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UStatWidget *_statWidget;
