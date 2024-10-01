@@ -130,12 +130,6 @@
     <Filter Include="Source\Prototype\Item\Equip">
       <UniqueIdentifier>{ED7E9353-12CF-3FC6-99E7-65652FECD905}</UniqueIdentifier>
     </Filter>
-    <ClCompile Include="..\..\Source\Prototype\Item\Equip\Armor_test.cpp">
-      <Filter>Source\Prototype\Item\Equip</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\Prototype\Item\Equip\Armor_test.h">
-      <Filter>Source\Prototype\Item\Equip</Filter>
-    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Item\Equip\EquipItem.cpp">
       <Filter>Source\Prototype\Item\Equip</Filter>
     </ClCompile>
@@ -209,6 +203,12 @@
       <Filter>Source\Prototype\Player</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Player\Creature.h">
+      <Filter>Source\Prototype\Player</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Player\MyDecal.cpp">
+      <Filter>Source\Prototype\Player</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Player\MyDecal.h">
       <Filter>Source\Prototype\Player</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Player\MyPlayer.cpp">

@@ -67,7 +67,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BB0BC40A-1D98-3B9E-9180-93BC10684831}</ProjectGuid>
+    <ProjectGuid>{5305EBB6-C9E5-3EE7-BCAE-D5A41CAFB9EA}</ProjectGuid>
     <RootNamespace>Prototype</RootNamespace>
   </PropertyGroup>
   <Import Project="UECommon.props" />
@@ -308,10 +308,6 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Item\Consumes\ConsumeItem.h"/>
-    <ClCompile Include="..\..\Source\Prototype\Item\Equip\Armor_test.cpp">
-      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\Prototype\Item\Equip\Armor_test.h"/>
     <ClCompile Include="..\..\Source\Prototype\Item\Equip\EquipItem.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -357,6 +353,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Player\Creature.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Player\MyDecal.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Player\MyDecal.h"/>
     <ClCompile Include="..\..\Source\Prototype\Player\MyPlayer.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
