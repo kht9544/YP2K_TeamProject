@@ -105,6 +105,8 @@ void ABaseItem::UseItem()
 {
 }
 
-void ABaseItem::DropItem()
+void ABaseItem::DropItem(FVector location, FRotator rotation)
 {
+	SetActorLocationAndRotation(location, rotation);
+	Init();
 }

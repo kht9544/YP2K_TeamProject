@@ -71,7 +71,7 @@ void UInventoryComponent::AddItem(int32 slot, ABaseItem* item)
 		return;
 	if (_isSlotFull)
 		return;
-	//TODO : Fill into EmptySlot First
+	//Fill into EmptySlot First
 	if (!_EmptySlots.IsEmpty())
 	{
 		int32 emptyslot;
@@ -110,14 +110,24 @@ void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)
 	if (slot >= _itemSlotMax)
 		return;
 
+	FVector playerPlos = GetOwner()->GetActorLocation();
+
+	float randFloat = FMath::FRandRange(0, PI * 2.0f);
+
+	float X = cosf(randFloat) * 300.0f;
+	float Y = sinf(randFloat) * 300.0f;
+	FVector itemPos = playerPlos + FVector(X, Y, 0.0f);
+	itemPos.Z = 50.0f;
+
 	UIupdate_Pop(slot);
 
 	if (isDrop)
-		_ItemSlots[slot]->DropItem();
+		_ItemSlots[slot]->DropItem(itemPos);
 	else
 		_ItemSlots[slot]->UseItem();
 
 	_ItemSlots[slot] = nullptr;
+	_EmptySlots.Add(slot);
 }
 
 void UInventoryComponent::EquipItem(int32 slot)

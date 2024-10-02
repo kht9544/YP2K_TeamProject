@@ -67,7 +67,7 @@ public:
 
 	void GetItem();
 	void UseItem();
-	void DropItem();
+	void DropItem(FVector location, FRotator rotation = FRotator::ZeroRotator);
 
 	//Item Data Getter
 	FString GetName() { return _Name; }
