@@ -30,12 +30,18 @@
 
 // Animation
 #include "../Animation/PlayerAnimInstance.h"
-#include "../Animation/Knight_AnimInstance.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+
 
 	_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -46,7 +52,7 @@ AMyPlayer::AMyPlayer()
 	_swordBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SwordSkeletal"));
 	_shieldBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ShieldSkeletal"));
 
-	_springArm->SetupAttachment(GetCapsuleComponent());
+	_springArm->SetupAttachment(RootComponent);
 	_camera->SetupAttachment(_springArm);
 
 	_springArm->TargetArmLength = 500.0f;
@@ -185,6 +191,16 @@ void AMyPlayer::PostInitializeComponents()
 	}
 
 	ItemEquipped.AddDynamic(this,&AMyPlayer::EquipItem);
+
+	_KnightanimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	if (_KnightanimInstance->IsValidLowLevelFast())
+	{
+		_KnightanimInstance->OnMontageEnded.AddDynamic(this, &AMyPlayer::OnAttackEnded);
+		_KnightanimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
+		_KnightanimInstance->_deathDelegate_Knight.AddUObject(this, &AMyPlayer::Disable);
+	}
+
+
 }
 
 // Called every frame
@@ -246,6 +262,11 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 	// TODO:Update UI
 }
 
+void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	_isAttcking = false;
+}
+
 void AMyPlayer::Move(const FInputActionValue &value)
 {
 	FVector2D MovementVector = value.Get<FVector2D>();
@@ -276,7 +297,19 @@ void AMyPlayer::JumpA(const FInputActionValue &value)
 void AMyPlayer::AttackA(const FInputActionValue &value)
 {
 	bool isPressed = value.Get<bool>();
-	AttackHit();
+	
+
+	if (isPressed && _isAttcking == false && _KnightanimInstance != nullptr)
+	{
+		_KnightanimInstance->PlayAttackMontage();
+		_isAttcking = true;
+
+		_curAttackIndex %= 4;
+		_curAttackIndex++;
+
+		_KnightanimInstance->JumpToSection(_curAttackIndex);
+	}
+
 }
 
 void AMyPlayer::Skill1(const FInputActionValue &value)

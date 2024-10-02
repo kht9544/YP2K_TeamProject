@@ -32,6 +32,8 @@ public:
 
 	float GetVertical() {return _vertical;}
 	float GetHorizontal() {return _horizontal;}
+	
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
