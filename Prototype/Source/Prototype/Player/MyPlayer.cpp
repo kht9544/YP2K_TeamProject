@@ -199,7 +199,7 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 		_KnightanimInstance->PlayAttackMontage();
 		_isAttcking = true;
 
-		_curAttackIndex %= 4;
+		_curAttackIndex %= 3;
 		_curAttackIndex++;
 
 		_KnightanimInstance->JumpToSection(_curAttackIndex);
