@@ -34,7 +34,6 @@ void AEquipItem::EquipPlayer(class AMyPlayer *Player)
 
     if (_equipItem)
     {
-        Player->SetEquipItem(_equipItemType,this);
         switch (_equipItemType)
         {
         case EItemType::UpperArmor:
@@ -64,9 +63,9 @@ void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *Oth
     if (Player)
     {
         EquipPlayer(Player);
-
+        Player->ItemEquipped.Broadcast(this);
         _meshComponent->SetVisibility(false);
         _meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        Destroy();
     }
-    Destroy();
 }

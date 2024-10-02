@@ -8,6 +8,9 @@
 #include "../Item/Equip/EquipItem.h"
 #include "MyPlayer.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemEquipped, AEquipItem*, EquipItem);
+
 struct FInputActionValue;
 
 UENUM(BlueprintType)
@@ -36,6 +39,9 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
 
+	UPROPERTY(BlueprintAssignable,Category = "Equipment")
+	FOnItemEquipped ItemEquipped;
+	
 	bool IsDashing() { return bIsDashing; }
 
 	//TODO: Monster로 변경
@@ -43,6 +49,10 @@ public:
 
 
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
+
+	UFUNCTION()
+	void EquipItem(AEquipItem* equipitem);
+
 
 	void SetEquipItem(EItemType equiptype, AEquipItem* equipitem);
 
