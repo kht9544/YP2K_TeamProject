@@ -294,7 +294,7 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			FVector2D MovementInput = _moveVector;
 			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
 
-			if (GetVelocity().Size() > 0.1f)
+			if (GetVelocity().Size() > 400.f)
 			{
 				FVector Forward = GetActorForwardVector() * MovementInput.Y;
 				FVector Right = GetActorRightVector() * MovementInput.X;
