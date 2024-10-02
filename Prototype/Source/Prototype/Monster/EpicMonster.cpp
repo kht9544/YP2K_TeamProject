@@ -2,10 +2,12 @@
 
 
 #include "Monster/EpicMonster.h"
-#include "../Player/MyPlayer.h"
 #include "Base/MyGameInstance.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
+#include "Monster/AI/AIController_Epic.h"
+
 
 AEpicMonster::AEpicMonster()
 {
@@ -24,6 +26,9 @@ AEpicMonster::AEpicMonster()
 	_capsuleComponent->InitCapsuleSize(250.0f, 250.0f); 
 
 	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
+
+	AIControllerClass = AAIController_Epic::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 }
 

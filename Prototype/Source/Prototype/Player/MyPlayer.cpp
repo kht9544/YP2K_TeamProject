@@ -183,6 +183,8 @@ void AMyPlayer::PostInitializeComponents()
 	{
 		_StatCom->SetLevelInit(1);
 	}
+
+	ItemEquipped.AddDynamic(this,&AMyPlayer::EquipItem);
 }
 
 // Called every frame
@@ -225,18 +227,23 @@ void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult 
 	}
 }
 
+void AMyPlayer::EquipItem(AEquipItem* equipitem)
+{
+	SetEquipItem(equipitem->GetEquipType(),equipitem);
+}
+
 void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 {
     if (_EquipItems.Contains(equiptype))
     {
+		//TODO 
         return;
     }
     else
     {
         _EquipItems.Add(equiptype, equipitem);
 	}
-
-	// Update UI
+	// TODO:Update UI
 }
 
 void AMyPlayer::Move(const FInputActionValue &value)
@@ -287,7 +294,7 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			FVector2D MovementInput = _moveVector;
 			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
 
-			if (GetVelocity().Size() > 0.1f)
+			if (GetVelocity().Size() > 400.f)
 			{
 				FVector Forward = GetActorForwardVector() * MovementInput.Y;
 				FVector Right = GetActorRightVector() * MovementInput.X;
@@ -398,7 +405,6 @@ void AMyPlayer::StatUIOpen(const FInputActionValue &value)
 		}
 		else
 		{
-
 			_statWidget->HPUpdate(_StatCom->GetMaxHp());
 			_statWidget->MPUpdate(_StatCom->GetMaxMp());
 			_statWidget->STRUpdate(_StatCom->GetStr());
@@ -436,29 +442,22 @@ void AMyPlayer::StartScreenShake()
 
 	if (_cameraShakeClass)
 	{
-		// 화면 흔들기 시작
 		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, InitialShakeStrength);
 	}
 
-	// 경과 시간 업데이트
 	ElapsedTime += GetWorld()->GetDeltaSeconds();
 
-	// 현재 흔들림 강도를 계산
 	float CurrentShakeStrength = FMath::Lerp(InitialShakeStrength, MaxShakeStrength, FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f));
 
-	// 타이머가 끝나지 않았다면 화면 흔들기 계속
 	if (ElapsedTime < Duration)
 	{
 		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, CurrentShakeStrength);
 	}
 	else
 	{
-		// 타이머가 끝났을 때 더 강하게 화면을 한 번 더 흔들리게 함
 		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, MaxShakeStrength * 2.0f);
-
-		// 타이머 중지
 		GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
-		ElapsedTime = 0.0f; // 경과 시간 초기화
+		ElapsedTime = 0.0f;
 	}
 }
 

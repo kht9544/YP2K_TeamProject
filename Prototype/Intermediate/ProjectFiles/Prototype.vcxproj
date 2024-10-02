@@ -67,7 +67,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5305EBB6-C9E5-3EE7-BCAE-D5A41CAFB9EA}</ProjectGuid>
+    <ProjectGuid>{0C551C70-8E7C-370B-938E-AB365776DDC0}</ProjectGuid>
     <RootNamespace>Prototype</RootNamespace>
   </PropertyGroup>
   <Import Project="UECommon.props" />
@@ -336,10 +336,6 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Item\Equip\UpperArmor.h"/>
-    <ClCompile Include="..\..\Source\Prototype\Monster\EpicAIController.cpp">
-      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\Prototype\Monster\EpicAIController.h"/>
     <ClCompile Include="..\..\Source\Prototype\Monster\EpicMonster.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -353,6 +349,18 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Monster\NormalMonster.h"/>
     <ClInclude Include="..\..\Source\Prototype\Monster\test_monster.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\AIController_Epic.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\AIController_Epic.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\AIController_NormalMonster.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\AIController_NormalMonster.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTask_FindRandPos.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTask_FindRandPos.h"/>
     <ClCompile Include="..\..\Source\Prototype\Player\Creature.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
