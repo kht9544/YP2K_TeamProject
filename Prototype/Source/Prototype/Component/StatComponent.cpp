@@ -14,16 +14,6 @@ UStatComponent::UStatComponent()
 
 
 
-	// 임시 게임인스턴스 아직 구현전이라 임시로 작성 
-	//_level = 1; 
-	//_maxHp = 100; 
-	//_curHp = _maxHp; 
-	//_maxMp = 50; 
-	//_curMp = _maxMp; 
-	//_str = 10; 
-	//_dex = 10; 
-	//_int = 10; 
-	//_bonusPoint = 3;
 }
 
 
@@ -42,33 +32,6 @@ void UStatComponent::BeginPlay()
 }
 
 
-//void UStatComponent::SetStat()
-//{
-//	// 무슨 문제? 
-//	if (StatDataTable != nullptr)
-//	{
-//		TArray<FMyStatData*> AllRows;
-//		StatDataTable->GetAllRows(TEXT(""), AllRows);
-//
-//		if (AllRows.IsValidIndex(_level - 1)) 
-//		{
-//			const FMyStatData& Data = *AllRows[_level - 1];
-//
-//		
-//			if (&Data != nullptr) 
-//			{
-//				_maxHp = Data.MaxHP;
-//				_curHp = _maxHp;
-//				_maxMp = Data.MaxMP;
-//				_curMp = _maxMp;
-//				_str = Data.STR;
-//				_dex = Data.DEX;
-//				_int = Data.INT;
-//				
-//			}
-//		}
-//	}
-//}
 
 // Called every frame
 void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -112,6 +75,32 @@ void UStatComponent::SetLevelInit(int level)
 
 	}
 
+}
+
+void UStatComponent::SetEpicLevelInit(int level)
+{
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
+
+	if (myGameInstance)
+	{
+		Data = myGameInstance->GetEpicDataByLevel(level);
+		_level = level;
+		_maxHp = Data->MaxHP;
+		_curHp = 0;
+		_maxMp = Data->MaxMP;
+		_curMp = 0;
+		_str = Data->STR;
+		_dex = Data->DEX;
+		_int = Data->INT;
+		_nextExp = Data->EXP;
+		_curExp = 0;
+		SetHp(_maxHp);
+		SetMp(_maxMp);
+		_bonusPoint = Data->BonusPoint;
+		_PILevelDelegate.Broadcast(_level);
+
+	}
 }
 
 
@@ -267,32 +256,6 @@ void UStatComponent::AddExp(int32 amount)
 	_PlEXPDelegate.Broadcast(ratio);
 }
 
-
-
-	/*if (StatDataTable != nullptr)
-	{
-		TArray<FMyStatData*> AllRows;
-		StatDataTable->GetAllRows(TEXT(""), AllRows);
-
-		if (AllRows.IsValidIndex(_level - 1))
-		{
-			const FMyStatData& Data = *AllRows[_level - 1];
-
-
-			if (&Data != nullptr)
-			{
-				_maxHp = Data.MaxHP;
-				_curHp = _maxHp;
-				_maxMp = Data.MaxMP;
-				_curMp = _maxMp;
-				_str = Data.STR;
-				_dex = Data.DEX;
-				_int = Data.INT;
-				_bonusPoint = Data.BonusPoint;
-
-			}
-		}
-	}*/
 
 
 
