@@ -3,6 +3,7 @@
 
 #include "Monster/EpicMonster.h"
 #include "../Player/MyPlayer.h"
+#include "Base/MyGameInstance.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -22,6 +23,7 @@ AEpicMonster::AEpicMonster()
 	_capsuleComponent = GetCapsuleComponent();
 	_capsuleComponent->InitCapsuleSize(250.0f, 250.0f); 
 
+	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
 
 }
 
@@ -34,6 +36,10 @@ void AEpicMonster::BeginPlay()
 void AEpicMonster::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	if (_StatCom)
+	{
+		_StatCom->SetEpicLevelInit(1);
+	}
 
 }
 

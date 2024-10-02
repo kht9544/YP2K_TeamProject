@@ -16,6 +16,16 @@ UMyGameInstance::UMyGameInstance()
 
 	}
 
+	// 현재 에픽 스탯데이터테이블 까지완
+	static ConstructorHelpers::FObjectFinder<UDataTable> EpicStatData
+	(TEXT("/Script/Engine.DataTable'/Game/Data/EpicMonsterDataTable.EpicMonsterDataTable'"));
+
+	if (EpicStatData.Succeeded())
+	{
+		_EpicstatTable = EpicStatData.Object;
+
+	}
+
 }
 
 void UMyGameInstance::Init()
@@ -28,7 +38,7 @@ void UMyGameInstance::Init()
 
 	LoadPlayerStatus(_playerLevel);
 	auto statData = GetStatDataByLevel(_playerLevel);
-
+	auto EpicData = GetEpicDataByLevel(1);
 }
 
 void UMyGameInstance::GetItemDataTable()
@@ -44,6 +54,12 @@ FMyStatData* UMyGameInstance::GetStatDataByLevel(int level)
 {
 	auto statData = _statTable->FindRow<FMyStatData>(*FString::FromInt(level), TEXT(""));
 	return statData;
+}
+
+FMyStatData* UMyGameInstance::GetEpicDataByLevel(int level)
+{
+	auto EpicStatData = _EpicstatTable->FindRow<FMyStatData>(*FString::FromInt(level), TEXT(""));
+	return EpicStatData;
 }
 
 void UMyGameInstance::SavePlayerStatus(int32 Level)
