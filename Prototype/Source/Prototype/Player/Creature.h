@@ -26,6 +26,7 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void Init();
 	virtual void Disable();
+	virtual void AttackHit();
 		
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 
