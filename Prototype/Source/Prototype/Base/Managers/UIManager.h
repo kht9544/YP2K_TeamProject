@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "UIManager.generated.h"
 
+class UInventoryWidget;
 UCLASS()
 class PROTOTYPE_API AUIManager : public AActor
 {
@@ -23,4 +24,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UInventoryWidget* GetInventoryUI() { return _inventoryUI; }
+
+private:
+	UInventoryWidget* _inventoryUI;
 };

@@ -4,6 +4,8 @@
 #include "Component/InventoryComponent.h"
 
 #include "Base/MyGameInstance.h"
+#include "Base/Managers/UIManager.h"
+#include "UI/InventoryWidget.h"
 
 #include "Item/BaseItem.h"
 #include "Item/Equip/Helmet.h"
@@ -37,6 +39,7 @@ void UInventoryComponent::BeginPlay()
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
 
+	UIManager->GetInventoryUI()->ItemDrop.Add(this, &UInventoryComponent::ExcuteItem);
 }
 
 
@@ -148,10 +151,12 @@ void UInventoryComponent::EquipItem(int32 slot)
 
 void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem* item)
 {
+	UIManager->GetInventoryUI()->SetItemImage(slot, item);
 }
 
 void UInventoryComponent::UIupdate_Pop(int32 slot)
 {
+	UIManager->GetInventoryUI()->SetItemImage(slot, nullptr);
 }
 
 void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem* item)

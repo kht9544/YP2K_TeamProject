@@ -19,6 +19,8 @@ class PROTOTYPE_API UInventoryWidget : public UUserWidget
 
 	virtual bool Initialize() override;
 
+public:
+
 	void SetButtons();
 
 	void SetItemImage(int32 slotIndex, ABaseItem* item = nullptr);

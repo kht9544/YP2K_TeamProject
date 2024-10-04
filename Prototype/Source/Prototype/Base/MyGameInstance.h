@@ -7,7 +7,7 @@
 #include "Component/StatComponent.h"
 #include "MyGameInstance.generated.h"
 
-#define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance()->GetUIManager())
+#define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
 
 UCLASS()
 class PROTOTYPE_API UMyGameInstance : public UGameInstance
