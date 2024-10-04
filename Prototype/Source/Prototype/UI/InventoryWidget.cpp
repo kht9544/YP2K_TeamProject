@@ -10,6 +10,8 @@
 #include "Components/PanelWidget.h"
 #include "Components/TextBlock.h"
 
+#include "Item/BaseItem.h"
+
 UInventoryWidget::UInventoryWidget(const FObjectInitializer& ObjectInitializer)
 	: UUserWidget(ObjectInitializer)
 {
@@ -26,6 +28,7 @@ bool UInventoryWidget::Initialize()
 
 void UInventoryWidget::SetButtons()
 {
+	
 }
 
 void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
@@ -34,6 +37,7 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 	{
 		Image_[slotIndex]->SetBrushFromTexture(_defaultTexture);
 	}
+	Image_[slotIndex]->SetBrushFromTexture(item->GetTexture());
 }
 
 void UInventoryWidget::ShowItem()
@@ -43,8 +47,39 @@ void UInventoryWidget::ShowItem()
 		ItemTexture->SetBrushFromTexture(_defaultTexture);
 		ItemDesc->SetText(FText::FromString(_defaultText));
 	}
+	else
+	{
+		ItemTexture->SetBrushFromTexture(_targetItem->GetTexture());
+		ItemDesc->SetText(FText::FromString(_targetItem->GetDesc()));
+	}
 }
 
 void UInventoryWidget::ExchangeEquip(int32 slotIndex)
 {
+}
+
+void UInventoryWidget::DropItem()
+{
+	if (_targetItem == nullptr)
+		return;
+
+	ItemDrop.Broadcast(_targetIndex, true);
+
+	_targetItem = nullptr;
+	ShowItem();
+	SetItemImage(_targetIndex, nullptr);
+	_targetIndex = -1;
+}
+
+void UInventoryWidget::UseItem()
+{
+	if (_targetItem == nullptr)
+		return;
+
+	ItemDrop.Broadcast(_targetIndex, false);
+
+	_targetItem = nullptr;
+	ShowItem();
+	SetItemImage(_targetIndex, nullptr);
+	_targetIndex = -1;
 }

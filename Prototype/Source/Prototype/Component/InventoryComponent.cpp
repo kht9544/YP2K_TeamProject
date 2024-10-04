@@ -3,6 +3,8 @@
 
 #include "Component/InventoryComponent.h"
 
+#include "Base/MyGameInstance.h"
+
 #include "Item/BaseItem.h"
 #include "Item/Equip/Helmet.h"
 #include "Item/Equip/UpperArmor.h"
@@ -34,6 +36,7 @@ void UInventoryComponent::BeginPlay()
 	_EquipSlots.Add(TEXT("LowerArmor"));
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
+
 }
 
 

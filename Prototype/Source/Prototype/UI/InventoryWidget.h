@@ -8,6 +8,8 @@
 
 class ABaseItem;
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32 slot, bool isDrop);
+
 UCLASS()
 class PROTOTYPE_API UInventoryWidget : public UUserWidget
 {
@@ -19,11 +21,17 @@ class PROTOTYPE_API UInventoryWidget : public UUserWidget
 
 	void SetButtons();
 
-	void SetItemImage(int32 slotIndex, ABaseItem* item);
+	void SetItemImage(int32 slotIndex, ABaseItem* item = nullptr);
 
 	void ShowItem();
 
 	void ExchangeEquip(int32 slotIndex);
+
+	void DropItem();
+	void UseItem();
+
+	//Delegate
+	ItemDropDelegate ItemDrop;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
@@ -32,7 +40,7 @@ private:
 	FString _defaultText;
 
 	UPROPERTY()
-	ABaseItem* _targetItem;
+	ABaseItem* _targetItem = nullptr;
 	UPROPERTY()
 	int32 _targetIndex = -1;
 
