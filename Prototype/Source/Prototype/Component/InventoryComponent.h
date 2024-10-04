@@ -27,6 +27,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
+	
+	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);
 	void EquipItem(int32 slot);
 

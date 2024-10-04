@@ -39,7 +39,7 @@ void UInventoryComponent::BeginPlay()
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
 
-	UIManager->GetInventoryUI()->ItemDrop.Add(this, &UInventoryComponent::ExcuteItem);
+	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
 }
 
 
