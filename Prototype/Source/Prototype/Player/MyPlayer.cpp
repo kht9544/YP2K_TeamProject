@@ -264,7 +264,7 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 
 void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	_isAttcking = false;
+	_isAttacking = false;
 }
 
 void AMyPlayer::Move(const FInputActionValue &value)
@@ -290,7 +290,8 @@ void AMyPlayer::JumpA(const FInputActionValue &value)
 
 	if (isPressed)
 	{
-		ACharacter::Jump();
+		if(!_isAttacking)
+			ACharacter::Jump();
 	}
 }
 
@@ -299,10 +300,10 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 	bool isPressed = value.Get<bool>();
 	
 
-	if (isPressed && _isAttcking == false && _KnightanimInstance != nullptr)
+	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
 		_KnightanimInstance->PlayAttackMontage();
-		_isAttcking = true;
+		_isAttacking = true;
 
 		_curAttackIndex %= 4;
 		_curAttackIndex++;
@@ -328,7 +329,7 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			FVector2D MovementInput = _moveVector;
 			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
 
-			if (GetVelocity().Size() > 100.f)
+			if (GetVelocity().Size() > 300.f)
 			{
 				FVector Forward = GetActorForwardVector() * MovementInput.Y;
 				FVector Right = GetActorRightVector() * MovementInput.X;
