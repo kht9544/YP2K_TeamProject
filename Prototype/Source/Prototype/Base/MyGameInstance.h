@@ -27,6 +27,7 @@ public:
 	class AUIManager* GetUIManager() { return _UIManager; }
 
 	 FMyStatData* GetStatDataByLevel(int level);
+	 FMyStatData* GetEpicDataByLevel(int level);
 
 	UPROPERTY(BlueprintReadWrite, Category = "Stat")
 	int32 _playerLevel;
@@ -43,5 +44,8 @@ private:
 
 	UPROPERTY()
 	UDataTable* _statTable;
+
+	UPROPERTY()
+	UDataTable* _EpicstatTable;
 
 };

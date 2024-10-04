@@ -22,6 +22,15 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void JumpToSection(int32 sectionIndex);
 	virtual void PlayAttackMontage();
+	
+	AttackDelegate _attackDelegate;
+	DeathDelegate _deathDelegate_Knight;
+
+	UFUNCTION()
+	virtual void AnimNotify_Attackhit();
+
+	UFUNCTION()
+	virtual void AnimNotify_Death();
 
 private:
 
@@ -41,4 +50,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _myAnimMontage;
+
+
 };

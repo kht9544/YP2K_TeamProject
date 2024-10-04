@@ -27,29 +27,32 @@ void AEquipItem::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void AEquipItem::EquipPlayer(class AMyPlayer* Player)
+void AEquipItem::EquipPlayer(class AMyPlayer *Player)
 {
-   if (_equipItem)
+    if (Player == nullptr)
+        return;
+
+    if (_equipItem)
     {
         switch (_equipItemType)
         {
-            case EItemType::UpperArmor:
-                Player->GetMesh()->SetSkeletalMesh(_equipItem);
-                break;
-            case EItemType::LowerArmor:
-                Player->_lowerBodyMesh->SetSkeletalMesh(_equipItem);
-                break;
-            case EItemType::ShoulderArmor:
-                Player->_shoulderBodyMesh->SetSkeletalMesh(_equipItem);
-                break;
-            case EItemType::Sword:
-                Player->_swordBodyMesh->SetSkeletalMesh(_equipItem);
-                break;
-            case EItemType::Shield:
-                Player->_shieldBodyMesh->SetSkeletalMesh(_equipItem);
-                break;
-            default:
-                break;
+        case EItemType::UpperArmor:
+            Player->GetMesh()->SetSkeletalMesh(_equipItem);
+            break;
+        case EItemType::LowerArmor:
+            Player->_lowerBodyMesh->SetSkeletalMesh(_equipItem);
+            break;
+        case EItemType::ShoulderArmor:
+            Player->_shoulderBodyMesh->SetSkeletalMesh(_equipItem);
+            break;
+        case EItemType::Sword:
+            Player->_swordBodyMesh->SetSkeletalMesh(_equipItem);
+            break;
+        case EItemType::Shield:
+            Player->_shieldBodyMesh->SetSkeletalMesh(_equipItem);
+            break;
+        default:
+            break;
         }
     }
 }
@@ -60,9 +63,9 @@ void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *Oth
     if (Player)
     {
         EquipPlayer(Player);
-
+        Player->ItemEquipped.Broadcast(this);
         _meshComponent->SetVisibility(false);
-        _meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
+        _meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        Destroy();
     }
-    Destroy();
 }

@@ -60,6 +60,6 @@ void ANormalMonster::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor
 
 void ANormalMonster::LaunchFromPlayer(FVector LaunchDirection)
 {
-	FVector UpVector(0.0f, 0.0f, 150.f);
+	FVector UpVector(0.0f, 0.0f, 200.f);
 	LaunchCharacter((LaunchDirection * _launchLength) + UpVector, true, true);
 }

@@ -26,15 +26,18 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void Init();
 	virtual void Disable();
+	virtual void AttackHit();
 		
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 
 	float GetVertical() {return _vertical;}
 	float GetHorizontal() {return _horizontal;}
+	
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	bool _isAttcking = false;
+	bool _isAttacking = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int32 _curAttackIndex = 0;
@@ -50,6 +53,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* _hpWidget;
+
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))

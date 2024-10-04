@@ -105,6 +105,8 @@ public:
 	void AddExp(int32 amount);
 
 	void SetLevelInit(int level);
+	// cheol 에픽몬스터 
+	void SetEpicLevelInit(int level);
 
 	bool IsDead() { return _curHp <= 0; }
 

@@ -5,7 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Creature.h"
+#include "../Item/Equip/EquipItem.h"
 #include "MyPlayer.generated.h"
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemEquipped, AEquipItem*, EquipItem);
 
 struct FInputActionValue;
 
@@ -35,18 +39,29 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
 
+	UPROPERTY(BlueprintAssignable,Category = "Equipment")
+	FOnItemEquipped ItemEquipped;
+	
 	bool IsDashing() { return bIsDashing; }
 
-	bool CanSetArmor();
-
-	void SetArmor(class AArmor_test *Armor);
+	//TODO: Monster로 변경
 	void OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit);
 
+
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
+
+	UFUNCTION()
+	void EquipItem(AEquipItem* equipitem);
+
+
+	void SetEquipItem(EItemType equiptype, AEquipItem* equipitem);
 
 	// Animation
 	float GetVertical() { return _vertical; }
 	float GetHorizontal() { return _horizontal; }
+	
+	UFUNCTION()
+	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
 
 private:
 	void Move(const FInputActionValue &value);
@@ -65,8 +80,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
 	TArray<bool> SkillOnCooldown;
 
-	// TODO:item으로 변경
-	TArray<class Armor_test *> Equipment; // 0:하체 1:상체 2:검 3:견갑 4:방패 5:투구
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment" , meta = (AllowPrivateAccess = "true"))
+    TMap<EItemType, AEquipItem*> _EquipItems;
 
 	bool bIsDashing;
 	FVector DashDirection;
@@ -135,7 +150,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class USkeletalMeshComponent* _shieldBodyMesh;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<class AMyDecal> _decal;
 
 	// cheol
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
@@ -146,13 +162,16 @@ public:
 
 	// MiniMap
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MiniMap, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent *_MiniMapspringArm;
+	class USpringArmComponent* _MiniMapspringArm;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MiniMap, meta = (AllowPrivateAccess = "true"))
-	class USceneCaptureComponent2D *_MiniMapCapture;
+	class USceneCaptureComponent2D* _MiniMapCapture;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
-	class UPaperSpriteComponent *_MinimapSprite;
+	class UPaperSpriteComponent* _MinimapSprite;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
+	class UMiniMapWidget* _MiniMap;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	float _dashDistance;
@@ -163,7 +182,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	FVector2D _moveVector;
 
-	// Animation
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	class UPlayerAnimInstance* _KnightanimInstance;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCameraShakeBase> _cameraShakeClass;
