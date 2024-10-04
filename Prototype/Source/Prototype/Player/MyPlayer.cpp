@@ -15,7 +15,6 @@
 #include "Kismet/KismetMathLibrary.h"
 
 // chelo
-#include "Component/StatComponent.h"
 #include "UI/StatWidget.h"
 #include "Components/WidgetComponent.h"
 
@@ -119,8 +118,6 @@ AMyPlayer::AMyPlayer()
 
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
 
-	// cheol
-	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
 
 	static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
 		TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
@@ -213,6 +210,12 @@ void AMyPlayer::Tick(float DeltaTime)
 	}
 }
 
+float AMyPlayer::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	return 0.0f;
+}
+
 // Called to bind functionality to input
 void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 {
@@ -230,6 +233,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_skill4Action, ETriggerEvent::Started, this, &AMyPlayer::Skill4);
 		EnhancedInputComponent->BindAction(_mouseAction, ETriggerEvent::Triggered, this, &AMyPlayer::Mouse);
 		EnhancedInputComponent->BindAction(_StatOpenAction, ETriggerEvent::Started, this, &AMyPlayer::StatUIOpen);
+		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Started, this, &AMyPlayer::Guard);
 	}
 }
 
@@ -423,6 +427,11 @@ void AMyPlayer::Mouse(const FInputActionValue &value)
 			PlayerController->SetInputMode(FInputModeGameAndUI().SetHideCursorDuringCapture(false));
 		}
 	}
+}
+
+void AMyPlayer::Guard(const FInputActionValue &value)
+{
+	bIsGuarding = true;
 }
 
 // cheol

@@ -25,8 +25,6 @@ AEpicMonster::AEpicMonster()
 	_capsuleComponent = GetCapsuleComponent();
 	_capsuleComponent->InitCapsuleSize(250.0f, 250.0f); 
 
-	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
-
 	AIControllerClass = AAIController_Epic::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
