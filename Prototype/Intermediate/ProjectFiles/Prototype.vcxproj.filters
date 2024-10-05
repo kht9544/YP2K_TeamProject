@@ -211,6 +211,24 @@
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_FindTarget.h">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_FlyFindTarget.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_FlyFindTarget.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_Fly.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_Fly.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_FlyAttack.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_FlyAttack.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTask_Attack.cpp">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClCompile>

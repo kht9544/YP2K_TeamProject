@@ -357,6 +357,18 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_FindTarget.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_FlyFindTarget.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_FlyFindTarget.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_Fly.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_Fly.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_FlyAttack.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_FlyAttack.h"/>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTask_Attack.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
