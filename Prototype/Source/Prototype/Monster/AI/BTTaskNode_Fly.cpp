@@ -21,5 +21,6 @@ UBTTaskNode_Fly::UBTTaskNode_Fly()
 
 EBTNodeResult::Type UBTTaskNode_Fly::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-  // 수정중
+	return EBTNodeResult::Type();
 }
+

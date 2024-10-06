@@ -62,6 +62,8 @@ void AEpicMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AEpicMonster::MeleeAttackhit()
 {
+
+
 	FHitResult hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
