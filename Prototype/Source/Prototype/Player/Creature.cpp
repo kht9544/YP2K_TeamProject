@@ -2,6 +2,7 @@
 
 #include "Player/Creature.h"
 #include "Engine/DamageEvents.h"
+
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -9,6 +10,10 @@ ACreature::ACreature()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	bIsGuarding = false;
+	// cheol
+	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
 }
 
 // Called when the game starts or when spawned
@@ -78,5 +83,16 @@ void ACreature::AttackHit()
 
 float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
 {
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	float damaged = -_StatCom->AddCurHp(-Damage);
+	if(_StatCom->IsDead())
+	{
+		SetActorEnableCollision(false);
+		auto controller = GetController();
+		if (controller)
+			GetController()->UnPossess();
+	}
+
 	return 0.0f;
 }

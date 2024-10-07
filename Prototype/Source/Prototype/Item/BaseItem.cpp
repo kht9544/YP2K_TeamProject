@@ -87,8 +87,8 @@ void ABaseItem::Disable()
 // Called when the game starts or when spawned
  void ABaseItem::BeginPlay()
  {
-
-}
+	Super::BeginPlay();
+ }
 
 // Called every frame
 void ABaseItem::Tick(float DeltaTime)

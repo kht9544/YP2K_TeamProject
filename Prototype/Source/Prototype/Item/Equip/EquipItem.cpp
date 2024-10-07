@@ -64,8 +64,9 @@ void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *Oth
     {
         EquipPlayer(Player);
         Player->ItemEquipped.Broadcast(this);
-        _meshComponent->SetVisibility(false);
-        _meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
         Destroy();
+       // _meshComponent->SetVisibility(false);
+        //_meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
     }
 }
