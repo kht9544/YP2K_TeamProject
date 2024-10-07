@@ -30,6 +30,7 @@ AEpicMonster::AEpicMonster()
 	AIControllerClass = AAIController_Epic::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
+	_launchLength =500.f;
 }
 
 void AEpicMonster::BeginPlay()

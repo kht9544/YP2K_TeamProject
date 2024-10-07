@@ -48,7 +48,7 @@ public:
 	bool IsDashing() { return bIsDashing; }
 
 	//TODO: Monster로 변경
-	void OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit);
+	void OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit);
 
 
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
@@ -76,7 +76,8 @@ private:
 	void Skill3(const FInputActionValue &value);
 	void Skill4(const FInputActionValue &value);
 	void Mouse(const FInputActionValue &value);
-	void Guard(const FInputActionValue &value);
+	void GuardStart(const FInputActionValue &value);
+	void GuardEnd(const FInputActionValue &value);
 	// cheol
 	void StatUIOpen(const FInputActionValue &value);
 

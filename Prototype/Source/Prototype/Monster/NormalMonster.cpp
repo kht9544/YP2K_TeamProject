@@ -49,17 +49,5 @@ void ANormalMonster::SetupPlayerInputComponent(UInputComponent *PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ANormalMonster::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit)
-{
-	AMyPlayer *Player = Cast<AMyPlayer>(OtherActor);
-	if (Player && Player->IsDashing())
-	{
-		Player->OnMonsterHit(this, Hit);
-	}
-}
 
-void ANormalMonster::LaunchFromPlayer(FVector LaunchDirection)
-{
-	FVector UpVector(0.0f, 0.0f, 200.f);
-	LaunchCharacter((LaunchDirection * _launchLength) + UpVector, true, true);
-}
+
