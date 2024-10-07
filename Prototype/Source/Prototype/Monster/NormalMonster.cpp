@@ -2,7 +2,6 @@
 
 #include "NormalMonster.h"
 #include "../Player/MyPlayer.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -17,11 +16,6 @@ ANormalMonster::ANormalMonster()
 	{
 		GetMesh()->SetSkeletalMesh(PS.Object);
 	}
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
-
-	_capsuleComponent = GetCapsuleComponent();
-
-	_capsuleComponent->OnComponentHit.AddDynamic(this, &ANormalMonster::OnHit);
 
 	_launchLength = 1000.0f;
 }

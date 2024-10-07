@@ -22,9 +22,7 @@ AEpicMonster::AEpicMonster()
 	{
 		GetMesh()->SetSkeletalMesh(Griffon.Object);
 	}
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
-	_capsuleComponent = GetCapsuleComponent();
 	_capsuleComponent->InitCapsuleSize(250.0f, 250.0f); 
 
 	AIControllerClass = AAIController_Epic::StaticClass();
@@ -63,7 +61,6 @@ void AEpicMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AEpicMonster::MeleeAttackhit()
 {
-
 
 	FHitResult hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);

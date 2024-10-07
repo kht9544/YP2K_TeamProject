@@ -2,12 +2,16 @@
 
 
 #include "Monster/Monster.h"
+#include "Components/CapsuleComponent.h"
 #include "../Player/MyPlayer.h"
 
 
 AMonster::AMonster()
 {
-    
+    GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
+
+	_capsuleComponent = GetCapsuleComponent();
+    _capsuleComponent->OnComponentHit.AddDynamic(this, &AMonster::OnHit);
 }
 
 void AMonster::BeginPlay()
@@ -45,6 +49,7 @@ void AMonster::LaunchFromPlayer(FVector LaunchDirection)
 void AMonster::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit)
 {
 	AMyPlayer *Player = Cast<AMyPlayer>(OtherActor);
+    UE_LOG(LogTemp,Warning,TEXT("On Hit"));
 	if (Player && Player->IsDashing())
 	{
 		Player->OnMonsterHit(this, Hit);

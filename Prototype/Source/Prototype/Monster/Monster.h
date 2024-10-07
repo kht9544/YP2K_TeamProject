@@ -29,6 +29,9 @@ public:
 protected:
 	virtual void DropReword();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+    class UCapsuleComponent* _capsuleComponent;
+
 	 
 
 public:
@@ -38,7 +41,7 @@ public:
 
 	void LaunchFromPlayer(FVector LaunchDirection);
 
-		UFUNCTION()
+	UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 

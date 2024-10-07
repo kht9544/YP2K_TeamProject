@@ -28,7 +28,6 @@ public:
 
 	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
 	
-	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);
 	void EquipItem(int32 slot);
 

@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Component/InventoryComponent.h"
 
 #include "Base/MyGameInstance.h"
@@ -25,7 +24,6 @@ UInventoryComponent::UInventoryComponent()
 	// ...
 }
 
-
 // Called when the game starts
 void UInventoryComponent::BeginPlay()
 {
@@ -39,12 +37,15 @@ void UInventoryComponent::BeginPlay()
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
 
-	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
+	if (UIManager && UIManager->GetInventoryUI())
+	{
+		UE_LOG(LogTemp, Error, TEXT("UIMANAGER"));
+		UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
+	}
 }
 
-
 // Called every frame
-void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -66,10 +67,10 @@ void UInventoryComponent::SlotFullCheck()
 
 void UInventoryComponent::TryEquip(FString part, int32 slot)
 {
-	//if there is already filled, exchange each.
+	// if there is already filled, exchange each.
 }
 
-void UInventoryComponent::AddItem(int32 slot, ABaseItem* item)
+void UInventoryComponent::AddItem(int32 slot, ABaseItem *item)
 {
 	if (item == nullptr)
 		return;
@@ -77,7 +78,7 @@ void UInventoryComponent::AddItem(int32 slot, ABaseItem* item)
 		return;
 	if (_isSlotFull)
 		return;
-	//Fill into EmptySlot First
+	// Fill into EmptySlot First
 	if (!_EmptySlots.IsEmpty())
 	{
 		int32 emptyslot;
@@ -86,14 +87,14 @@ void UInventoryComponent::AddItem(int32 slot, ABaseItem* item)
 		UIupdate_Add(emptyslot, item);
 		return;
 	}
-	//Fill into Selected Slot
+	// Fill into Selected Slot
 	if (_ItemSlots[slot] == nullptr)
 	{
 		_ItemSlots[slot] = item;
 		UIupdate_Add(slot, item);
 		SlotFullCheck();
 	}
-	//if Already filled, fill into next slot
+	// if Already filled, fill into next slot
 	else
 	{
 		for (int i = slot; i < _itemSlotMax; i++)
@@ -138,18 +139,16 @@ void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)
 
 void UInventoryComponent::EquipItem(int32 slot)
 {
-	//TODO : Switch-case with EquipType Enum later
+	// TODO : Switch-case with EquipType Enum later
 	auto equipment = Cast<AHelmet>(_ItemSlots[slot]);
 	if (equipment != nullptr)
 	{
 		TryEquip(TEXT("Helmet"), slot);
 		return;
 	}
-
 }
 
-
-void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem* item)
+void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem *item)
 {
 	UIManager->GetInventoryUI()->SetItemImage(slot, item);
 }
@@ -159,6 +158,6 @@ void UInventoryComponent::UIupdate_Pop(int32 slot)
 	UIManager->GetInventoryUI()->SetItemImage(slot, nullptr);
 }
 
-void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem* item)
+void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem *item)
 {
 }
