@@ -2,7 +2,7 @@
 
 #include "Player/Creature.h"
 #include "Engine/DamageEvents.h"
-
+#include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -62,7 +62,6 @@ void ACreature::AttackHit()
 	FVector center = GetActorLocation() + vec * 0.5f;
 
 	FColor drawColor = FColor::Green;
-	
 
 	if (bResult)
 	{
@@ -73,25 +72,35 @@ void ACreature::AttackHit()
 			if (hitResult.GetActor() && hitResult.GetActor()->IsValidLowLevel())
 			{
 				FDamageEvent DamageEvent;
-				//hitResult.GetActor()->TakeDamage(_statCom->GetAttackDamage(), DamageEvent, GetController(), this);
+				hitResult.GetActor()->TakeDamage(0.0f, DamageEvent, GetController(), this);
 			}
 		}
 	}
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 0.3f);
-
 }
 
 float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	float damaged = -_StatCom->AddCurHp(-Damage);
-	if(_StatCom->IsDead())
+	if (bIsGuarding)
 	{
-		SetActorEnableCollision(false);
-		auto controller = GetController();
-		if (controller)
-			GetController()->UnPossess();
+		LaunchCharacter((GetActorLocation().GetSafeNormal()*-1000.f), true, true);
+		UE_LOG(LogTemp, Warning, TEXT("guarding"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("noguard"));
+		float damaged = -_StatCom->AddCurHp(-Damage);
+		if (_StatCom->IsDead())
+		{
+			SetActorEnableCollision(false);
+			auto controller = GetController();
+			if (controller)
+				GetController()->UnPossess();
+		}
+
+		return 0.0f;
 	}
 
 	return 0.0f;

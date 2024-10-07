@@ -75,7 +75,8 @@ private:
 	void Skill3(const FInputActionValue &value);
 	void Skill4(const FInputActionValue &value);
 	void Mouse(const FInputActionValue &value);
-	void Guard(const FInputActionValue &value);
+	void GuardStart(const FInputActionValue &value);
+	void GuardEnd(const FInputActionValue &value);
 	// cheol
 	void StatUIOpen(const FInputActionValue &value);
 

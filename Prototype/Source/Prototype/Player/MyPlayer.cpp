@@ -233,7 +233,8 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_skill4Action, ETriggerEvent::Started, this, &AMyPlayer::Skill4);
 		EnhancedInputComponent->BindAction(_mouseAction, ETriggerEvent::Triggered, this, &AMyPlayer::Mouse);
 		EnhancedInputComponent->BindAction(_StatOpenAction, ETriggerEvent::Started, this, &AMyPlayer::StatUIOpen);
-		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Started, this, &AMyPlayer::Guard);
+		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Started, this, &AMyPlayer::GuardStart);
+		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Completed, this, &AMyPlayer::GuardEnd);
 	}
 }
 
@@ -429,7 +430,12 @@ void AMyPlayer::Mouse(const FInputActionValue &value)
 	}
 }
 
-void AMyPlayer::Guard(const FInputActionValue &value)
+void AMyPlayer::GuardEnd(const FInputActionValue &value)
+{
+	bIsGuarding = false;
+}
+
+void AMyPlayer::GuardStart(const FInputActionValue &value)
 {
 	bIsGuarding = true;
 }
