@@ -4,6 +4,8 @@
 
 #include "Item/BaseItem.h"
 
+#include "Player/MyPlayer.h"
+
 #include "Base/MyGameInstance.h"
 #include "Component/InventoryComponent.h"
 
@@ -90,6 +92,14 @@ void ABaseItem::Disable()
 	Super::BeginPlay();
  }
 
+ void ABaseItem::PostInitializeComponents()
+ {
+	 Super::PostInitializeComponents();
+
+	 _trigger->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::OnMyCharacterOverlap);
+	 _trigger->OnComponentEndOverlap.AddDynamic(this, &ABaseItem::OnMyCharacterOverlapEnd);
+ }
+
 // Called every frame
 void ABaseItem::Tick(float DeltaTime)
 {
@@ -97,8 +107,18 @@ void ABaseItem::Tick(float DeltaTime)
 
 }
 
+void ABaseItem::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+}
+
+void ABaseItem::OnMyCharacterOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+}
+
 void ABaseItem::GetItem()
 {
+
 }
 
 void ABaseItem::UseItem()

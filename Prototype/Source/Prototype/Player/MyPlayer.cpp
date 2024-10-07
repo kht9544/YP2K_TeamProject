@@ -1,6 +1,7 @@
 #include "MyPlayer.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Component/InventoryComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Camera/CameraShakeBase.h"
@@ -44,6 +45,7 @@ AMyPlayer::AMyPlayer()
 
 	_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	_inventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
 	//_upperBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("UpperSkeletal"));
 	_lowerBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("LowerSkeletal"));
@@ -250,6 +252,14 @@ void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult 
 void AMyPlayer::EquipItem(AEquipItem* equipitem)
 {
 	SetEquipItem(equipitem->GetEquipType(),equipitem);
+}
+
+void AMyPlayer::GetItem(ABaseItem* item)
+{
+	if (item == nullptr)
+		return;
+
+	_inventoryComponent->AddItem(0, item);
 }
 
 void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)

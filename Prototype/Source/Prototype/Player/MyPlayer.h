@@ -12,6 +12,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemEquipped, AEquipItem*, EquipItem);
 
 struct FInputActionValue;
+class ABaseItem;
 
 UENUM(BlueprintType)
 enum class EPlayerState : uint8
@@ -54,7 +55,7 @@ public:
 
 	UFUNCTION()
 	void EquipItem(AEquipItem* equipitem);
-
+	void GetItem(ABaseItem* item);
 
 	void SetEquipItem(EItemType equiptype, AEquipItem* equipitem);
 
@@ -137,6 +138,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class USkillWidget_test *_skillWidgetInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	class UInventoryComponent* _inventoryComponent;
 
 	//  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Parkour, meta = (AllowPrivateAccess = "true"))
 	//  class UParkourComponent_Test* _parkourComp;
