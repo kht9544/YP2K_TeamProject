@@ -29,15 +29,25 @@ public:
 protected:
 	virtual void DropReword();
 
+	 
 
 public:
 	int32 GetExp() { return _exp; }
 	
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	void LaunchFromPlayer(FVector LaunchDirection);
+
+		UFUNCTION()
+    void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	int32 _exp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Physics", meta = (AllowPrivateAccess = "true"))
+    float _launchLength;
 
 	//TODO::만들어지면
 	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))

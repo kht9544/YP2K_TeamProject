@@ -2,6 +2,7 @@
 
 
 #include "Monster/Monster.h"
+#include "../Player/MyPlayer.h"
 
 
 AMonster::AMonster()
@@ -34,3 +35,18 @@ float AMonster::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent,
     return 0.0f;
 }
 
+void AMonster::LaunchFromPlayer(FVector LaunchDirection)
+{
+    FVector UpVector(0.0f, 0.0f, 200.f);
+	LaunchCharacter((LaunchDirection * _launchLength) + UpVector, true, true);
+    UE_LOG(LogTemp,Warning,TEXT("Launh"));
+}
+
+void AMonster::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit)
+{
+	AMyPlayer *Player = Cast<AMyPlayer>(OtherActor);
+	if (Player && Player->IsDashing())
+	{
+		Player->OnMonsterHit(this, Hit);
+	}
+}

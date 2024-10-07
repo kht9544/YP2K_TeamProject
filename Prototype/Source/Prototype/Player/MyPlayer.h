@@ -47,7 +47,7 @@ public:
 	bool IsDashing() { return bIsDashing; }
 
 	//TODO: Monster로 변경
-	void OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit);
+	void OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit);
 
 
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }

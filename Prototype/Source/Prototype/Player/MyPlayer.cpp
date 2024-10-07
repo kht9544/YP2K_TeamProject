@@ -238,7 +238,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 }
 
 
-void AMyPlayer::OnMonsterHit(class ANormalMonster *HitMonster, const FHitResult &Hit)
+void AMyPlayer::OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit)
 {
 	if (HitMonster)
 	{
