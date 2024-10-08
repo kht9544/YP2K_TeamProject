@@ -159,6 +159,10 @@ AMyPlayer::AMyPlayer()
 	bIsDashing = false;
 	DashDuration = _dashDistance / _dashSpeed;
 	DashTimeElapsed = 0.f;
+
+	// Animation : Guard (shield)
+	/*GuardStartSectionName = TEXT("GuardStart");  
+	GuardEndSectionName = TEXT("GuardEnd");*/
 }
 
 // Called when the game starts or when spawned
@@ -282,6 +286,7 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 	}
 	// TODO:Update UI
 }
+
 
 void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
@@ -448,12 +453,28 @@ void AMyPlayer::Mouse(const FInputActionValue &value)
 void AMyPlayer::GuardEnd(const FInputActionValue &value)
 {
 	bIsGuarding = false;
+
+	UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	if (PlayerAnimInstance)
+	{
+		PlayerAnimInstance->PlayGuardMontage(bIsGuarding);
+	}
+
 }
 
 void AMyPlayer::GuardStart(const FInputActionValue &value)
 {
 	bIsGuarding = true;
+
+	// Animation
+	UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	if (PlayerAnimInstance)
+	{
+		PlayerAnimInstance->PlayGuardMontage(bIsGuarding);
+	}
+
 }
+
 
 // cheol
 void AMyPlayer::StatUIOpen(const FInputActionValue &value)
