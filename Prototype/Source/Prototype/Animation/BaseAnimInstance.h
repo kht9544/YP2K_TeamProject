@@ -21,6 +21,8 @@ public:
 	virtual void JumpToSection(int32 sectionIndex);
 	virtual void PlayAttackMontage();
 
+	
+
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", meta = (AllowPrivateAccess = true))
@@ -38,5 +40,5 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _myAnimMontage;
-
+	
 };

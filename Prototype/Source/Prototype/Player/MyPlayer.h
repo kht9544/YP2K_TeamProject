@@ -63,6 +63,11 @@ public:
 	float GetVertical() { return _vertical; }
 	float GetHorizontal() { return _horizontal; }
 	
+	/*FName GuardStartSectionName;
+	FName GuardEndSectionName;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UAnimMontage* GuardMontage;*/
+	
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
 
@@ -204,4 +209,6 @@ public:
 
 	FTimerHandle ScreenShakeTimerHandle;
 	FTimerHandle MeteorTimerHandle;
+
+
 };
