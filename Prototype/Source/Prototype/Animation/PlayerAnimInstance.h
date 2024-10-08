@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "../Animation/BaseAnimInstance.h"
 #include "PlayerAnimInstance.generated.h"
 
 /**
  * 
  */
-DECLARE_MULTICAST_DELEGATE(AttackDelegate);
-DECLARE_MULTICAST_DELEGATE(DeathDelegate);
+
 
 UCLASS()
-class PROTOTYPE_API UPlayerAnimInstance : public UAnimInstance
+class PROTOTYPE_API UPlayerAnimInstance : public UBaseAnimInstance
 {
 	GENERATED_BODY()
 	
@@ -31,25 +31,5 @@ public:
 
 	UFUNCTION()
 	virtual void AnimNotify_Death();
-
-private:
-
-protected:
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Player",meta = (AllowPrivateAccess = true))
-	float _speed;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	bool _isFalling;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	float _Direction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	float _vertical;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	float _horizontal;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	bool _isDead;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
-	class UAnimMontage* _myAnimMontage;
-
 
 };

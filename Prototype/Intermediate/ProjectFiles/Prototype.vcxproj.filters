@@ -52,6 +52,12 @@
     <Filter Include="Source\Prototype\Animation">
       <UniqueIdentifier>{60E94C24-58DA-3740-B1C1-AC5A17E86A1D}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Animation\BaseAnimInstance.cpp">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Animation\BaseAnimInstance.h">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Animation\PlayerAnimInstance.cpp">
       <Filter>Source\Prototype\Animation</Filter>
     </ClCompile>
