@@ -490,7 +490,7 @@ void AMyPlayer::InvenUIOpen(const FInputActionValue& value)
 
 	if (isPressed && invenUI != nullptr)
 	{
-		
+		UIManager->OpenUI(UI_LIST::Inventory);
 	}
 }
 
