@@ -36,12 +36,6 @@ void UInventoryComponent::BeginPlay()
 	_EquipSlots.Add(TEXT("LowerArmor"));
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
-
-	if (UIManager && UIManager->GetInventoryUI())
-	{
-		UE_LOG(LogTemp, Error, TEXT("UIMANAGER"));
-		UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
-	}
 }
 
 // Called every frame
@@ -108,6 +102,12 @@ void UInventoryComponent::AddItem(int32 slot, ABaseItem *item)
 		}
 		return;
 	}
+}
+
+void UInventoryComponent::InitializeComponent()
+{
+	Super::InitializeComponent();
+	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
 }
 
 void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)

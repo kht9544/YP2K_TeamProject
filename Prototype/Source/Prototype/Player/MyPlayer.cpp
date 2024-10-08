@@ -319,7 +319,6 @@ void AMyPlayer::JumpA(const FInputActionValue &value)
 void AMyPlayer::AttackA(const FInputActionValue &value)
 {
 	bool isPressed = value.Get<bool>();
-	
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
