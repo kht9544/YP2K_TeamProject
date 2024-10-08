@@ -1,4 +1,7 @@
 #include "MyPlayer.h"
+
+#include "Base/MyGameInstance.h"
+
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Component/InventoryComponent.h"
@@ -16,6 +19,8 @@
 #include "Kismet/KismetMathLibrary.h"
 
 // chelo
+#include "Base/Managers/UIManager.h"
+#include "UI/InventoryWidget.h"
 #include "UI/StatWidget.h"
 #include "Components/WidgetComponent.h"
 
@@ -235,6 +240,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_skill4Action, ETriggerEvent::Started, this, &AMyPlayer::Skill4);
 		EnhancedInputComponent->BindAction(_mouseAction, ETriggerEvent::Triggered, this, &AMyPlayer::Mouse);
 		EnhancedInputComponent->BindAction(_StatOpenAction, ETriggerEvent::Started, this, &AMyPlayer::StatUIOpen);
+		EnhancedInputComponent->BindAction(_InvenOpenAction, ETriggerEvent::Started, this, &AMyPlayer::InvenUIOpen);
 		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Started, this, &AMyPlayer::GuardStart);
 		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Completed, this, &AMyPlayer::GuardEnd);
 	}
@@ -474,6 +480,18 @@ void AMyPlayer::StatUIOpen(const FInputActionValue &value)
 			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
 		}
+	}
+}
+
+void AMyPlayer::InvenUIOpen(const FInputActionValue& value)
+{
+	bool isPressed = value.Get<bool>();
+
+	auto invenUI = UIManager->GetInventoryUI();
+
+	if (isPressed && invenUI != nullptr)
+	{
+		
 	}
 }
 

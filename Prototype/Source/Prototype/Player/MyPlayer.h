@@ -80,6 +80,7 @@ private:
 	void GuardEnd(const FInputActionValue &value);
 	// cheol
 	void StatUIOpen(const FInputActionValue &value);
+	void InvenUIOpen(const FInputActionValue &value);
 
 	// void CheckForClimbableWall();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
@@ -127,6 +128,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction *_StatOpenAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* _InvenOpenAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction *_guardAction;
