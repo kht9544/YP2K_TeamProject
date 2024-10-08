@@ -20,8 +20,8 @@ class PROTOTYPE_API UPlayerAnimInstance : public UBaseAnimInstance
 public:
 	UPlayerAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-	virtual void JumpToSection(int32 sectionIndex);
-	virtual void PlayAttackMontage();
+	virtual void JumpToSection(int32 sectionIndex) override;
+	virtual void PlayAttackMontage() override;
 	
 	AttackDelegate _attackDelegate;
 	DeathDelegate _deathDelegate_Knight;
