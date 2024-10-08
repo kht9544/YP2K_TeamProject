@@ -67,7 +67,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8F8FF33E-397D-36BB-8B71-52CD6D99A30A}</ProjectGuid>
+    <ProjectGuid>{6285C3D8-4D17-3F12-BC72-08E9C64177CB}</ProjectGuid>
     <RootNamespace>Prototype</RootNamespace>
   </PropertyGroup>
   <Import Project="UECommon.props" />
@@ -268,6 +268,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\PrototypeCharacter.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Animation\BaseAnimInstance.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Animation\BaseAnimInstance.h"/>
     <ClCompile Include="..\..\Source\Prototype\Animation\PlayerAnimInstance.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
