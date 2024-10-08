@@ -52,6 +52,12 @@
     <Filter Include="Source\Prototype\Animation">
       <UniqueIdentifier>{60E94C24-58DA-3740-B1C1-AC5A17E86A1D}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Animation\BaseAnimInstance.cpp">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Animation\BaseAnimInstance.h">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Animation\PlayerAnimInstance.cpp">
       <Filter>Source\Prototype\Animation</Filter>
     </ClCompile>
@@ -169,6 +175,12 @@
     <Filter Include="Source\Prototype\Monster">
       <UniqueIdentifier>{881315DA-BC1F-383B-9D63-C6C450E5BF53}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Monster\BossMonster.cpp">
+      <Filter>Source\Prototype\Monster</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\BossMonster.h">
+      <Filter>Source\Prototype\Monster</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\EpicMonster.cpp">
       <Filter>Source\Prototype\Monster</Filter>
     </ClCompile>
