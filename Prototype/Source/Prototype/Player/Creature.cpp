@@ -35,10 +35,12 @@ void ACreature::PostInitializeComponents()
 
 void ACreature::Init()
 {
+
 }
 
 void ACreature::Disable()
 {
+
 }
 
 void ACreature::AttackHit()
@@ -72,6 +74,7 @@ void ACreature::AttackHit()
 			if (hitResult.GetActor() && hitResult.GetActor()->IsValidLowLevel())
 			{
 				FDamageEvent DamageEvent;
+				//TODO: 데미지 변경
 				hitResult.GetActor()->TakeDamage(0.0f, DamageEvent, GetController(), this);
 			}
 		}
@@ -85,12 +88,14 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 
 	if (bIsGuarding)
 	{
-		LaunchCharacter((GetActorLocation().GetSafeNormal()*-1000.f), true, true);
-		UE_LOG(LogTemp, Warning, TEXT("guarding"));
+		UE_LOG(LogTemp, Warning, TEXT("Guard"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("noguard"));
+		FVector KnockbackDirection = GetActorLocation() - DamageCauser->GetActorLocation();
+		KnockbackDirection.Z = 0.0f;
+		KnockbackDirection.Normalize();
+		LaunchCharacter(KnockbackDirection * 1000.f, true, true);
 		float damaged = -_StatCom->AddCurHp(-Damage);
 		if (_StatCom->IsDead())
 		{
@@ -99,8 +104,6 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 			if (controller)
 				GetController()->UnPossess();
 		}
-
-		return 0.0f;
 	}
 
 	return 0.0f;
