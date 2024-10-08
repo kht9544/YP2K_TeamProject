@@ -16,14 +16,11 @@ UPlayerAnimInstance::UPlayerAnimInstance()
 		_myAnimMontage = Knignt.Object;
 	}
 
-	
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-
-	//AMyPlayer* myCharacter = Cast<AMyPlayer>(TryGetPawnOwner());
 
 }
 
