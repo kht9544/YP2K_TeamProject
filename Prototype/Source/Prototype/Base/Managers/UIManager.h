@@ -6,6 +6,13 @@
 #include "GameFramework/Actor.h"
 #include "UIManager.generated.h"
 
+UENUM()
+enum class UI_LIST
+{
+	Inventory,
+
+};
+
 class UInventoryWidget;
 UCLASS()
 class PROTOTYPE_API AUIManager : public AActor
@@ -24,8 +31,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void OpenUI(UI_LIST ui);
+	void CloseUI(UI_LIST ui);
+	void CloseAll();
+
 	UInventoryWidget* GetInventoryUI() { return _inventoryUI; }
 
 private:
+	UPROPERTY()
+	TArray<UUserWidget*> _uiList;
+
+	UPROPERTY()
 	UInventoryWidget* _inventoryUI;
 };

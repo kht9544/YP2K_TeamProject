@@ -4,25 +4,29 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "../Animation/BaseAnimInstance.h"
 #include "PlayerAnimInstance.generated.h"
 
 /**
  * 
  */
-DECLARE_MULTICAST_DELEGATE(AttackDelegate);
-DECLARE_MULTICAST_DELEGATE(DeathDelegate);
+
 
 UCLASS()
-class PROTOTYPE_API UPlayerAnimInstance : public UAnimInstance
+class PROTOTYPE_API UPlayerAnimInstance : public UBaseAnimInstance
 {
 	GENERATED_BODY()
 	
 public:
 	UPlayerAnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-	virtual void JumpToSection(int32 sectionIndex);
-	virtual void PlayAttackMontage();
-	
+	virtual void JumpToSection(int32 sectionIndex) override;
+	virtual void PlayAttackMontage() override;
+
+	// 방어 애니메이션 재생 함수 (시작/해제)
+	void PlayGuardMontage(bool bIsGuarding);
+	void StopGuardMontage();
+
 	AttackDelegate _attackDelegate;
 	DeathDelegate _deathDelegate_Knight;
 
@@ -32,24 +36,12 @@ public:
 	UFUNCTION()
 	virtual void AnimNotify_Death();
 
-private:
-
 protected:
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Player",meta = (AllowPrivateAccess = true))
-	float _speed;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	bool _isFalling;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	float _Direction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	float _vertical;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	float _horizontal;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player", Meta = (AllowPrivateAccess = true))
-	bool _isDead;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
-	class UAnimMontage* _myAnimMontage;
-
+	class UAnimMontage* _shieldMontage;
+	
+	FName GuardStartSectionName;
+	FName GuardLoopSectionName;
+	FName GuardEndSectionName;
 
 };

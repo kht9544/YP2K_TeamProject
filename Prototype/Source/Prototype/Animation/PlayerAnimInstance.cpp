@@ -2,12 +2,15 @@
 
 
 #include "PlayerAnimInstance.h"
-
+#include "../Player/Creature.h"
 #include "../Player/MyPlayer.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UPlayerAnimInstance::UPlayerAnimInstance()
 {
+
+
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> Knignt
 	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/Knight_Montage.Knight_Montage'"));
 
@@ -16,48 +19,60 @@ UPlayerAnimInstance::UPlayerAnimInstance()
 		_myAnimMontage = Knignt.Object;
 	}
 
-	_isFalling = false;
-	_isDead = false;
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Guard
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/Shield_Montage.Shield_Montage'"));
+	if (Guard.Succeeded())
+	{
+		_shieldMontage = Guard.Object;
+	}
 
-    _speed = 0.0f;
-	_Direction = 0;
-	_vertical = 0;
-	_horizontal = 0;
+	GuardLoopSectionName = TEXT("GuardLoop");
+	GuardEndSectionName = TEXT("GuardEnd");
+	GuardStartSectionName = TEXT("GuardStart");
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-
-	AMyPlayer* myCharacter = Cast<AMyPlayer>(TryGetPawnOwner());
-
-	if (myCharacter != nullptr)
-	{
-		_speed = myCharacter->GetVelocity().Size();
-
-		_isFalling = myCharacter->GetMovementComponent()->IsFalling();
-		_Direction = CalculateDirection(myCharacter->GetVelocity(), myCharacter->GetActorRotation());
-
-		_vertical = _speed + (myCharacter->GetVertical() - _speed) * (DeltaSeconds);
-		_horizontal = _Direction + (myCharacter->GetHorizontal() - _Direction) * (DeltaSeconds);
-		//_isDead = (myCharacter->GetCurHp() <= 0);
-
-		_vertical = _vertical + (myCharacter->GetVertical() - _vertical) * (DeltaSeconds);
-
-	}
 }
 
 void UPlayerAnimInstance::JumpToSection(int32 sectionIndex)
 {
-	FName sectionName = FName(*FString::Printf(TEXT("Attack%d"), sectionIndex));
-	Montage_JumpToSection(sectionName);
+	Super::JumpToSection(sectionIndex);
 }
 
 void UPlayerAnimInstance::PlayAttackMontage()
 {
-	if (!Montage_IsPlaying(_myAnimMontage))
+	Super::PlayAttackMontage();
+}
+
+void UPlayerAnimInstance::PlayGuardMontage(bool bIsGuarding)
+{
+	if(bIsGuarding)
 	{
-		Montage_Play(_myAnimMontage);
+		if (!Montage_IsPlaying(_shieldMontage))
+		{
+			// 방어 애니메이션 시작 (GuardStart 섹션)
+			Montage_Play(_shieldMontage, 1.0f);
+			Montage_JumpToSection(FName("GuardStart"), _shieldMontage);
+		}
+		// 방어 상태일 때 GuardLoop 섹션으로 이동 (루프)
+		Montage_JumpToSection(FName("GuardLoop"), _shieldMontage);
+	}
+	else
+	{
+		// 방어가 해제될 때 GuardEnd 섹션으로 이동
+		Montage_JumpToSection(FName("GuardEnd"), _shieldMontage);
+	}
+
+}
+
+
+void UPlayerAnimInstance::StopGuardMontage()
+{
+	if (Montage_IsPlaying(_shieldMontage))
+	{
+		Montage_Stop(0.0f, _shieldMontage);
 	}
 }
 
