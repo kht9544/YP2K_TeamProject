@@ -36,7 +36,7 @@
 // Animation
 #include "../Animation/PlayerAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "UI/PlayerBarWidget.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -154,6 +154,15 @@ AMyPlayer::AMyPlayer()
 		_decal = MD.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder<UUserWidget> PlBar
+	(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerBar_UI.PlayerBar_UI_C'"));
+
+	if (PlBar.Succeeded())
+	{
+		WidgetClass = PlBar.Class;
+	}
+
+
 	_dashDistance = 1000.f;
 	_dashSpeed = 3000.f;
 	bIsDashing = false;
@@ -180,6 +189,16 @@ void AMyPlayer::BeginPlay()
 	{
 		_MiniMap->AddToViewport();
 	}
+
+	if (WidgetClass)  
+	{
+		_Widget = CreateWidget<UPlayerBarWidget>(GetWorld(), WidgetClass);
+		if (_Widget)
+		{
+			_Widget->AddToViewport();  
+		}
+	}
+
 
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)

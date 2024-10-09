@@ -61,8 +61,13 @@ protected:
 	bool bIsGuarding;
 
 public:
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
-	class UWidgetComponent* _Widget;
+	class UUserWidget* _Widget;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> WidgetClass;
 
 
 };
