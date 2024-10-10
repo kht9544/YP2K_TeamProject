@@ -14,4 +14,12 @@ class PROTOTYPE_API ABossMonster : public AMonster
 {
 	GENERATED_BODY()
 	
+public:
+	// Sets default values for this character's properties
+	ABossMonster();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
 };

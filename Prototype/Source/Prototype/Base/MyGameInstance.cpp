@@ -26,6 +26,15 @@ UMyGameInstance::UMyGameInstance()
 
 	}
 
+	static ConstructorHelpers::FObjectFinder<UDataTable> BossStatData
+	(TEXT("/Script/Engine.DataTable'/Game/Data/BossMonsterDataTable.BossMonsterDataTable'"));
+
+	if (BossStatData.Succeeded())
+	{
+		_BossstatTable = BossStatData.Object;
+
+	}
+
 }
 
 void UMyGameInstance::Init()
@@ -60,6 +69,12 @@ FMyStatData* UMyGameInstance::GetEpicDataByLevel(int level)
 {
 	auto EpicStatData = _EpicstatTable->FindRow<FMyStatData>(*FString::FromInt(level), TEXT(""));
 	return EpicStatData;
+}
+
+FMyStatData* UMyGameInstance::GetBossDataByLevel(int level)
+{
+	auto BossStatData = _BossstatTable->FindRow<FMyStatData>(*FString::FromInt(level), TEXT(""));
+	return BossStatData;
 }
 
 void UMyGameInstance::SavePlayerStatus(int32 Level)

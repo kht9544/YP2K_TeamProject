@@ -36,6 +36,7 @@ void AMonster::DropReword()
 
 float AMonster::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+    Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
     return 0.0f;
 }
 
@@ -52,4 +53,11 @@ void AMonster::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPri
 	{
 		Player->OnMonsterHit(this, Hit);
 	}
+}
+
+bool AMonster::PerformGimmick()
+{
+    UE_LOG(LogTemp, Warning, TEXT("StartGimmick"));
+
+    return false;
 }
