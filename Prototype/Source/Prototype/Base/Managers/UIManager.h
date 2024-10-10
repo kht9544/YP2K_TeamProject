@@ -13,6 +13,9 @@ enum class UI_LIST
 
 };
 
+DECLARE_MULTICAST_DELEGATE(PAUSE_GAME);
+DECLARE_MULTICAST_DELEGATE(RESUM_GAME);
+
 class UInventoryWidget;
 UCLASS()
 class PROTOTYPE_API AUIManager : public AActor
@@ -34,12 +37,19 @@ public:
 	void OpenUI(UI_LIST ui);
 	void CloseUI(UI_LIST ui);
 	void CloseAll();
+	void ToggleUI(UI_LIST ui);
 
 	UInventoryWidget* GetInventoryUI() { return _inventoryUI; }
 
+
+	PAUSE_GAME pauseGame;
+	RESUM_GAME resumGame;
 private:
 	UPROPERTY()
 	TArray<UUserWidget*> _uiList;
+
+	UPROPERTY()
+	TArray<bool> _uiIsOpen;
 
 	UPROPERTY()
 	UInventoryWidget* _inventoryUI;

@@ -314,9 +314,12 @@ void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 
 void AMyPlayer::Move(const FInputActionValue &value)
 {
+	if(bIsGuarding)
+		return;
 	FVector2D MovementVector = value.Get<FVector2D>();
 
 	_moveVector = MovementVector;
+
 	AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 	AddMovementInput(GetActorRightVector(), MovementVector.X);
 }
@@ -346,6 +349,8 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
+		if(bIsGuarding)
+			bIsGuarding = false;
 		_KnightanimInstance->PlayAttackMontage();
 		_isAttacking = true;
 
@@ -530,7 +535,7 @@ void AMyPlayer::InvenUIOpen(const FInputActionValue& value)
 
 	if (isPressed && invenUI != nullptr)
 	{
-		UIManager->OpenUI(UI_LIST::Inventory);
+		UIManager->ToggleUI(UI_LIST::Inventory);
 	}
 }
 

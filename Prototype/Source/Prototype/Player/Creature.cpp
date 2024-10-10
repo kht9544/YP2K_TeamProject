@@ -75,7 +75,7 @@ void ACreature::AttackHit()
 			{
 				FDamageEvent DamageEvent;
 				//TODO: 데미지 변경
-				hitResult.GetActor()->TakeDamage(0.0f, DamageEvent, GetController(), this);
+				hitResult.GetActor()->TakeDamage(10.0f, DamageEvent, GetController(), this);
 			}
 		}
 	}
@@ -96,7 +96,8 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 		KnockbackDirection.Z = 0.0f;
 		KnockbackDirection.Normalize();
 		LaunchCharacter(KnockbackDirection * 1000.f, true, true);
-		float damaged = -_StatCom->AddCurHp(-Damage);
+		_StatCom->AddCurHp(-Damage);
+
 		if (_StatCom->IsDead())
 		{
 			SetActorEnableCollision(false);
