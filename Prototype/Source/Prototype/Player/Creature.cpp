@@ -5,6 +5,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
 
+#include "Component/StatComponent.h"
+#include "Base/MyGameInstance.h"
+
 // Sets default values
 ACreature::ACreature()
 {
@@ -31,6 +34,9 @@ void ACreature::Tick(float DeltaTime)
 void ACreature::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	_StatCom->SetLevelInit(1);
+
 }
 
 void ACreature::Init()

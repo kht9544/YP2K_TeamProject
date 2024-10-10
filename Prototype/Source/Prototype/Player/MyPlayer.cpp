@@ -162,6 +162,15 @@ AMyPlayer::AMyPlayer()
 		WidgetClass = PlBar.Class;
 	}
 
+	if (WidgetClass)
+	{
+		_Widget = CreateWidget<UPlayerBarWidget>(GetWorld(), WidgetClass);
+		if (_Widget)
+		{
+			_Widget->AddToViewport();
+		}
+	}
+
 
 	_dashDistance = 1000.f;
 	_dashSpeed = 3000.f;
@@ -190,14 +199,6 @@ void AMyPlayer::BeginPlay()
 		_MiniMap->AddToViewport();
 	}
 
-	if (WidgetClass)  
-	{
-		_Widget = CreateWidget<UPlayerBarWidget>(GetWorld(), WidgetClass);
-		if (_Widget)
-		{
-			_Widget->AddToViewport();  
-		}
-	}
 
 
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
@@ -212,9 +213,26 @@ void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	if (_StatCom)
-	{
 		_StatCom->SetLevelInit(1);
+
+
+	if (_Widget)
+	{
+		auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+		if (PlWidget)
+		{
+			float CurrentHP = _StatCom->GetCurHp();
+			float CurrentMP = _StatCom->GetCurMp();
+			float CurrentEXP = _StatCom->GetExp();
+
+			// 플레이어 스탯
+			UE_LOG(LogTemp, Warning, TEXT("Current HP: %f, Current MP: %f, Current EXP: %f"), CurrentHP, CurrentMP, CurrentEXP);
+
+			_StatCom->_PlHPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlHPBar);
+			_StatCom->_PlMPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlMPBar);
+			_StatCom->_PlEXPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlExpBar);
+		}
+
 	}
 
 	ItemEquipped.AddDynamic(this,&AMyPlayer::EquipItem);
