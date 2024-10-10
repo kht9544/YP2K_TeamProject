@@ -22,10 +22,21 @@ AAIController_BossMonster::AAIController_BossMonster()
 
 void AAIController_BossMonster::OnPossess(APawn *InPawn)
 {
+    Super::OnPossess(InPawn);
+
+    UBlackboardComponent *blackboardComponent = Blackboard;
+    if (UseBlackboard(_bb, blackboardComponent))
+    {
+        if (RunBehaviorTree(_bt))
+        {
+            blackboardComponent->SetValueAsVector(FName(TEXT("FixedPos")),InPawn->GetActorLocation());
+        }
+    }
 }
 
 void AAIController_BossMonster::OnUnPossess()
 {
+    Super::OnUnPossess();
 }
 
 void AAIController_BossMonster::RandMove()

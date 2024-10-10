@@ -32,17 +32,20 @@ void UBTService_PlayerDistance::TickNode(UBehaviorTreeComponent &OwnerComp, uint
     {
         float Distance = FVector::Dist(ControlledPawn->GetActorLocation(), PlayerActor->GetActorLocation());
 
-        // if (Distance < 300.0f)
-        // {
-        //     OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::Melee);
-        // }
-        // else if (Distance < 800.0f)
-        // {
-        //     OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::Ranged);
-        // }
-        // else
-        // {
-        //     OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::None);
-        // }
+        if (Distance < 300.0f)
+        {
+            //OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::Melee);
+            UE_LOG(LogTemp, Warning, TEXT("Distance300"));
+        }
+        else if (Distance < 800.0f)
+        {
+            //OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::Ranged);
+              UE_LOG(LogTemp, Warning, TEXT("Distance800"));
+        }
+        else
+        {
+            //OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::None);
+             UE_LOG(LogTemp, Warning, TEXT("Distance1000"));
+        }
     }
 }

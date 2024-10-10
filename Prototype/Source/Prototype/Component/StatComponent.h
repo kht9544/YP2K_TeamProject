@@ -107,6 +107,7 @@ public:
 	void SetLevelInit(int level);
 	// cheol 에픽몬스터 
 	void SetEpicLevelInit(int level);
+	void SetBossLevelInit(int level);
 
 	bool IsDead() { return _curHp <= 0; }
 

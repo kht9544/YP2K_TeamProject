@@ -31,17 +31,6 @@ void ANormalMonster::PostInitializeComponents()
 	 Super::PostInitializeComponents();
 }
 
-// Called every frame
-void ANormalMonster::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-// Called to bind functionality to input
-void ANormalMonster::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
 
 
 
