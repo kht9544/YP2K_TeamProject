@@ -68,8 +68,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	UAnimMontage* GuardMontage;*/
 	
-	UFUNCTION()
-	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
+	/*UFUNCTION()
+	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);*/
 
 private:
 	void Move(const FInputActionValue &value);

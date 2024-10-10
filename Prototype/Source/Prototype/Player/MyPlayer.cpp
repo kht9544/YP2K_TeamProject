@@ -307,10 +307,10 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 }
 
 
-void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
-{
-	_isAttacking = false;
-}
+//void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
+//{
+//	_isAttacking = false;
+//}
 
 void AMyPlayer::Move(const FInputActionValue &value)
 {

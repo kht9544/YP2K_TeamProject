@@ -82,6 +82,12 @@ void ACreature::AttackHit()
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 0.3f);
 }
 
+void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	_isAttacking = false;
+	_attackEndedDelegate.Broadcast();
+}
+
 float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);

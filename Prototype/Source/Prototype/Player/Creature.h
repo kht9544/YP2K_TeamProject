@@ -7,6 +7,8 @@
 #include "../Component/StatComponent.h"
 #include "Creature.generated.h"
 
+
+DECLARE_MULTICAST_DELEGATE(Delegate_AttackEnded);
 UCLASS()
 class PROTOTYPE_API ACreature : public ACharacter
 {
@@ -15,6 +17,7 @@ class PROTOTYPE_API ACreature : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ACreature();
+	Delegate_AttackEnded _attackEndedDelegate;
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,6 +32,9 @@ public:
 	virtual void Disable();
 	virtual void AttackHit();
 		
+	UFUNCTION()
+	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
+
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 
 	float GetVertical() {return _vertical;}

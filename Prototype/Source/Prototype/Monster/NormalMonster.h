@@ -16,9 +16,15 @@ public:
 	// Sets default values for this character's properties
 	ANormalMonster();
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
+	virtual void Attack_AI() override;
 
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
+	class UMonster_N_AnimInstance* _monster_N_AnimInstance;
 };
