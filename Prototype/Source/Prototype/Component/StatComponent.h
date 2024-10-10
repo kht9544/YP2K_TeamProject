@@ -119,8 +119,6 @@ public:
 	PIEXP _PlEXPDelegate;
 	PILevel _PILevelDelegate;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DataTable")
-	UDataTable* StatDataTable;
 
 
 protected:

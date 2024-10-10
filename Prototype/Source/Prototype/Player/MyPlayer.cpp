@@ -533,13 +533,7 @@ void AMyPlayer::StatUIOpen(const FInputActionValue &value)
 		}
 		else
 		{
-			_statWidget->HPUpdate(_StatCom->GetMaxHp());
-			_statWidget->MPUpdate(_StatCom->GetMaxMp());
-			_statWidget->STRUpdate(_StatCom->GetStr());
-			_statWidget->DEXUpdate(_StatCom->GetDex());
-			_statWidget->INTUpdate(_StatCom->GetInt());
-			_statWidget->BonusPointUpdate(_StatCom->GetBonusPoint());
-			_statWidget->PlLevelUpdate(_StatCom->GetLevel());
+			_statWidget->UpdateStatDisplay();
 			_statWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
