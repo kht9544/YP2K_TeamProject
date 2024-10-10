@@ -44,18 +44,19 @@ void UBTService_CheckHP::TickNode(UBehaviorTreeComponent &OwnerComp, uint8 *Node
             }
             else
             {
-               //ControlledPawn->_StatCom->Heal(30.f); // 체력 30% 회복
+                float MaxHp = ControlledPawn->_StatCom->GetMaxHp();
+                ControlledPawn->_StatCom->SetHp(MaxHp);
                 OwnerComp.GetBlackboardComponent()->SetValueAsBool("GimmickExecuted", false);
             }
         }
 
-        if (CurrentHealthPercent <= 50.0f && !OwnerComp.GetBlackboardComponent()->GetValueAsBool("Phase2"))
+        if (CurrentHealthPercent <= 50.0f && !OwnerComp.GetBlackboardComponent()->GetValueAsBool("Phase2") && OwnerComp.GetBlackboardComponent()->GetValueAsBool("GimmickExecuted"))
         {
             UE_LOG(LogTemp, Warning, TEXT("Phase2"));
             OwnerComp.GetBlackboardComponent()->SetValueAsBool("Phase2", true);
         }
 
-        if (CurrentHealthPercent < 10.0f && !OwnerComp.GetBlackboardComponent()->GetValueAsBool("Phase3"))
+        if (CurrentHealthPercent < 10.0f && !OwnerComp.GetBlackboardComponent()->GetValueAsBool("Phase3") && OwnerComp.GetBlackboardComponent()->GetValueAsBool("GimmickExecuted"))
         {
             UE_LOG(LogTemp, Warning, TEXT("Phase3"));
             OwnerComp.GetBlackboardComponent()->SetValueAsBool("Phase2", false);

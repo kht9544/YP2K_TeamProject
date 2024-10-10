@@ -349,6 +349,7 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
+		//AttackHit();
 		if(bIsGuarding)
 			bIsGuarding = false;
 		_KnightanimInstance->PlayAttackMontage();
