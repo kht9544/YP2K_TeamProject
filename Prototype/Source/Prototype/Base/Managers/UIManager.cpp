@@ -22,6 +22,7 @@ AUIManager::AUIManager()
 	}
 
 	_uiList.Add(_inventoryUI);
+	_uiIsOpen.Add(false);
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +47,7 @@ void AUIManager::OpenUI(UI_LIST ui)
 
 	_uiList[UIindex]->SetVisibility(ESlateVisibility::Visible);
 	_uiList[UIindex]->AddToViewport(UIindex);
+	_uiIsOpen[UIindex] = true;
 }
 
 void AUIManager::CloseUI(UI_LIST ui)
@@ -56,6 +58,7 @@ void AUIManager::CloseUI(UI_LIST ui)
 
 	_uiList[UIindex]->SetVisibility(ESlateVisibility::Hidden);
 	_uiList[UIindex]->RemoveFromParent();
+	_uiIsOpen[UIindex] = false;
 }
 
 void AUIManager::CloseAll()
@@ -65,5 +68,19 @@ void AUIManager::CloseAll()
 		widget->SetVisibility(ESlateVisibility::Hidden);
 		widget->RemoveFromParent();
 	}
+	for (bool isopen : _uiIsOpen)
+		isopen = false;
+}
+
+void AUIManager::ToggleUI(UI_LIST ui)
+{
+	int32 UIindex = (int32)ui;
+	if (UIindex > _uiList.Num())
+		return;
+
+	if (_uiIsOpen[UIindex])
+		CloseUI(ui);
+	else
+		OpenUI(ui);
 }
 
