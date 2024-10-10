@@ -21,7 +21,9 @@ class PROTOTYPE_API UInventoryWidget : public UUserWidget
 
 public:
 
-	void SetButtons();
+	void SetItemButtons();
+	void SetEquipButtons();
+	void SetStats();
 
 	void SetItemImage(int32 slotIndex, ABaseItem* item = nullptr);
 

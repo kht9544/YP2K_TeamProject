@@ -52,5 +52,8 @@ private:
 	TArray<bool> _uiIsOpen;
 
 	UPROPERTY()
+	TArray<bool> _isPauseWhenOpen;
+
+	UPROPERTY()
 	UInventoryWidget* _inventoryUI;
 };

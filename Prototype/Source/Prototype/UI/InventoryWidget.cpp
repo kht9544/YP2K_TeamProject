@@ -6,6 +6,7 @@
 #include "Components/UniformGridPanel.h"
 #include "Components/Widget.h"
 #include "Components/Button.h"
+#include "UI/Elements/IndexedButton.h"
 #include "Components/Image.h"
 #include "Components/PanelWidget.h"
 #include "Components/TextBlock.h"
@@ -21,14 +22,44 @@ bool UInventoryWidget::Initialize()
 {
 	bool result = Super::Initialize();
 
-
+	SetItemButtons();
 
 	return result;
 }
 
-void UInventoryWidget::SetButtons()
+void UInventoryWidget::SetItemButtons()
+{
+	TArray<UWidget*> widgets;
+	widgets = ItemSlots->GetAllChildren();
+
+	int32 index = 0;
+	for (UWidget* widget : widgets)
+	{
+		UIndexedButton* button = Cast<UIndexedButton>(widget);
+		if (button)
+		{
+			button->SetIndex(index);
+			button->SetIsEnabled(true);
+			//button->OnClicked.AddDynamic(this, UMyInventoryUI::ShowItem);
+			Button_.Add(button);
+
+			UImage* image = Cast<UImage>(button->GetChildAt(0));
+			if (image)
+			{
+				Image_.Add(image);
+			}
+			index++;
+		}
+	}
+}
+
+void UInventoryWidget::SetEquipButtons()
 {
 	
+}
+
+void UInventoryWidget::SetStats()
+{
 }
 
 void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
