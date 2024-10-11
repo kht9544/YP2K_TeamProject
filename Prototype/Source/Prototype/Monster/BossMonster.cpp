@@ -29,3 +29,12 @@ void ABossMonster::PostInitializeComponents()
 		_StatCom->SetBossLevelInit(1);
 	}
 }
+
+bool ABossMonster::PerformGimmick()
+{
+    UE_LOG(LogTemp, Warning, TEXT("StartGimmick"));
+
+    
+
+    return false;
+}

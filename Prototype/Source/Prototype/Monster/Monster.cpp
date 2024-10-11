@@ -55,9 +55,4 @@ void AMonster::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPri
 	}
 }
 
-bool AMonster::PerformGimmick()
-{
-    UE_LOG(LogTemp, Warning, TEXT("StartGimmick"));
 
-    return false;
-}

@@ -349,16 +349,16 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
-		//AttackHit();
-		if(bIsGuarding)
-			bIsGuarding = false;
-		_KnightanimInstance->PlayAttackMontage();
-		_isAttacking = true;
+		AttackHit();
+		// if(bIsGuarding)
+		// 	bIsGuarding = false;
+		// _KnightanimInstance->PlayAttackMontage();
+		// _isAttacking = true;
 
-		_curAttackIndex %= 4;
-		_curAttackIndex++;
+		// _curAttackIndex %= 4;
+		// _curAttackIndex++;
 
-		_KnightanimInstance->JumpToSection(_curAttackIndex);
+		// _KnightanimInstance->JumpToSection(_curAttackIndex);
 	}
 
 }
