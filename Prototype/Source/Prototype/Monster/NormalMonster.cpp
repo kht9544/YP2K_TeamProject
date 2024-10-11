@@ -44,13 +44,6 @@ void ANormalMonster::PostInitializeComponents()
 
 void ANormalMonster::Attack_AI()
 {
-	/*if (_statCom->IsDead())
-	{
-		FVector missLocation = GetActorLocation();
-		SoundManager->PlaySound("MyMonstere_Dead", missLocation);
-		return;
-	}*/
-
 	if (_isAttacking == false && _monster_N_AnimInstance != nullptr)
 	{
 		_monster_N_AnimInstance->PlayAttackMontage();

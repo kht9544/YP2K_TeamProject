@@ -22,7 +22,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
     if(monster == nullptr)
         return EBTNodeResult::Failed;
 
-    monster->AttackHit();
+    monster->Attack_AI();
 
     // character->_attackEndedDelegate.AddLambda(
 	// 	[this]() -> void
