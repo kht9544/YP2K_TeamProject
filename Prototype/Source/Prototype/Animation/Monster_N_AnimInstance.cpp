@@ -6,7 +6,7 @@
 UMonster_N_AnimInstance::UMonster_N_AnimInstance()
 {
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> Monster_N_01
-	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/Monster_N_01_AnimMontage.Monster_N_01_AnimMontage'"));
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/Monster_N_07_AnimMontage.Monster_N_07_AnimMontage'"));
 
 	if (Monster_N_01.Succeeded())
 	{

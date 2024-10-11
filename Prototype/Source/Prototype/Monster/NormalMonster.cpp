@@ -2,6 +2,8 @@
 
 #include "NormalMonster.h"
 #include "../Player/MyPlayer.h"
+#include "../Animation/Monster_N_AnimInstance.h"
+#include "../Player/Creature.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -10,7 +12,7 @@ ANormalMonster::ANormalMonster()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton/mesh/SK_Skeleton_base.SK_Skeleton_base'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> PS(TEXT("/Script/Engine.SkeletalMesh'/Game/SKnight_modular/Skeleton_Knight_07/mesh/SK_SKnight_07_full.SK_SKnight_07_full'"));
 
 	if (PS.Succeeded())
 	{
@@ -29,19 +31,39 @@ void ANormalMonster::BeginPlay()
 void ANormalMonster::PostInitializeComponents()
 {
 	 Super::PostInitializeComponents();
+
+	 _monster_N_AnimInstance = Cast<UMonster_N_AnimInstance>(GetMesh()->GetAnimInstance());
+	 if (_monster_N_AnimInstance->IsValidLowLevelFast())
+	 {
+		 _monster_N_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
+		 _monster_N_AnimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
+		 _monster_N_AnimInstance->_deathDelegate.AddUObject(this, &AMonster::Disable);
+	 }
+
 }
 
-// Called every frame
-void ANormalMonster::Tick(float DeltaTime)
+void ANormalMonster::Attack_AI()
 {
-	Super::Tick(DeltaTime);
+	/*if (_statCom->IsDead())
+	{
+		FVector missLocation = GetActorLocation();
+		SoundManager->PlaySound("MyMonstere_Dead", missLocation);
+		return;
+	}*/
+
+	if (_isAttacking == false && _monster_N_AnimInstance != nullptr)
+	{
+		_monster_N_AnimInstance->PlayAttackMontage();
+		_isAttacking = true;
+
+		_curAttackIndex %= 4;
+		_curAttackIndex++;
+
+		_monster_N_AnimInstance->JumpToSection(_curAttackIndex);
+	}
+
 }
 
-// Called to bind functionality to input
-void ANormalMonster::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
 
 
 

@@ -211,6 +211,12 @@
     <Filter Include="Source\Prototype\Monster\AI">
       <UniqueIdentifier>{96682966-B8D5-318C-91C7-3B405372E76E}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\AIController_BossMonster.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\AIController_BossMonster.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\AIController_Epic.cpp">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClCompile>
@@ -223,6 +229,12 @@
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\AIController_NormalMonster.h">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_CheckHP.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_CheckHP.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_FindTarget.cpp">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClCompile>
@@ -233,6 +245,12 @@
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_FlyFindTarget.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_PlayerDistance.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_PlayerDistance.h">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTaskNode_Fly.cpp">
