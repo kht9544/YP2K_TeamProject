@@ -31,9 +31,39 @@ public:
 
 	void ExchangeEquip(int32 slotIndex);
 
+	UFUNCTION()
 	void DropItem();
+	UFUNCTION()
 	void UseItem();
 
+private:
+	void SetTargetItem(int32 slotIndex);
+	UFUNCTION()
+	void TargetItem0();
+	UFUNCTION()
+	void TargetItem1();
+	UFUNCTION()
+	void TargetItem2();
+	UFUNCTION()
+	void TargetItem3();
+	UFUNCTION()
+	void TargetItem4();
+	UFUNCTION()
+	void TargetItem5();
+	UFUNCTION()
+	void TargetItem6();
+	UFUNCTION()
+	void TargetItem7();
+	UFUNCTION()
+	void TargetItem8();
+	UFUNCTION()
+	void TargetItem9();
+	UFUNCTION()
+	void TargetItem10();
+	UFUNCTION()
+	void TargetItem11();
+
+public:
 	//Delegate
 	ItemDropDelegate ItemDrop;
 
