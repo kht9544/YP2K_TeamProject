@@ -22,6 +22,8 @@ void AMonster::BeginPlay()
 void AMonster::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
+
+
 }
 
 void AMonster::Disable()

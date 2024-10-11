@@ -125,6 +125,8 @@ void UStatWidget::UpdateStatDisplay()
 		DEXUpdate(player->_StatCom->GetDex());
 		INTUpdate(player->_StatCom->GetInt());
 		BonusPointUpdate(player->_StatCom->GetBonusPoint());
+		PlLevelUpdate(player->_StatCom->GetLevel());
+
 	}
 }
 

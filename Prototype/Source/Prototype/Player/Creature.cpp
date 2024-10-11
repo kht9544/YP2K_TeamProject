@@ -5,6 +5,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
 
+#include "Component/StatComponent.h"
+#include "Base/MyGameInstance.h"
+
 // Sets default values
 ACreature::ACreature()
 {
@@ -31,6 +34,9 @@ void ACreature::Tick(float DeltaTime)
 void ACreature::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	_StatCom->SetLevelInit(1);
+
 }
 
 void ACreature::Init()
@@ -80,6 +86,12 @@ void ACreature::AttackHit()
 		}
 	}
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 0.3f);
+}
+
+void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	_isAttacking = false;
+	_attackEndedDelegate.Broadcast();
 }
 
 float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
