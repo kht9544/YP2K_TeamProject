@@ -23,7 +23,7 @@ public:
 	UFUNCTION()
 	virtual void Disable() override;
 
-	virtual void Attack_AI(){}
+	virtual void Attack_AI() {};
 	
 
 protected:
