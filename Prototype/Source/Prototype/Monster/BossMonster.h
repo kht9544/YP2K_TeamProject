@@ -18,8 +18,15 @@ public:
 	// Sets default values for this character's properties
 	ABossMonster();
 
-protected:
+	bool PerformGimmick();
+
+	void SetCanTeleport(bool CanTel){_CanTeleport = CanTel;}
+	
+
+private:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
+
+	bool _CanTeleport = false;
 };

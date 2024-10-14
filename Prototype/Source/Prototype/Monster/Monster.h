@@ -23,7 +23,7 @@ public:
 	UFUNCTION()
 	virtual void Disable() override;
 
-	virtual void Attack_AI(){}
+	virtual void Attack_AI(){};
 	
 
 protected:
@@ -43,8 +43,6 @@ public:
 
 	UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-	bool PerformGimmick();
 
 protected:
 	UPROPERTY(VisibleAnywhere)
