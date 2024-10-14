@@ -312,6 +312,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Item\Consumes\ConsumeItem.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Item\Consumes\HP_Postion.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Consumes\HP_Postion.h"/>
     <ClCompile Include="..\..\Source\Prototype\Item\Equip\EquipItem.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

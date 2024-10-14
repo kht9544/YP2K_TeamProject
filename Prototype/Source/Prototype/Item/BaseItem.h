@@ -71,8 +71,8 @@ public:
 	void OnMyCharacterOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 
-	void GetItem();
-	void UseItem();
+	virtual void GetItem();
+	virtual void UseItem();
 	void DropItem(FVector location, FRotator rotation = FRotator::ZeroRotator);
 
 	//Item Data Getter

@@ -133,6 +133,12 @@
     <ClInclude Include="..\..\Source\Prototype\Item\Consumes\ConsumeItem.h">
       <Filter>Source\Prototype\Item\Consumes</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Item\Consumes\HP_Postion.cpp">
+      <Filter>Source\Prototype\Item\Consumes</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Item\Consumes\HP_Postion.h">
+      <Filter>Source\Prototype\Item\Consumes</Filter>
+    </ClInclude>
     <Filter Include="Source\Prototype\Item\Equip">
       <UniqueIdentifier>{ED7E9353-12CF-3FC6-99E7-65652FECD905}</UniqueIdentifier>
     </Filter>
