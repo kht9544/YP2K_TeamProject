@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Component/StatComponent.h"
+#include "../Item/BaseItem.h"
 #include "MyGameInstance.generated.h"
 
 #define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
@@ -20,15 +21,15 @@ public:
 private:
 
 public:
-	void GetItemDataTable();
 	virtual void Init() override;
-	struct FItemData* GetItemDataByCode(int32 code);
-
+	
 	class AUIManager* GetUIManager() { return _UIManager; }
 
 	FMyStatData* GetStatDataByLevel(int level);
 	FMyStatData* GetEpicDataByLevel(int level);
 	FMyStatData* GetBossDataByLevel(int level);
+
+	FItemData* GetConsumeItemData(int code);
 
 	UPROPERTY(BlueprintReadWrite, Category = "Stat")
 	int32 _playerLevel;
@@ -51,5 +52,8 @@ private:
 
 	UPROPERTY()
 	UDataTable* _BossstatTable;
+
+	UPROPERTY()
+	UDataTable* _ConsItemTable;
 
 };

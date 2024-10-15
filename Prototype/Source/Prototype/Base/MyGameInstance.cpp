@@ -35,6 +35,13 @@ UMyGameInstance::UMyGameInstance()
 
 	}
 
+	static ConstructorHelpers::FObjectFinder<UDataTable> ConsumItemData
+	(TEXT("/Script/Engine.DataTable'/Game/Data/Item/ConsumeItemDataTable.ConsumeItemDataTable'"));
+
+	if (ConsumItemData.Succeeded())
+	{
+		_ConsItemTable = ConsumItemData.Object;
+	}
 }
 
 void UMyGameInstance::Init()
@@ -50,14 +57,6 @@ void UMyGameInstance::Init()
 	auto EpicData = GetEpicDataByLevel(1);
 }
 
-void UMyGameInstance::GetItemDataTable()
-{
-}
-
-FItemData* UMyGameInstance::GetItemDataByCode(int32 code)
-{
-	return nullptr;
-}
 
 FMyStatData* UMyGameInstance::GetStatDataByLevel(int level)
 {
@@ -75,6 +74,12 @@ FMyStatData* UMyGameInstance::GetBossDataByLevel(int level)
 {
 	auto BossStatData = _BossstatTable->FindRow<FMyStatData>(*FString::FromInt(level), TEXT(""));
 	return BossStatData;
+}
+
+FItemData* UMyGameInstance::GetConsumeItemData(int code)
+{
+	auto ConsumeData = _ConsItemTable->FindRow<FItemData>(*FString::FromInt(code), TEXT(""));
+	return ConsumeData;
 }
 
 void UMyGameInstance::SavePlayerStatus(int32 Level)

@@ -51,8 +51,8 @@ void ABaseItem::SetItemWithCode(int32 itemCode)
 	auto gameinstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	if (gameinstance != nullptr)
 	{
-		FItemData* data = gameinstance->GetItemDataByCode(itemCode);
-		if (data->_Name == TEXT(""))
+		FItemData* data = gameinstance->GetConsumeItemData(itemCode);
+		if (data == nullptr || data->_Name == TEXT(""))
 		{
 			UE_LOG(LogTemp, Error, TEXT("Data Load Faild!"));
 			return;
@@ -105,6 +105,7 @@ void ABaseItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
 void ABaseItem::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -112,6 +113,7 @@ void ABaseItem::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, A
 	_player = Cast<AMyPlayer>(OverlappedComponent);
 	if (_player == nullptr)
 		return;
+	UE_LOG(LogTemp, Warning, TEXT("Player Collision!"));
 	_player->GetItem(this);
 	Disable();
 }
