@@ -29,6 +29,14 @@ UPlayerAnimInstance::UPlayerAnimInstance()
 	GuardLoopSectionName = TEXT("GuardLoop");
 	GuardEndSectionName = TEXT("GuardEnd");
 	GuardStartSectionName = TEXT("GuardStart");
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> HitReaction
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/HitMotionMontage.HitMotionMontage'"));
+	if (HitReaction.Succeeded())
+	{
+		HitReactionMontage = HitReaction.Object;
+	}
+
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

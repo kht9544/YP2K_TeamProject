@@ -21,7 +21,8 @@ public:
 	virtual void JumpToSection(int32 sectionIndex);
 	virtual void PlayAttackMontage();
 
-	
+	//UFUNCTION(BlueprintCallable) 블루프린트와 연결하려면 이것사용
+	void PlayHitReactionMontage();
 
 protected:
 
@@ -40,5 +41,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _myAnimMontage;
-	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* HitReactionMontage;
+
+
 };

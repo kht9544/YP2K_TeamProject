@@ -52,4 +52,13 @@ void UBaseAnimInstance::PlayAttackMontage()
 	}
 }
 
+void UBaseAnimInstance::PlayHitReactionMontage()
+{
+	if (HitReactionMontage)
+	{
+		Montage_Play(HitReactionMontage);
+	}
+}
+
+
 

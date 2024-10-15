@@ -32,7 +32,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
     class UCapsuleComponent* _capsuleComponent;
 
-	 
 
 public:
 	int32 GetExp() { return _exp; }
@@ -50,6 +49,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Physics", meta = (AllowPrivateAccess = "true"))
     float _launchLength;
+
 
 	//TODO::만들어지면
 	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))

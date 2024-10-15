@@ -77,5 +77,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> WidgetClass;
 
-
+	
 };

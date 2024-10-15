@@ -12,6 +12,13 @@ UMonster_N_AnimInstance::UMonster_N_AnimInstance()
 	{
 		_myAnimMontage = Monster_N_01.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> HitReaction
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/NM_HitMotionMontage.NM_HitMotionMontage'"));
+
+	if (HitReaction.Succeeded())
+	{
+		HitReactionMontage = HitReaction.Object;
+	}
 
 }
 
@@ -24,6 +31,7 @@ void UMonster_N_AnimInstance::PlayAttackMontage()
 {
 	Super::PlayAttackMontage();
 }
+
 
 void UMonster_N_AnimInstance::JumpToSection(int32 sectionIndex)
 {

@@ -210,5 +210,6 @@ public:
 	FTimerHandle ScreenShakeTimerHandle;
 	FTimerHandle MeteorTimerHandle;
 
+	
 
 };

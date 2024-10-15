@@ -8,6 +8,8 @@
 #include "Component/StatComponent.h"
 #include "Base/MyGameInstance.h"
 
+#include "../Animation/BaseAnimInstance.h"
+
 // Sets default values
 ACreature::ACreature()
 {
@@ -104,6 +106,12 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 	}
 	else
 	{
+		UBaseAnimInstance* AnimInstance = Cast<UBaseAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance)
+		{
+			AnimInstance->PlayHitReactionMontage();
+		}
+
 		FVector KnockbackDirection = GetActorLocation() - DamageCauser->GetActorLocation();
 		KnockbackDirection.Z = 0.0f;
 		KnockbackDirection.Normalize();

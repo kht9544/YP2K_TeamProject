@@ -28,6 +28,9 @@ public:
 
 	DeathDelegate _deathDelegate;
 
+	//HitMotionDelegate _hitMotionDelegate;
+
+
 	UFUNCTION()
 	virtual void AnimNotify_Attackhit();
 
