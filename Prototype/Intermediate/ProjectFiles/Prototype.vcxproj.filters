@@ -199,6 +199,12 @@
     <ClInclude Include="..\..\Source\Prototype\Monster\EpicMonster.h">
       <Filter>Source\Prototype\Monster</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\EpicProjectile.cpp">
+      <Filter>Source\Prototype\Monster</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\EpicProjectile.h">
+      <Filter>Source\Prototype\Monster</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\Monster.cpp">
       <Filter>Source\Prototype\Monster</Filter>
     </ClCompile>
