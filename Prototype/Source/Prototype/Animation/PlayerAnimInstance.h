@@ -27,22 +27,27 @@ public:
 	// 방어 애니메이션 재생 함수 (시작/해제)
 	void PlayGuardMontage(bool bIsGuarding);
 	void StopGuardMontage();
+	// 스킬 애니메이션 재생함수
+	void PlaySkill01Montage();
 
 	AttackDelegate _attackDelegate;
 	DeathDelegate _deathDelegate_Knight;
-	/*HitMotionDelegate _hitMotionDelegate;*/
+
 
 	UFUNCTION()
 	virtual void AnimNotify_Attackhit();
 
 	UFUNCTION()
 	virtual void AnimNotify_Death();
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skills", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* _skill01Montage;
+
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _shieldMontage;
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
-	class UAnimMontage* _hitMotionMontage;*/
+	
 
 	FName GuardStartSectionName;
 	FName GuardLoopSectionName;

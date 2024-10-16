@@ -398,11 +398,15 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			FVector2D MovementInput = _moveVector;
 			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
 
+		
+
+
 			if (GetVelocity().Size() > 300.f)
 			{
 				FVector Forward = GetActorForwardVector() * MovementInput.Y;
 				FVector Right = GetActorRightVector() * MovementInput.X;
 				DashDirection = (Forward + Right).GetSafeNormal();
+
 			}
 			else
 			{
@@ -411,6 +415,13 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 
 			DashTimeElapsed = 0.f;
 			_skillWidgetInstance->StartCooldown(0, 5.0f);
+
+			UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+			if (PlayerAnimInstance)
+			{
+				PlayerAnimInstance->PlaySkill01Montage();  // Skill1 Animation
+			}
+			
 		}
 	}
 }
