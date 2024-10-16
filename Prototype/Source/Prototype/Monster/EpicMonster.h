@@ -35,6 +35,12 @@ public:
 
 	void RangedAttackhit();
 
+	//test shoot
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AEpicProjectile> _projectileClass;
+
+	void testShot();
+
 private:
 
 
