@@ -41,6 +41,7 @@ public:
 
 	void testShot();
 
+	//int attckDamage(int32 Attpower, int32 str, int32 dex, int32 _int);
 private:
 
 

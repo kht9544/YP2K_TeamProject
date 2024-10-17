@@ -163,7 +163,7 @@ void AEpicMonster::testShot()
 	if (_projectileClass)
 	{
 		FVector forward = GetActorForwardVector();
-		FName MouthSocketName = TEXT("Headso");
+		FName MouthSocketName = TEXT("wings_1");
 		//FVector forward = GetActorForwardVector();
 	//	FVector fireLocation = GetActorLocation() + (forward * 150);
 
@@ -174,10 +174,11 @@ void AEpicMonster::testShot()
 		auto projectile = GetWorld()->SpawnActor<AEpicProjectile>(_projectileClass, fireLocation, fireRotation);
 		if (projectile)
 		{
-			projectile->SetArcher(this);
-			//projectile->SetDamage(_statCom->GetAttackDamage());
+			projectile->Griffon(this);
+			projectile->SetDamage(70); // 데미지 추후 수정 
 			projectile->FireInDirection(forward);
 			UE_LOG(LogTemp, Error, TEXT("testShot"));
 		}
 	}
 }
+

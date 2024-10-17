@@ -29,10 +29,12 @@ public:
 
 	UFUNCTION()
 	void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
-	void SetArcher(class AEpicMonster* archer) { _Griffon = archer; }
-	
+	void Griffon(class AEpicMonster* archer) { _Griffon = archer; }
+	void SetDamage(int32 Amount) { _damage = Amount; }
+
 	void Init();
 	void Disable();
+	
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
@@ -46,6 +48,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
 	class AEpicMonster* _Griffon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	int32 _damage;
 
 	FTimerHandle _timerHandle;
 
