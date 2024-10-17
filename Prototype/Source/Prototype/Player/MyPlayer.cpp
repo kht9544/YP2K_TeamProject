@@ -15,7 +15,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MyPlayerController.h"
 #include "../UI/SkillWidget_test.h"
-#include "MyDecal.h"
+#include "MeteorDecal.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // chelo
@@ -148,7 +148,7 @@ AMyPlayer::AMyPlayer()
 		_cameraShakeClass = CS.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<AMyDecal> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Decal_BP.Decal_BP_C'"));
+	static ConstructorHelpers::FClassFinder<AMeteorDecal> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/MeteorDecal_BP.MeteorDecal_BP_C'"));
 	if (MD.Succeeded())
 	{
 		_decal = MD.Class;
@@ -426,31 +426,46 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 	}
 }
 
-void AMyPlayer::Skill2(const FInputActionValue &value)
+void AMyPlayer::Skill2(const FInputActionValue& value)
 {
-	bool isPressed = value.Get<bool>();
+    bool isPressed = value.Get<bool>();
 
-	if (isPressed && _skillWidgetInstance != nullptr)
-	{
-		if (SkillOnCooldown[1])
-			return;
-		else
-		{
-			SkillOnCooldown[1] = true;
+    if (isPressed && _skillWidgetInstance != nullptr)
+    {
+        if (SkillOnCooldown[1])
+            return;
+        else
+        {
+            SkillOnCooldown[1] = true;
 
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = GetInstigator();
-			FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
-			DecalLocation.Z = 0.0f;
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = GetInstigator();
 
-			AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
-			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
-			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);
-			_skillWidgetInstance->StartCooldown(1, 5.0f);
-		}
-	}
+            // 메테오가 떨어질 위치 계산 (플레이어 앞 1000 단위)
+            FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f);  // 하늘에서 시작
+            FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
+            DecalLocation.Z = 0.0f;  // Z축을 0으로 설정하여 지면에 위치하게 함
+
+            // 메테오 데칼 생성 및 메테오 소환
+            AMeteorDecal* MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
+            if (MeteorDecal)
+            {
+                // 메테오가 하늘에서 바닥으로 떨어지게 함
+                MeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
+            }
+
+            // 화면 흔들림과 메테오 폭발 타이머 설정
+            GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
+            GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);  // 3초 후 메테오 충돌
+
+            // 스킬 쿨다운 시작
+            _skillWidgetInstance->StartCooldown(1, 5.0f);
+        }
+    }
 }
+
+
 
 void AMyPlayer::Skill3(const FInputActionValue &value)
 {
