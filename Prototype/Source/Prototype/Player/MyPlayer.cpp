@@ -38,6 +38,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/PlayerBarWidget.h"
 
+
+//hp
+#include "Components/ProgressBar.h"
+
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
@@ -256,6 +260,29 @@ void AMyPlayer::Tick(float DeltaTime)
 	if (bIsDashing)
 	{
 		PerformDash(DeltaTime);
+	}
+
+	if (_Widget)
+	{
+		auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+		if (PlWidget)
+		{
+			int32 plMaxHp = _StatCom->GetMaxHp();
+			//int32 pMaxMp = _StatCom->GetMaxMp();
+			float NewScaleX = (plMaxHp + 10.0f) / 1000.0f;
+
+			//float NewMPScaleX = (pMaxMp + 10.0f) / 50.0f;
+
+
+			if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
+			{
+				PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewScaleX, 3.0f));
+				//PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 1.0f));
+
+			}
+
+		}
+
 	}
 }
 
