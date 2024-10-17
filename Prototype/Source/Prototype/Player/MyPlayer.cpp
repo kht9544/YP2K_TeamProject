@@ -268,17 +268,21 @@ void AMyPlayer::Tick(float DeltaTime)
 		if (PlWidget)
 		{
 			int32 plMaxHp = _StatCom->GetMaxHp();
-			//int32 pMaxMp = _StatCom->GetMaxMp();
-			float NewScaleX = (plMaxHp + 10.0f) / 1000.0f;
+			int32 pMaxMp = _StatCom->GetMaxMp();
+			float NewHPScaleX = (plMaxHp + 10.0f) / 1000.0f;
 
-			//float NewMPScaleX = (pMaxMp + 10.0f) / 50.0f;
+			float NewMPScaleX = (pMaxMp + 0.5f) / 50.0f;
 
 
 			if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
 			{
-				PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewScaleX, 3.0f));
-				//PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 1.0f));
+				PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
 
+			}
+
+			if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
+			{
+				PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
 			}
 
 		}

@@ -156,8 +156,9 @@ void UStatWidget::HPUpClick()
 
 		if (BonusPoints > 0)
 		{
-			player->_StatCom->SetMaxHp(plMaxHp + 10);
+			player->_StatCom->SetMaxHp(plMaxHp + 100);
 			player->_StatCom->SetBonusPoint(BonusPoints - 1);
+
 		}
 		UpdateStatDisplay();
 

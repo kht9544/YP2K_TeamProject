@@ -173,7 +173,7 @@ void UStatComponent::SetBonusPoint(int32 newBp)
 	FMyStatData* Data = nullptr;
 
 		_bonusPoint = Data->BonusPoint;
-		_bonusPoint = FMath::Clamp(newBp, 0, 10);
+		_bonusPoint = FMath::Clamp(newBp, 0, 10000);
 }
 
 void UStatComponent::SetStr(int32 newstr)
