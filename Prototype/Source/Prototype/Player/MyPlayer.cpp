@@ -492,6 +492,14 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
 
             // 스킬 쿨다운 시작
             _skillWidgetInstance->StartCooldown(1, 5.0f);
+
+
+			UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+			if (PlayerAnimInstance)
+			{
+				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
+			}
+
         }
     }
 }
