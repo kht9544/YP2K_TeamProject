@@ -29,7 +29,7 @@ public:
 
 	FieldAttack _fieldAttackDelegate;
 
-private:
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DECAL, meta = (AllowPrivateAccess = "true"))
 	float _areaRadius;
 
