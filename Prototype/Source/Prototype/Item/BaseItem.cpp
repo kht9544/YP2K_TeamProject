@@ -43,7 +43,7 @@ ABaseItem::ABaseItem()
 	_trigger->SetSphereRadius(60.0f);
 
 	_meshComponent->SetCollisionProfileName(TEXT("Item"));
-	_trigger->SetCollisionProfileName(TEXT("Item"));
+	_trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }
 
 void ABaseItem::SetItemWithCode(int32 itemCode)
@@ -58,13 +58,13 @@ void ABaseItem::SetItemWithCode(int32 itemCode)
 			return;
 		}
 
+		_Texture = data->_Texture;
+		_Mesh = data->_Mesh;
+		_Value = data->_Value;
+		_Price = data->_Price;
 		_Name = data->_Name;
 		_Type = data->_Type;
 		_Description = data->_Description;
-		_Price = data->_Price;
-		_Value = data->_Value;
-		_Mesh = data->_Mesh;
-		_Texture = data->_Texture;
 
 		_meshComponent->SetStaticMesh(_Mesh);
 	}
