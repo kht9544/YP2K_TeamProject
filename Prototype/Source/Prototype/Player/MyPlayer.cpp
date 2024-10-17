@@ -38,6 +38,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/PlayerBarWidget.h"
 
+
+//hp
+#include "Components/ProgressBar.h"
+
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
@@ -257,6 +261,33 @@ void AMyPlayer::Tick(float DeltaTime)
 	{
 		PerformDash(DeltaTime);
 	}
+
+	if (_Widget)
+	{
+		auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+		if (PlWidget)
+		{
+			int32 plMaxHp = _StatCom->GetMaxHp();
+			int32 pMaxMp = _StatCom->GetMaxMp();
+			float NewHPScaleX = (plMaxHp + 10.0f) / 1000.0f;
+
+			float NewMPScaleX = (pMaxMp + 0.5f) / 50.0f;
+
+
+			if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
+			{
+				PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
+
+			}
+
+			if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
+			{
+				PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
+			}
+
+		}
+
+	}
 }
 
 float AMyPlayer::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -455,6 +486,14 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
             GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
 
             _skillWidgetInstance->StartCooldown(1, 5.0f);
+
+
+			UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+			if (PlayerAnimInstance)
+			{
+				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
+			}
+
         }
     }
 }

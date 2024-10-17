@@ -99,7 +99,7 @@ public:
 	UFUNCTION()
 	void INTUpClick();
 
-	
+
 
 
 };
