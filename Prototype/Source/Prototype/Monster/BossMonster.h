@@ -28,5 +28,8 @@ private:
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<class AMyDecal> _decal;
+
 	bool _CanTeleport = false;
 };

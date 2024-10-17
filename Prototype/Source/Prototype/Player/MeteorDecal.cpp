@@ -61,11 +61,9 @@ void AMeteorDecal::OnMeteorImpact()
 {
    _fieldAttackDelegate.Broadcast(GetActorLocation());
 
-    // 메테오 메시 숨김
-    MeteorMesh->SetVisibility(false);
-
-    // 데칼 폭발 처리
     DeActiveEvent(GetActorLocation());
+
+    Destroy();
 }
 
 void AMeteorDecal::UpdateMeteorPosition(float DeltaTime)
