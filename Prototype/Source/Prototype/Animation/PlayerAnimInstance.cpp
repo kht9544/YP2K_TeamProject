@@ -45,6 +45,13 @@ UPlayerAnimInstance::UPlayerAnimInstance()
 		_skill01Montage = Skill01Montage.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Skill02Montage
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/Skill_02_Mongtage.Skill_02_Mongtage'"));
+	if (Skill02Montage.Succeeded())
+	{
+		_skill02Montage = Skill02Montage.Object;
+	}
+
 
 }
 
@@ -98,6 +105,14 @@ void UPlayerAnimInstance::PlaySkill01Montage()
 	if (_skill01Montage)
 	{
 		Montage_Play(_skill01Montage);
+	}
+}
+
+void UPlayerAnimInstance::PlaySkill02Montage()
+{
+	if (_skill02Montage)
+	{
+		Montage_Play(_skill02Montage);
 	}
 }
 
