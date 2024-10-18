@@ -12,7 +12,7 @@
 UCLASS()
 class PROTOTYPE_API ABossMonster : public AMonster
 {
-	GENERATED_BODY()
+	GENERATED_BODY() 
 	
 public:
 	// Sets default values for this character's properties
