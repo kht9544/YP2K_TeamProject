@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Monster/Monster.h"
+#include "Monster.h"
 #include "BossMonster.generated.h"
 
 /**

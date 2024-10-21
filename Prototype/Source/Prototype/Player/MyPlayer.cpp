@@ -90,6 +90,8 @@ AMyPlayer::AMyPlayer()
 	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
 	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
+
+	
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> USM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Face_Pos.Free_Body_Face_Pos'"));
 	if (USM.Succeeded())
 	{
@@ -288,6 +290,7 @@ void AMyPlayer::Tick(float DeltaTime)
 		}
 
 	}
+
 }
 
 float AMyPlayer::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
