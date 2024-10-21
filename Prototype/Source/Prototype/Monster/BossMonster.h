@@ -27,6 +27,10 @@ private:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
+	virtual void Attack_AI() override;
 
 	bool _CanTeleport = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
 };

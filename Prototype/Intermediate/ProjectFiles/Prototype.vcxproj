@@ -272,6 +272,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Animation\BaseAnimInstance.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Animation\Monster_Boss01_AnimInstance.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Animation\Monster_Boss01_AnimInstance.h"/>
     <ClCompile Include="..\..\Source\Prototype\Animation\Monster_N_AnimInstance.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

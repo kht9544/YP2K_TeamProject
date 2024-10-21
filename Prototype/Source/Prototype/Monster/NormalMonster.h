@@ -25,6 +25,6 @@ protected:
 
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_N_AnimInstance* _monster_N_AnimInstance;
 };

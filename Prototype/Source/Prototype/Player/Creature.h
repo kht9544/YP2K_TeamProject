@@ -39,7 +39,8 @@ public:
 
 	float GetVertical() {return _vertical;}
 	float GetHorizontal() {return _horizontal;}
-	
+	int32 GetCurHp() { return _StatCom->GetCurHp(); }
+
 	// cheol
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	UStatComponent* _StatCom;
