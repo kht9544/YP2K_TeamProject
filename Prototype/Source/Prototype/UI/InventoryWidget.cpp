@@ -59,10 +59,6 @@ void UInventoryWidget::SetItemButtons()
 			//button->OnClicked.AddDynamic(this, UMyInventoryUI::ShowItem);
 			Button_.Add(button);
 
-			//TODO : Dosn't working
-			auto image = Cast<UImage>(Cast<UButton>(button)->GetChildAt(0));
-			Image_.Add(image);
-
 			index++;
 		}
 	}
@@ -82,12 +78,16 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 	if (item == nullptr)
 	{
 		Button_[slotIndex]->SetItem(nullptr);
-		Image_[slotIndex]->SetBrushFromTexture(_defaultTexture);
+		Button_[slotIndex]->SetImage(_defaultTexture);
+		Button_[slotIndex]->ButtonUpdate();
 	}
 	Button_[slotIndex]->SetItem(item);
 	UTexture2D* texture = item->GetTexture();
-	if(texture)
-		Image_[slotIndex]->SetBrushFromTexture(texture);
+	if (texture)
+	{
+		Button_[slotIndex]->SetImage(texture);
+		Button_[slotIndex]->ButtonUpdate();
+	}
 }
 
 void UInventoryWidget::ShowItem()

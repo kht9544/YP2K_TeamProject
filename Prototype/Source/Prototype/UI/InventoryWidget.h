@@ -83,8 +83,6 @@ private:
 	class UUniformGridPanel* ItemSlots;
 	UPROPERTY(meta = (BindWidget))
 	TArray<class UIndexedButton*> Button_;
-	UPROPERTY(meta = (BindWidget))
-	TArray<class UImage*> Image_;
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* ItemTexture;
