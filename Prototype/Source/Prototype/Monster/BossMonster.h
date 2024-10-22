@@ -30,6 +30,9 @@ private:
 	virtual void PostInitializeComponents() override;
 	virtual void Attack_AI() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<class AMyDecal> _decal;
+
 	bool _CanTeleport = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))

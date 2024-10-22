@@ -476,24 +476,18 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
             SpawnParams.Owner = this;
             SpawnParams.Instigator = GetInstigator();
 
-            // 메테오가 떨어질 위치 계산 (플레이어 앞 1000 단위)
-            FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f);  // 하늘에서 시작
+            FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f); 
             FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
-            DecalLocation.Z = 0.0f;  // Z축을 0으로 설정하여 지면에 위치하게 함
+            DecalLocation.Z -= 98.0f;
 
-            // 메테오 데칼 생성 및 메테오 소환
             AMeteorDecal* MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
             if (MeteorDecal)
             {
-                // 메테오가 하늘에서 바닥으로 떨어지게 함
                 MeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
             }
 
-            // 화면 흔들림과 메테오 폭발 타이머 설정
             GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
-            GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);  // 3초 후 메테오 충돌
 
-            // 스킬 쿨다운 시작
             _skillWidgetInstance->StartCooldown(1, 5.0f);
 
 
