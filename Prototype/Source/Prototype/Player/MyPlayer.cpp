@@ -269,26 +269,29 @@ void AMyPlayer::Tick(float DeltaTime)
 		auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
 		if (PlWidget)
 		{
-			int32 plMaxHp = _StatCom->GetMaxHp();
-			int32 pMaxMp = _StatCom->GetMaxMp();
-			float NewHPScaleX = (plMaxHp + 10.0f) / 1000.0f;
+			int32 PlMaxHp = _StatCom->GetMaxHp();
+			int32 PlMaxMp = _StatCom->GetMaxMp();
+			int32 PlCurHp = _StatCom->GetCurHp();
+			int32 PlCurMp = _StatCom->GetCurMp();
 
-			float NewMPScaleX = (pMaxMp + 0.5f) / 50.0f;
+			float HPPercent = float(PlCurHp) / float(PlMaxHp);
+			float MPPercent = float(PlCurMp) / float(PlMaxMp);
 
+			float NewHPScaleX = float(PlMaxHp) / 1000.0f;
+			float NewMPScaleX = float(PlMaxMp) / 50.0f;
 
 			if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
 			{
+				PlWidget->Pl_HPBar->SetPercent(HPPercent);
 				PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
-
 			}
 
 			if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
 			{
+				PlWidget->Pl_MPBar->SetPercent(MPPercent);
 				PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
 			}
-
 		}
-
 	}
 
 }
