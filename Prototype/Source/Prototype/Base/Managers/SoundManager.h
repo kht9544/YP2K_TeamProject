@@ -7,6 +7,8 @@
 #include "Sound/SoundCue.h"
 #include "SoundManager.generated.h"
 
+class ASoundEffect;
+
 UCLASS()
 class PROTOTYPE_API ASoundManager : public AActor
 {
@@ -15,7 +17,6 @@ class PROTOTYPE_API ASoundManager : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASoundManager();
-	void PlaySound(FString name, FVector location);
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,6 +25,7 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+	void PlaySound(FString name, FVector location);
 
 private:
 

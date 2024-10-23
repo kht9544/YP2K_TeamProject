@@ -34,16 +34,11 @@ void ASoundEffect::Tick(float DeltaTime)
 
 void ASoundEffect::Play(FVector location)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Playing sound at location: %s"), *location.ToString());
 	if (_audioComponent && _soundCom)
 	{
 		SetActorLocation(location);
 		_audioComponent->SetSound(_soundCom);
-		/*_audioComponent->Play();*/
-		if (!IsPlaying()) // 이미 재생 중이지 않을 때만 재생
-		{
-			_audioComponent->Play();
-		}
+		_audioComponent->Play();
 	}
 }
 

@@ -33,7 +33,10 @@ public:
 	virtual void AttackHit();
 		
 	//VFX
+	virtual FString GetHitSoundName() const;
 	virtual FString GetSwingSoundName() const;
+	virtual FString GetGuardOn() const;
+	virtual FString GetGuardOff() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);

@@ -10,6 +10,7 @@
 
 #include "../Animation/BaseAnimInstance.h"
 #include "../Base/Managers/SoundManager.h"
+#include "../Player/MyPlayer.h"
 
 // Sets default values
 ACreature::ACreature()
@@ -54,6 +55,7 @@ void ACreature::Disable()
 
 void ACreature::AttackHit()
 {
+	
 	TArray<FHitResult> hitResults;
 	FCollisionQueryParams params(NAME_None, false, this);
 
@@ -77,7 +79,7 @@ void ACreature::AttackHit()
 	if (bResult)
 	{
 		drawColor = FColor::Red;
-
+		
 		for (auto &hitResult : hitResults)
 		{
 			if (hitResult.GetActor() && hitResult.GetActor()->IsValidLowLevel())
@@ -85,20 +87,40 @@ void ACreature::AttackHit()
 				FDamageEvent DamageEvent;
 				//TODO: 데미지 변경
 				hitResult.GetActor()->TakeDamage(10.0f, DamageEvent, GetController(), this);
+
+				_hitPoint = hitResult.ImpactPoint;
+				SoundManager->PlaySound(*GetHitSoundName(), _hitPoint);
 			}
 		}
 	}
 	else
 	{
+		
 		FVector missLocation = GetActorLocation();
+		
 		SoundManager->PlaySound(*GetSwingSoundName(), missLocation);
 	}
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 0.3f);
 }
 
+FString ACreature::GetHitSoundName() const
+{
+	return "default_hit_sound";
+}
+
 FString ACreature::GetSwingSoundName() const
 {
 	return "default_SwingAttackSound";
+}
+
+FString ACreature::GetGuardOn() const
+{
+	return "default_ShieldSound";
+}
+
+FString ACreature::GetGuardOff() const
+{
+	return "default_ShieldSound";
 }
 
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -114,6 +136,7 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 	if (bIsGuarding)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Guard"));
+		SoundManager->PlaySound(*GetGuardOn(), _hitPoint);
 	}
 	else
 	{
@@ -122,6 +145,8 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 		{
 			AnimInstance->PlayHitReactionMontage();
 		}
+
+		SoundManager->PlaySound(*GetGuardOff(), _hitPoint);
 
 		FVector KnockbackDirection = GetActorLocation() - DamageCauser->GetActorLocation();
 		KnockbackDirection.Z = 0.0f;

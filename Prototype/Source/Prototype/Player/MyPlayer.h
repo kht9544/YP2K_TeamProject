@@ -64,6 +64,10 @@ public:
 	float GetHorizontal() { return _horizontal; }
 
 	virtual FString GetSwingSoundName() const override;
+	virtual FString GetHitSoundName() const override;
+	virtual FString GetGuardOn() const override;
+	virtual FString GetGuardOff() const override;
+
 	/*FName GuardStartSectionName;
 	FName GuardEndSectionName;
 	UPROPERTY(EditAnywhere, Category = "Animation")

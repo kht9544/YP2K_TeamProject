@@ -367,6 +367,21 @@ FString AMyPlayer::GetSwingSoundName() const
 	return "SwingSound_Sword_01";
 }
 
+FString AMyPlayer::GetHitSoundName() const
+{
+	return "TakeSound_Sword_01";
+}
+
+FString AMyPlayer::GetGuardOn() const
+{
+	return "ShieldGuard_On";
+}
+
+FString AMyPlayer::GetGuardOff() const
+{
+	return "ShieldGuard_Off";
+}
+
 
 //void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 //{
@@ -410,7 +425,7 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
-		AttackHit();
+		//AttackHit(); // Sound가 반복으로 중복출력됨..
 		 if(bIsGuarding)
 		 	bIsGuarding = false;
 		 _KnightanimInstance->PlayAttackMontage();
