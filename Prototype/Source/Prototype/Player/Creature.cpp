@@ -9,6 +9,7 @@
 #include "Base/MyGameInstance.h"
 
 #include "../Animation/BaseAnimInstance.h"
+#include "../Base/Managers/SoundManager.h"
 
 // Sets default values
 ACreature::ACreature()
@@ -87,7 +88,17 @@ void ACreature::AttackHit()
 			}
 		}
 	}
+	else
+	{
+		FVector missLocation = GetActorLocation();
+		SoundManager->PlaySound(*GetSwingSoundName(), missLocation);
+	}
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 0.3f);
+}
+
+FString ACreature::GetSwingSoundName() const
+{
+	return "default_SwingAttackSound";
 }
 
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)

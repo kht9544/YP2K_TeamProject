@@ -8,7 +8,11 @@
 #include "../Item/BaseItem.h"
 #include "MyGameInstance.generated.h"
 
+
+class ASoundManager;
+
 #define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
+#define SoundManager Cast<UMyGameInstance>(GetGameInstance())->GetSoundManager()
 
 UCLASS()
 class PROTOTYPE_API UMyGameInstance : public UGameInstance
@@ -30,6 +34,9 @@ public:
 	FMyStatData* GetBossDataByLevel(int level);
 
 	FItemData* GetConsumeItemData(int code);
+
+
+	ASoundManager* GetSoundManager() { return _soundManager; }
 
 	UPROPERTY(BlueprintReadWrite, Category = "Stat")
 	int32 _playerLevel;
@@ -55,5 +62,8 @@ private:
 
 	UPROPERTY()
 	UDataTable* _ConsItemTable;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	ASoundManager* _soundManager;
 
 };

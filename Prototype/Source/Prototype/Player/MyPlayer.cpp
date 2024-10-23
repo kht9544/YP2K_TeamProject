@@ -362,6 +362,11 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 	// TODO:Update UI
 }
 
+FString AMyPlayer::GetSwingSoundName() const
+{
+	return "SwingSound_Sword_01";
+}
+
 
 //void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 //{

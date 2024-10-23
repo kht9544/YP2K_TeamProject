@@ -94,6 +94,12 @@
     <Filter Include="Source\Prototype\Base\Managers">
       <UniqueIdentifier>{C4B05F69-C8B5-3C14-B67D-C8ED062C64A6}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\Base\Managers\SoundManager.cpp">
+      <Filter>Source\Prototype\Base\Managers</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Base\Managers\SoundManager.h">
+      <Filter>Source\Prototype\Base\Managers</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Base\Managers\UIManager.cpp">
       <Filter>Source\Prototype\Base\Managers</Filter>
     </ClCompile>
@@ -369,6 +375,15 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\UI\Elements\IndexedButton.h">
       <Filter>Source\Prototype\UI\Elements</Filter>
+    </ClInclude>
+    <Filter Include="Source\Prototype\VFX">
+      <UniqueIdentifier>{E3288CC8-109C-322A-965C-9F3F89045649}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Prototype\VFX\SoundEffect.cpp">
+      <Filter>Source\Prototype\VFX</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\VFX\SoundEffect.h">
+      <Filter>Source\Prototype\VFX</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

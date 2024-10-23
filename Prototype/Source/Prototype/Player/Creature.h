@@ -32,6 +32,9 @@ public:
 	virtual void Disable();
 	virtual void AttackHit();
 		
+	//VFX
+	virtual FString GetSwingSoundName() const;
+
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
 
