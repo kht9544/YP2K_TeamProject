@@ -37,6 +37,7 @@ public:
 	virtual FString GetSwingSoundName() const;
 	virtual FString GetGuardOn() const;
 	virtual FString GetGuardOff() const;
+	virtual FString GetDeadSoundName() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);

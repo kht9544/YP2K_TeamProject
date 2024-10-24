@@ -16,6 +16,9 @@ public:
 	// Sets default values for this character's properties
 	ANormalMonster();
 
+	virtual FString GetHitSoundName() const override;
+	virtual FString GetGuardOff() const override;
+	virtual FString GetDeadSoundName() const override;
 
 protected:
 	// Called when the game starts or when spawned
