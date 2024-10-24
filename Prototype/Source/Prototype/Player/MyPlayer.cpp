@@ -42,6 +42,9 @@
 //hp
 #include "Components/ProgressBar.h"
 
+#include "../Base/Managers/SoundManager.h"
+
+
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
@@ -382,6 +385,16 @@ FString AMyPlayer::GetGuardOff() const
 	return "ShieldGuard_Off";
 }
 
+FString AMyPlayer::GetSkillSound01() const
+{
+	return "Skill01_Sound";
+}
+
+FString AMyPlayer::GetSkillSound02() const
+{
+	return "Skill02_Sound";
+}
+
 
 //void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 //{
@@ -478,7 +491,7 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			{
 				PlayerAnimInstance->PlaySkill01Montage();  // Skill1 Animation
 			}
-			
+			SoundManager->PlaySound(*GetSkillSound01(), _hitPoint);
 		}
 	}
 }
@@ -525,6 +538,7 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
 			{
 				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
 			}
+			SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
 
         }
     }

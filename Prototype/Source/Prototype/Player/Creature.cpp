@@ -128,6 +128,16 @@ FString ACreature::GetDeadSoundName() const
 	return "default_DeadSound";
 }
 
+FString ACreature::GetSkillSound01() const
+{
+	return "default_Skill01";
+}
+
+FString ACreature::GetSkillSound02() const
+{
+	return "default_Skill02";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;

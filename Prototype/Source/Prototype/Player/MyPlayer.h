@@ -67,6 +67,8 @@ public:
 	virtual FString GetHitSoundName() const override;
 	virtual FString GetGuardOn() const override;
 	virtual FString GetGuardOff() const override;
+	virtual FString GetSkillSound01() const override;
+	virtual FString GetSkillSound02()const override;
 
 	/*FName GuardStartSectionName;
 	FName GuardEndSectionName;

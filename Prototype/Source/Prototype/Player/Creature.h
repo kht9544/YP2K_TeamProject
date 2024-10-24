@@ -38,6 +38,8 @@ public:
 	virtual FString GetGuardOn() const;
 	virtual FString GetGuardOff() const;
 	virtual FString GetDeadSoundName() const;
+	virtual FString GetSkillSound01() const;
+	virtual FString GetSkillSound02() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
