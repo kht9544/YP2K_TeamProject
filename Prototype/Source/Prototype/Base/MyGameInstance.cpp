@@ -61,7 +61,8 @@ void UMyGameInstance::Init()
 	FActorSpawnParameters parameters;
 	parameters.Name = TEXT("SoundManager");
 	_soundManager = GetWorld()->SpawnActor<ASoundManager>(FVector::ZeroVector, FRotator::ZeroRotator, parameters);
-
+	parameters.Name = TEXT("EffectManager");
+	_effectManager = GetWorld()->SpawnActor<AEffectManager>(FVector::ZeroVector, FRotator::ZeroRotator, parameters);
 
 }
 
