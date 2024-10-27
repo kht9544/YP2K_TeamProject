@@ -403,15 +403,15 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
 		AttackHit();
-		 if(bIsGuarding)
-		 	bIsGuarding = false;
-		 _KnightanimInstance->PlayAttackMontage();
-		 _isAttacking = true;
+		//  if(bIsGuarding)
+		//  	bIsGuarding = false;
+		//  _KnightanimInstance->PlayAttackMontage();
+		//  _isAttacking = true;
 
-		 _curAttackIndex %= 4;
-		 _curAttackIndex++;
+		//  _curAttackIndex %= 4;
+		//  _curAttackIndex++;
 
-		 _KnightanimInstance->JumpToSection(_curAttackIndex);
+		//  _KnightanimInstance->JumpToSection(_curAttackIndex);
 	}
 
 }
@@ -430,10 +430,6 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			bIsDashing = true;
 
 			FVector2D MovementInput = _moveVector;
-			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
-
-		
-
 
 			if (GetVelocity().Size() > 300.f)
 			{

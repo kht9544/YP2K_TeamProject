@@ -23,6 +23,10 @@ public:
 
 	void SetCanTeleport(bool CanTel){_CanTeleport = CanTel;}
 	
+	void StartDash();
+	void StopDash();
+
+	bool bIsDashing;
 
 private:
 	// Called when the game starts or when spawned
@@ -33,8 +37,20 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class AMyDecal> _decal;
 
+	FTimerHandle DashTimerHandle;
+
 	bool _CanTeleport = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Obstacle", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ABossObstacle> _obstacle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
+    float DashSpeed;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
+    float DashDuration;
+
 };
