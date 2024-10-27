@@ -43,6 +43,7 @@
 #include "Components/ProgressBar.h"
 
 #include "../Base/Managers/SoundManager.h"
+#include "../Base/Managers/EffectManager.h"
 
 
 // Sets default values
@@ -162,6 +163,8 @@ AMyPlayer::AMyPlayer()
 	{
 		_decal = MD.Class;
 	}
+
+
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> PlBar
 	(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerBar_UI.PlayerBar_UI_C'"));
@@ -395,6 +398,11 @@ FString AMyPlayer::GetSkillSound02() const
 	return "Skill02_Sound";
 }
 
+FString AMyPlayer::GetSkillParticleEffect02() const
+{
+	return "NS_Meteor";
+}
+
 
 //void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 //{
@@ -539,7 +547,7 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
 				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
 			}
 			SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
-
+			EffectManager->Play(*GetSkillParticleEffect02(), _hitPoint);
         }
     }
 }

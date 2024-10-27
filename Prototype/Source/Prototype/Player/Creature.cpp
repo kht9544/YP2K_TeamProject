@@ -138,6 +138,11 @@ FString ACreature::GetSkillSound02() const
 	return "default_Skill02";
 }
 
+FString ACreature::GetSkillParticleEffect02() const
+{
+	return "default_Skill02_Effect";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;

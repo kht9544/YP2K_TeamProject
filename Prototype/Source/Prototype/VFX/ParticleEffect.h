@@ -27,7 +27,10 @@ public:
 	bool IsPlaying();
 
 	UFUNCTION()
-	void EndNiagara(class UNiagaraComponent* particle);
+	void End(class UParticleSystemComponent* particle);
+
+	UFUNCTION()
+	void EndNiagara (class UNiagaraComponent* particle);
 
 	//UFUNCTION()
 	//void EndSystem(class UParticleSystem* particle);
@@ -38,5 +41,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* _niagaraCom;
+	
 
 };

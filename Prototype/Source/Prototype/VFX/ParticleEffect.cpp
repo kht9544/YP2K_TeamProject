@@ -6,6 +6,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Particles/ParticleSystem.h"
 #include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 
 
@@ -13,13 +14,12 @@ AParticleEffect::AParticleEffect()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	/*_particleCom = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
-	RootComponent = _particleCom;*/
+	_particleCom = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
+	RootComponent = _particleCom;
 
 	_niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
-	RootComponent = _niagaraCom;
-	
-
+	//RootComponent = _niagaraCom;
+	_niagaraCom->SetupAttachment(RootComponent);
 	//_niagaraCom->SetupAttachment(RootComponent);
 
 }
@@ -28,7 +28,10 @@ AParticleEffect::AParticleEffect()
 void AParticleEffect::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	_particleCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::End);
+	End(_particleCom);
+
 	_niagaraCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::EndNiagara);
 	EndNiagara(_niagaraCom);
 }
@@ -56,9 +59,21 @@ bool AParticleEffect::IsPlaying()
 	return false;
 }
 
-void AParticleEffect::EndNiagara(UNiagaraComponent* particle)
+void AParticleEffect::End(UParticleSystemComponent* particle)
 {
 	if (particle)
+		particle->DeactivateSystem();
+}
+
+void AParticleEffect::EndNiagara(UNiagaraComponent* particle)
+{
+	//if (particle)
+	//{
+	//	particle->Deactivate();
+	//	particle->DestroyComponent();
+	//}
+
+	if (particle && _niagaraCom)
 	{
 		particle->Deactivate();
 		particle->DestroyComponent();

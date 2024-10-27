@@ -69,7 +69,7 @@ public:
 	virtual FString GetGuardOff() const override;
 	virtual FString GetSkillSound01() const override;
 	virtual FString GetSkillSound02()const override;
-
+	virtual FString GetSkillParticleEffect02() const override;
 	/*FName GuardStartSectionName;
 	FName GuardEndSectionName;
 	UPROPERTY(EditAnywhere, Category = "Animation")

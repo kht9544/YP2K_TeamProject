@@ -41,6 +41,8 @@ public:
 	virtual FString GetSkillSound01() const;
 	virtual FString GetSkillSound02() const;
 
+	virtual FString GetSkillParticleEffect02() const;
+
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
 
