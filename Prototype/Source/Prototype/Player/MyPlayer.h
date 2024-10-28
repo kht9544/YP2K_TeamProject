@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Creature.h"
 #include "../Item/Equip/EquipItem.h"
+#include "NiagaraSystem.h"
 #include "MyPlayer.generated.h"
 
 
@@ -180,6 +181,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class AMyDecal> _decal;
 
+	
+	//  YSR시도
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UNiagaraSystem* _decalNiagaraSystem; // 추가된 Niagara 시스템 변수
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UStatWidget *_statWidget;
 
@@ -217,6 +224,5 @@ public:
 	FTimerHandle ScreenShakeTimerHandle;
 	FTimerHandle MeteorTimerHandle;
 
-	
 
 };

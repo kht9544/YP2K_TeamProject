@@ -53,6 +53,7 @@ void AMeteorDecal::StartMeteor(FVector startLocation, FVector endLocation, float
     _elapsedTime = 0.0f;
 
     MeteorMesh->SetWorldLocation(startLocation);  // 메테오를 하늘에 위치시킴
+   
     SetActorLocation(endLocation);  // 데칼은 바닥에 위치
     _bIsPlay = true;
 }

@@ -44,6 +44,9 @@
 
 #include "../Base/Managers/SoundManager.h"
 #include "../Base/Managers/EffectManager.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 
 // Sets default values
@@ -163,6 +166,14 @@ AMyPlayer::AMyPlayer()
 	{
 		_decal = MD.Class;
 	}
+
+	//  YSR시도
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> DecalNiagaraSystem(TEXT("/Script/Niagara.NiagaraSystem'/Game/Blueprint/VFX/NS_Meteor.NS_Meteor'"));
+	if (DecalNiagaraSystem.Succeeded())
+	{
+		_decalNiagaraSystem = DecalNiagaraSystem.Object; // 새로운 Niagara 시스템
+	}
+
 
 
 
@@ -531,6 +542,44 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
             {
                 // 메테오가 하늘에서 바닥으로 떨어지게 함
                 MeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
+
+				if (_decalNiagaraSystem)
+				{
+					UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+						GetWorld(),
+						_decalNiagaraSystem,
+						DecalLocation,
+						FRotator::ZeroRotator
+					);
+
+					if (NiagaraComponent)
+					{
+						NiagaraComponent->SetRelativeScale3D(FVector(1.0f));  // 필요에 따라 크기 조절
+						NiagaraComponent->SetAutoDestroy(true);  // 일정 시간 후 자동으로 삭제
+
+						//FTimerHandle NiagaraDestroyHandle;
+						FTimerHandle NiagaraMovementHandle;
+						GetWorld()->GetTimerManager().SetTimer(NiagaraMovementHandle, [this, NiagaraComponent, MeteorDecal, DecalLocation ]()
+							{
+								if (NiagaraComponent && MeteorDecal)
+								{
+									// 나이아가라가 메테오 데칼과 함께 이동하도록 설정
+									FVector NewLocation = DecalLocation;  // 현재 위치를 데칼 위치로 설정
+									NiagaraComponent->SetWorldLocation(NewLocation);
+								}
+							}, 0.1f, true);  
+
+						// 메테오가 떨어진 후 나이아가라를 보이지 않도록 설정
+						FTimerHandle NiagaraDestroyHandle;
+						GetWorld()->GetTimerManager().SetTimer(NiagaraDestroyHandle, [NiagaraComponent]()
+							{
+								if (NiagaraComponent)
+								{
+									NiagaraComponent->DestroyComponent();
+								}
+							}, 3.0f, false);  // 3초 후 나이아가라 삭제
+					}
+				}
             }
 
             // 화면 흔들림과 메테오 폭발 타이머 설정
@@ -547,7 +596,7 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
 				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
 			}
 			SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
-			EffectManager->Play(*GetSkillParticleEffect02(), _hitPoint);
+			
         }
     }
 }
@@ -712,6 +761,7 @@ void AMyPlayer::StartScreenShake()
 
 void AMyPlayer::CastMeteor()
 {
+
 }
 
 // void AMyPlayer::CheckForClimbableWall()

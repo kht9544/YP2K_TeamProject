@@ -10,17 +10,23 @@
 #include "NiagaraComponent.h"
 
 
+
 AParticleEffect::AParticleEffect()
 {
+	//PrimaryActorTick.bCanEverTick = false;
+
+	//_particleCom = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
+	//RootComponent = _particleCom;
+
+	//_niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
+	////RootComponent = _niagaraCom;
+	//_niagaraCom->SetupAttachment(RootComponent);
+	////_niagaraCom->SetupAttachment(RootComponent);
+
 	PrimaryActorTick.bCanEverTick = false;
 
-	_particleCom = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
-	RootComponent = _particleCom;
-
-	_niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
-	//RootComponent = _niagaraCom;
-	_niagaraCom->SetupAttachment(RootComponent);
-	//_niagaraCom->SetupAttachment(RootComponent);
+	_niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
+	RootComponent = _niagaraCom;
 
 }
 
@@ -29,11 +35,14 @@ void AParticleEffect::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_particleCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::End);
-	End(_particleCom);
+	//_particleCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::End);
+	//End(_particleCom);
 
-	_niagaraCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::EndNiagara);
-	EndNiagara(_niagaraCom);
+	//_niagaraCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::EndNiagara);
+	//EndNiagara(_niagaraCom);
+
+	_niagaraCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::End);
+	End(_niagaraCom);
 }
 
 
@@ -54,31 +63,32 @@ void AParticleEffect::Play(FVector location, FRotator rotator)
 
 bool AParticleEffect::IsPlaying()
 {
-	if (_niagaraCom->IsActive())
+	/*if (_niagaraCom->IsActive())
 		return true;
-	return false;
+	return false;*/
+	return _niagaraCom->IsActive();
 }
 
-void AParticleEffect::End(UParticleSystemComponent* particle)
+void AParticleEffect::End(UNiagaraComponent* niagaraComponent)
 {
-	if (particle)
-		particle->DeactivateSystem();
+	if (niagaraComponent)
+		niagaraComponent->Deactivate();
 }
 
-void AParticleEffect::EndNiagara(UNiagaraComponent* particle)
-{
-	//if (particle)
-	//{
-	//	particle->Deactivate();
-	//	particle->DestroyComponent();
-	//}
-
-	if (particle && _niagaraCom)
-	{
-		particle->Deactivate();
-		particle->DestroyComponent();
-	}
-
-}
+//void AParticleEffect::EndNiagara(UNiagaraComponent* particle)
+//{
+//	//if (particle)
+//	//{
+//	//	particle->Deactivate();
+//	//	particle->DestroyComponent();
+//	//}
+//
+//	if (particle && _niagaraCom)
+//	{
+//		particle->Deactivate();
+//		particle->DestroyComponent();
+//	}
+//
+//}
 
 
