@@ -17,8 +17,8 @@ public:
 
 	AEffectManager();
 
-	void CreateParticle(FString name, FString path);
-	void CreateParticleEffects();
+	void CreateNiagaraClass(FString name, FString path);
+	void CreateEffect();
 	void Play(FString name, FVector location, FRotator rotator = FRotator::ZeroRotator);
 
 	virtual void Tick(float DeltaTime) override;
