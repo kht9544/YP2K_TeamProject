@@ -32,6 +32,17 @@ public:
 	virtual void Disable();
 	virtual void AttackHit();
 		
+	//VFX
+	virtual FString GetHitSoundName() const;
+	virtual FString GetSwingSoundName() const;
+	virtual FString GetGuardOn() const;
+	virtual FString GetGuardOff() const;
+	virtual FString GetDeadSoundName() const;
+	virtual FString GetSkillSound01() const;
+	virtual FString GetSkillSound02() const;
+
+	virtual FString GetSkillParticleEffect02() const;
+
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
 
@@ -39,7 +50,8 @@ public:
 
 	float GetVertical() {return _vertical;}
 	float GetHorizontal() {return _horizontal;}
-	
+	int32 GetCurHp() { return _StatCom->GetCurHp(); }
+
 	// cheol
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	UStatComponent* _StatCom;
@@ -77,5 +89,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> WidgetClass;
 
-
+	
 };

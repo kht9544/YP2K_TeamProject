@@ -16,6 +16,9 @@ public:
 	// Sets default values for this character's properties
 	ANormalMonster();
 
+	virtual FString GetHitSoundName() const override;
+	virtual FString GetGuardOff() const override;
+	virtual FString GetDeadSoundName() const override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,6 +28,6 @@ protected:
 
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_N_AnimInstance* _monster_N_AnimInstance;
 };

@@ -15,7 +15,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MyPlayerController.h"
 #include "../UI/SkillWidget_test.h"
-#include "MyDecal.h"
+#include "MeteorDecal.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // chelo
@@ -37,6 +37,14 @@
 #include "../Animation/PlayerAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/PlayerBarWidget.h"
+
+
+//hp
+#include "Components/ProgressBar.h"
+
+#include "../Base/Managers/SoundManager.h"
+#include "../Base/Managers/EffectManager.h"
+
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -86,6 +94,8 @@ AMyPlayer::AMyPlayer()
 	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
 	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
+
+	
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> USM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Face_Pos.Free_Body_Face_Pos'"));
 	if (USM.Succeeded())
 	{
@@ -148,11 +158,13 @@ AMyPlayer::AMyPlayer()
 		_cameraShakeClass = CS.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<AMyDecal> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Decal_BP.Decal_BP_C'"));
+	static ConstructorHelpers::FClassFinder<AMeteorDecal> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/MeteorDecal_BP.MeteorDecal_BP_C'"));
 	if (MD.Succeeded())
 	{
 		_decal = MD.Class;
 	}
+
+
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> PlBar
 	(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerBar_UI.PlayerBar_UI_C'"));
@@ -209,6 +221,7 @@ void AMyPlayer::BeginPlay()
 	SkillOnCooldown.Init(false, 4);
 }
 
+
 void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -256,6 +269,37 @@ void AMyPlayer::Tick(float DeltaTime)
 	{
 		PerformDash(DeltaTime);
 	}
+
+	if (_Widget)
+	{
+		auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+		if (PlWidget)
+		{
+			int32 PlMaxHp = _StatCom->GetMaxHp();
+			int32 PlMaxMp = _StatCom->GetMaxMp();
+			int32 PlCurHp = _StatCom->GetCurHp();
+			int32 PlCurMp = _StatCom->GetCurMp();
+
+			float HPPercent = float(PlCurHp) / float(PlMaxHp);
+			float MPPercent = float(PlCurMp) / float(PlMaxMp);
+
+			float NewHPScaleX = float(PlMaxHp) / 1000.0f;
+			float NewMPScaleX = float(PlMaxMp) / 50.0f;
+
+			if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
+			{
+				PlWidget->Pl_HPBar->SetPercent(HPPercent);
+				PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
+			}
+
+			if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
+			{
+				PlWidget->Pl_MPBar->SetPercent(MPPercent);
+				PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
+			}
+		}
+	}
+
 }
 
 float AMyPlayer::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -324,6 +368,41 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 	// TODO:Update UI
 }
 
+FString AMyPlayer::GetSwingSoundName() const
+{
+	return "SwingSound_Sword_01";
+}
+
+FString AMyPlayer::GetHitSoundName() const
+{
+	return "TakeSound_Sword_01";
+}
+
+FString AMyPlayer::GetGuardOn() const
+{
+	return "ShieldGuard_On";
+}
+
+FString AMyPlayer::GetGuardOff() const
+{
+	return "ShieldGuard_Off";
+}
+
+FString AMyPlayer::GetSkillSound01() const
+{
+	return "Skill01_Sound";
+}
+
+FString AMyPlayer::GetSkillSound02() const
+{
+	return "Skill02_Sound";
+}
+
+FString AMyPlayer::GetSkillParticleEffect02() const
+{
+	return "NS_Meteor";
+}
+
 
 //void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 //{
@@ -367,16 +446,16 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
-		AttackHit();
-		// if(bIsGuarding)
-		// 	bIsGuarding = false;
-		// _KnightanimInstance->PlayAttackMontage();
-		// _isAttacking = true;
+		//AttackHit(); // Sound가 반복으로 중복출력됨..
+		 if(bIsGuarding)
+		 	bIsGuarding = false;
+		 _KnightanimInstance->PlayAttackMontage();
+		 _isAttacking = true;
 
-		// _curAttackIndex %= 4;
-		// _curAttackIndex++;
+		 _curAttackIndex %= 4;
+		 _curAttackIndex++;
 
-		// _KnightanimInstance->JumpToSection(_curAttackIndex);
+		 _KnightanimInstance->JumpToSection(_curAttackIndex);
 	}
 
 }
@@ -397,11 +476,15 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			FVector2D MovementInput = _moveVector;
 			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
 
+		
+
+
 			if (GetVelocity().Size() > 300.f)
 			{
 				FVector Forward = GetActorForwardVector() * MovementInput.Y;
 				FVector Right = GetActorRightVector() * MovementInput.X;
 				DashDirection = (Forward + Right).GetSafeNormal();
+
 			}
 			else
 			{
@@ -410,35 +493,66 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 
 			DashTimeElapsed = 0.f;
 			_skillWidgetInstance->StartCooldown(0, 5.0f);
+
+			UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+			if (PlayerAnimInstance)
+			{
+				PlayerAnimInstance->PlaySkill01Montage();  // Skill1 Animation
+			}
+			SoundManager->PlaySound(*GetSkillSound01(), _hitPoint);
 		}
 	}
 }
 
-void AMyPlayer::Skill2(const FInputActionValue &value)
+void AMyPlayer::Skill2(const FInputActionValue& value)
 {
-	bool isPressed = value.Get<bool>();
+    bool isPressed = value.Get<bool>();
 
-	if (isPressed && _skillWidgetInstance != nullptr)
-	{
-		if (SkillOnCooldown[1])
-			return;
-		else
-		{
-			SkillOnCooldown[1] = true;
+    if (isPressed && _skillWidgetInstance != nullptr)
+    {
+        if (SkillOnCooldown[1])
+            return;
+        else
+        {
+            SkillOnCooldown[1] = true;
 
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = GetInstigator();
-			FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
-			DecalLocation.Z = 0.0f;
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = GetInstigator();
 
-			AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
-			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
-			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);
-			_skillWidgetInstance->StartCooldown(1, 5.0f);
-		}
-	}
+            // 메테오가 떨어질 위치 계산 (플레이어 앞 1000 단위)
+            FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f);  // 하늘에서 시작
+            FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
+            DecalLocation.Z = 0.0f;  // Z축을 0으로 설정하여 지면에 위치하게 함
+
+            // 메테오 데칼 생성 및 메테오 소환
+            AMeteorDecal* MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
+            if (MeteorDecal)
+            {
+                // 메테오가 하늘에서 바닥으로 떨어지게 함
+                MeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
+            }
+
+            // 화면 흔들림과 메테오 폭발 타이머 설정
+            GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
+            GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);  // 3초 후 메테오 충돌
+
+            // 스킬 쿨다운 시작
+            _skillWidgetInstance->StartCooldown(1, 5.0f);
+
+
+			UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+			if (PlayerAnimInstance)
+			{
+				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
+			}
+			SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
+			EffectManager->Play(*GetSkillParticleEffect02(), _hitPoint);
+        }
+    }
 }
+
+
 
 void AMyPlayer::Skill3(const FInputActionValue &value)
 {

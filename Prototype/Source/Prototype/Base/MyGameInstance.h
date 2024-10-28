@@ -8,8 +8,17 @@
 #include "../Item/BaseItem.h"
 #include "MyGameInstance.generated.h"
 
+
+class AEffectManager;
+class ASoundManager;
+
 #define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
+<<<<<<< HEAD
 #define T_DEFAULT Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()->GetDefaultTexture()
+=======
+#define SoundManager Cast<UMyGameInstance>(GetGameInstance())->GetSoundManager()
+#define EffectManager Cast<UMyGameInstance>(GetGameInstance())->GetEffectManager()
+>>>>>>> main
 
 UCLASS()
 class PROTOTYPE_API UMyGameInstance : public UGameInstance
@@ -31,6 +40,9 @@ public:
 	FMyStatData* GetBossDataByLevel(int level);
 
 	FItemData* GetConsumeItemData(int code);
+
+	ASoundManager* GetSoundManager() { return _soundManager; }
+	AEffectManager* GetEffectManager() { return _effectManager; }
 
 	UPROPERTY(BlueprintReadWrite, Category = "Stat")
 	int32 _playerLevel;
@@ -57,4 +69,8 @@ private:
 	UPROPERTY()
 	UDataTable* _ConsItemTable;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	ASoundManager* _soundManager;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	AEffectManager* _effectManager;
 };

@@ -29,6 +29,30 @@ UPlayerAnimInstance::UPlayerAnimInstance()
 	GuardLoopSectionName = TEXT("GuardLoop");
 	GuardEndSectionName = TEXT("GuardEnd");
 	GuardStartSectionName = TEXT("GuardStart");
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> HitReaction
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/HitMotionMontage.HitMotionMontage'"));
+	if (HitReaction.Succeeded())
+	{
+		HitReactionMontage = HitReaction.Object;
+	}
+
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Skill01Montage
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/Skill_01_Mongtage.Skill_01_Mongtage'"));
+	if (Skill01Montage.Succeeded())
+	{
+		_skill01Montage = Skill01Montage.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Skill02Montage
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Player/Skill_02_Mongtage.Skill_02_Mongtage'"));
+	if (Skill02Montage.Succeeded())
+	{
+		_skill02Montage = Skill02Montage.Object;
+	}
+
+
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -73,6 +97,22 @@ void UPlayerAnimInstance::StopGuardMontage()
 	if (Montage_IsPlaying(_shieldMontage))
 	{
 		Montage_Stop(0.0f, _shieldMontage);
+	}
+}
+
+void UPlayerAnimInstance::PlaySkill01Montage()
+{
+	if (_skill01Montage)
+	{
+		Montage_Play(_skill01Montage);
+	}
+}
+
+void UPlayerAnimInstance::PlaySkill02Montage()
+{
+	if (_skill02Montage)
+	{
+		Montage_Play(_skill02Montage);
 	}
 }
 

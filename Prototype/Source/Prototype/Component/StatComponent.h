@@ -120,6 +120,8 @@ public:
 	PILevel _PILevelDelegate;
 	
 
+	//int attckDamage(int32 Attpower, int32 str,int32 dex,int32 _int);
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
@@ -157,7 +159,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _nextExp;
-
 
 
 

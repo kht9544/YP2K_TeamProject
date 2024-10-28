@@ -31,7 +31,7 @@ void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		_vertical = _speed + (myCharacter->GetVertical() - _speed) * (DeltaSeconds);
 		_horizontal = _Direction + (myCharacter->GetHorizontal() - _Direction) * (DeltaSeconds);
-		//_isDead = (myCharacter->GetCurHp() <= 0);
+		_isDead = (myCharacter->GetCurHp() <= 0);
 
 		_vertical = _vertical + (myCharacter->GetVertical() - _vertical) * (DeltaSeconds);
 
@@ -51,5 +51,14 @@ void UBaseAnimInstance::PlayAttackMontage()
 		Montage_Play(_myAnimMontage);
 	}
 }
+
+void UBaseAnimInstance::PlayHitReactionMontage()
+{
+	if (HitReactionMontage)
+	{
+		Montage_Play(HitReactionMontage);
+	}
+}
+
 
 

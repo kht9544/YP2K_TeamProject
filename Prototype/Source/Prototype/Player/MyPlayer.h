@@ -62,7 +62,14 @@ public:
 	// Animation
 	float GetVertical() { return _vertical; }
 	float GetHorizontal() { return _horizontal; }
-	
+
+	virtual FString GetSwingSoundName() const override;
+	virtual FString GetHitSoundName() const override;
+	virtual FString GetGuardOn() const override;
+	virtual FString GetGuardOff() const override;
+	virtual FString GetSkillSound01() const override;
+	virtual FString GetSkillSound02()const override;
+	virtual FString GetSkillParticleEffect02() const override;
 	/*FName GuardStartSectionName;
 	FName GuardEndSectionName;
 	UPROPERTY(EditAnywhere, Category = "Animation")
@@ -210,5 +217,6 @@ public:
 	FTimerHandle ScreenShakeTimerHandle;
 	FTimerHandle MeteorTimerHandle;
 
+	
 
 };
