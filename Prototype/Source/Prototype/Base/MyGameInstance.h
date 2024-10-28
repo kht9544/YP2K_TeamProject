@@ -13,12 +13,9 @@ class AEffectManager;
 class ASoundManager;
 
 #define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
-<<<<<<< HEAD
 #define T_DEFAULT Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()->GetDefaultTexture()
-=======
 #define SoundManager Cast<UMyGameInstance>(GetGameInstance())->GetSoundManager()
 #define EffectManager Cast<UMyGameInstance>(GetGameInstance())->GetEffectManager()
->>>>>>> main
 
 UCLASS()
 class PROTOTYPE_API UMyGameInstance : public UGameInstance
