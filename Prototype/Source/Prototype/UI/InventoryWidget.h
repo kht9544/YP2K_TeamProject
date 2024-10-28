@@ -69,8 +69,6 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
-	class UTexture2D* _defaultTexture;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
 	FString _defaultText;
 
 	UPROPERTY()

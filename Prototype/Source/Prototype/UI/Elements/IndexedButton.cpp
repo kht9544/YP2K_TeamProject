@@ -2,6 +2,9 @@
 
 
 #include "UI/Elements/IndexedButton.h"
+#include "Base/MyGameInstance.h"
+#include "Base/Managers/UIManager.h"
+#include "Styling/SlateTypes.h"
 #include "Components/Image.h"
 
 void UIndexedButton::ButtonUpdate()
@@ -12,12 +15,15 @@ void UIndexedButton::ButtonUpdate()
 	{
 		imageBrush.SetResourceObject(_image);
 	}
-	//TODO : Why Linking Error??
-	FButtonStyle buttonStyle;
-	buttonStyle.SetNormal(imageBrush);
-	buttonStyle.SetHovered(imageBrush);
-	buttonStyle.SetPressed(imageBrush);
-
-	this->SetStyle(buttonStyle);
+	else
+	{
+		imageBrush.SetResourceObject(T_DEFAULT);
+	}
+	//TODO : Image is SO SMALL
+	FButtonStyle btnStyle;
+	btnStyle.SetNormal(imageBrush);
+	btnStyle.SetHovered(imageBrush);
+	btnStyle.SetPressed(imageBrush);
 	
+	this->SetStyle(btnStyle);
 }

@@ -3,6 +3,8 @@
 
 #include "UI/InventoryWidget.h"
 
+#include "Base/MyGameInstance.h"
+#include "Base/Managers/UIManager.h"
 #include "Components/UniformGridPanel.h"
 #include "Components/Widget.h"
 #include "Components/Button.h"
@@ -78,7 +80,7 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 	if (item == nullptr)
 	{
 		Button_[slotIndex]->SetItem(nullptr);
-		Button_[slotIndex]->SetImage(_defaultTexture);
+		Button_[slotIndex]->SetImage(T_DEFAULT);
 		Button_[slotIndex]->ButtonUpdate();
 	}
 	Button_[slotIndex]->SetItem(item);
@@ -94,7 +96,7 @@ void UInventoryWidget::ShowItem()
 {
 	if (_targetItem == nullptr)
 	{
-		ItemTexture->SetBrushFromTexture(_defaultTexture);
+		ItemTexture->SetBrushFromTexture(T_DEFAULT);
 		ItemDesc->SetText(FText::FromString(_defaultText));
 	}
 	else

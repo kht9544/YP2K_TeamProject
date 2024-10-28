@@ -9,6 +9,7 @@
 #include "MyGameInstance.generated.h"
 
 #define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
+#define T_DEFAULT Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()->GetDefaultTexture()
 
 UCLASS()
 class PROTOTYPE_API UMyGameInstance : public UGameInstance
