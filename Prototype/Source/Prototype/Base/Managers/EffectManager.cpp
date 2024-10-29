@@ -26,7 +26,6 @@ AEffectManager::AEffectManager()
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)
 {
-	//ConstructorHelpers::FClassFinder<UNiagaraSystem> effect(*path);
 	ConstructorHelpers::FClassFinder<AParticleEffect> effect(*path);
 	if (effect.Succeeded())
 	{
@@ -57,19 +56,6 @@ void AEffectManager::CreateEffect()
 
 void AEffectManager::Play(FString name, FVector location, FRotator rotator)
 {
-	/*if (_effectTable.Contains(name) == false)
-		return;
-
-	auto findEffect = _effectTable[name].FindByPredicate(
-		[](AParticleEffect* effect)-> bool
-		{
-			if (effect->IsPlaying())
-				return false;
-			return true;
-		});
-
-	if (findEffect)
-		(*findEffect)->Play(location, rotator);*/
 
 	if (!_effectTable.Contains(name))
 		return;
