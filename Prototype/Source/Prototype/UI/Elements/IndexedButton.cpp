@@ -19,7 +19,8 @@ void UIndexedButton::ButtonUpdate()
 	{
 		imageBrush.SetResourceObject(T_DEFAULT);
 	}
-	//TODO : Image is SO SMALL
+	imageBrush.ImageSize = FVector2D(200.0f, 200.0f);
+
 	FButtonStyle btnStyle;
 	btnStyle.SetNormal(imageBrush);
 	btnStyle.SetHovered(imageBrush);

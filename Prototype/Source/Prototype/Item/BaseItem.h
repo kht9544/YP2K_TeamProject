@@ -41,6 +41,9 @@ struct FItemData : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* _Texture;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USkeletalMesh* _Skeletal;
 };
 
 UCLASS()
@@ -97,5 +100,5 @@ protected:
 	int32 _Value;
 	UStaticMesh* _Mesh;
 	UTexture2D* _Texture;
-
+	USkeletalMesh* _Skeletal;
 };
