@@ -21,11 +21,10 @@ public:
 
 	bool PerformGimmick();
 
+	void Rush(); 
+
 	void SetCanTeleport(bool CanTel){_CanTeleport = CanTel;}
 	
-	void StartDash();
-	void StopDash();
-
 	bool bIsDashing;
 
 private:
@@ -52,5 +51,12 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
     float DashDuration;
+
+    TArray<ABossObstacle*> SpawnedObstacles; 
+
+    int32 RemainingRushes = 5; 
+
+   
+
 
 };

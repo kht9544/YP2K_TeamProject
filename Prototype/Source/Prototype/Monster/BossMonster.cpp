@@ -29,8 +29,8 @@ ABossMonster::ABossMonster()
 	}
 
 	DashSpeed = 12000.f;
-    DashDuration = 2.0f;
-    bIsDashing = false;
+	DashDuration = 2.0f;
+	bIsDashing = false;
 }
 
 void ABossMonster::BeginPlay()
@@ -71,42 +71,34 @@ void ABossMonster::Attack_AI()
 
 bool ABossMonster::PerformGimmick()
 {
-	UE_LOG(LogTemp, Warning, TEXT("StartGimmick"));
 	if (UWorld *World = GetWorld())
 	{
-		FVector SpawnLocation = GetActorLocation() + FVector(1300.0f, 1300.0f, 100.0f); 
-		FRotator SpawnRotation = FRotator::ZeroRotator;		 
 		FActorSpawnParameters SpawnParams;
+		float DistanceFromBoss = 700.0f;
+		int32 NumObstacles = 3;
 
-		ABossObstacle* Obstacle = World->SpawnActor<ABossObstacle>(_obstacle, SpawnLocation, SpawnRotation, SpawnParams);
+		for (int32 i = 0; i < NumObstacles; ++i)
+		{
+			float AngleDeg = i * (360.0f / NumObstacles);
+			float AngleRad = FMath::DegreesToRadians(AngleDeg);
+
+			FVector Offset = FVector(
+				FMath::Cos(AngleRad) * DistanceFromBoss,
+				FMath::Sin(AngleRad) * DistanceFromBoss,
+				0.0f);
+
+			FVector SpawnLocation = GetActorLocation() + Offset;
+			FRotator SpawnRotation = FRotator::ZeroRotator;
+
+			ABossObstacle *Obstacle = World->SpawnActor<ABossObstacle>(_obstacle, SpawnLocation, SpawnRotation, SpawnParams);
+		}
 	}
-
-	StartDash();
 
 	return false;
 }
 
-void ABossMonster::StartDash()
+void ABossMonster::Rush()
 {
-	if (!bIsDashing)
-    {
-		UE_LOG(LogTemp, Warning, TEXT("StartDash"));
-        bIsDashing = true;
-
-        GetCharacterMovement()->MaxWalkSpeed = DashSpeed;
-
-        GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::StopDash, DashDuration, false);
-    }
+	
 }
 
-void ABossMonster::StopDash()
-{
-	if (bIsDashing)
-    {
-		UE_LOG(LogTemp, Warning, TEXT("StopDash"));
-        bIsDashing = false;
-
-        GetCharacterMovement()->MaxWalkSpeed = 600.f; 
-        GetWorld()->GetTimerManager().ClearTimer(DashTimerHandle);
-    }
-}

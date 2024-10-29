@@ -40,7 +40,6 @@ void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	if(ABossMonster* Boss = Cast<ABossMonster>(OtherActor))
 	{
 		Destroy();
-		Boss->StopDash();
 	}
 }
 
