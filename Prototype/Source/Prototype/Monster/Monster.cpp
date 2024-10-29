@@ -14,6 +14,7 @@ AMonster::AMonster()
 	_capsuleComponent = GetCapsuleComponent();
     _capsuleComponent->OnComponentHit.AddDynamic(this, &AMonster::OnHit);
 
+	bIsDead = false;
 }
 
 void AMonster::BeginPlay()
@@ -42,18 +43,30 @@ float AMonster::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent,
 {
 	AMyPlayer* player = Cast<AMyPlayer>(DamageCauser);
 
+
+
+	if (bIsDead)
+	{
+		return 0.0f;
+	}
+
 	float damaged = -_StatCom->AddCurHp(-Damage);
 	if (this->_StatCom->IsDead() && player != nullptr)
 	{
+		bIsDead = true;
+
 		SetActorEnableCollision(false);
 		auto controller = GetController();
 		if (controller)
 			GetController()->UnPossess();
+
+
 		player->_StatCom->AddExp(GetExp());
+		UE_LOG(LogTemp, Error, TEXT(" Add Exp : %d"), _exp);
 
 
 	}
-	return 0.0f;
+	return damaged;
 }
 
 void AMonster::LaunchFromPlayer(FVector LaunchDirection)

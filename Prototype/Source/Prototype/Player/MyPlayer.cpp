@@ -450,6 +450,7 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 		 _curAttackIndex++;
 
 		 _KnightanimInstance->JumpToSection(_curAttackIndex);
+		 UE_LOG(LogTemp, Error, TEXT("Attack"));//test
 	}
 
 }
