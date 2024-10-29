@@ -19,7 +19,8 @@ ABossMonster::ABossMonster()
 		GetMesh()->SetSkeletalMesh(SM.Object);
 	}
 
-	_exp = 1;
+	//_StatCom->GetExp();
+	_exp = 10;
 }
 
 void ABossMonster::BeginPlay()
