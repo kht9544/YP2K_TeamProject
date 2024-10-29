@@ -43,6 +43,14 @@ UMyGameInstance::UMyGameInstance()
 	{
 		_ConsItemTable = ConsumItemData.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> EquipItemData
+	(TEXT("/Script/Engine.DataTable'/Game/Data/Item/EquipItemDataTable.EquipItemDataTable'"));
+
+	if (EquipItemData.Succeeded())
+	{
+		_EquipItemTable = EquipItemData.Object;
+	}
 }
 
 void UMyGameInstance::Init()
@@ -89,6 +97,12 @@ FItemData* UMyGameInstance::GetConsumeItemData(int code)
 {
 	auto ConsumeData = _ConsItemTable->FindRow<FItemData>(*FString::FromInt(code), TEXT(""));
 	return ConsumeData;
+}
+
+FItemData* UMyGameInstance::GetEquipItemData(int code)
+{
+	auto EquipData = _EquipItemTable->FindRow<FItemData>(*FString::FromInt(code), TEXT(""));
+	return EquipData;
 }
 
 void UMyGameInstance::SavePlayerStatus(int32 Level)

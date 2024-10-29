@@ -4,13 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Managers/EffectManager.h"
+#include "Managers/SoundManager.h"
 #include "Component/StatComponent.h"
 #include "../Item/BaseItem.h"
 #include "MyGameInstance.generated.h"
 
-
-class AEffectManager;
-class ASoundManager;
 
 #define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
 #define T_DEFAULT Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()->GetDefaultTexture()
@@ -37,6 +36,7 @@ public:
 	FMyStatData* GetBossDataByLevel(int level);
 
 	FItemData* GetConsumeItemData(int code);
+	FItemData* GetEquipItemData(int code);
 
 	ASoundManager* GetSoundManager() { return _soundManager; }
 	AEffectManager* GetEffectManager() { return _effectManager; }
@@ -65,6 +65,8 @@ private:
 
 	UPROPERTY()
 	UDataTable* _ConsItemTable;
+	UPROPERTY()
+	UDataTable* _EquipItemTable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	ASoundManager* _soundManager;
