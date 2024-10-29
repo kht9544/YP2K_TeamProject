@@ -21,6 +21,14 @@ AUIManager::AUIManager()
 		_inventoryUI = CreateWidget<UInventoryWidget>(GetWorld(), inventory.Class);
 	}
 
+	static ConstructorHelpers::FObjectFinder<UTexture2D> defaultTexture(
+		TEXT("/Script/Engine.Texture2D'/Game/CraftResourcesIcons/Textures/T_Default.T_Default'")
+	);
+	if (defaultTexture.Succeeded())
+	{
+		_defaultTexture = defaultTexture.Object;
+	}
+
 	_uiList.Add(_inventoryUI);
 	_uiIsOpen.Add(false);
 	_isPauseWhenOpen.Add(true);

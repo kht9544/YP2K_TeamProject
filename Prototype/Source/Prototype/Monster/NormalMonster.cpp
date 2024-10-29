@@ -22,6 +22,21 @@ ANormalMonster::ANormalMonster()
 	_launchLength = 1000.0f;
 }
 
+FString ANormalMonster::GetHitSoundName() const
+{
+	return "NormalMonster_AttackSound";
+}
+
+FString ANormalMonster::GetGuardOff() const
+{
+	return "NormalMonster_TakeDamageSound";
+}
+
+FString ANormalMonster::GetDeadSoundName() const
+{
+	return "NormalMonster_DeathSound";
+}
+
 // Called when the game starts or when spawned
 void ANormalMonster::BeginPlay()
 {

@@ -17,6 +17,8 @@ DECLARE_MULTICAST_DELEGATE(PAUSE_GAME);
 DECLARE_MULTICAST_DELEGATE(RESUM_GAME);
 
 class UInventoryWidget;
+class UTexture2D;
+
 UCLASS()
 class PROTOTYPE_API AUIManager : public AActor
 {
@@ -41,6 +43,7 @@ public:
 
 	UInventoryWidget* GetInventoryUI() { return _inventoryUI; }
 
+	UTexture2D* GetDefaultTexture() { return _defaultTexture; }
 
 	PAUSE_GAME pauseGame;
 	RESUM_GAME resumGame;
@@ -56,4 +59,7 @@ private:
 
 	UPROPERTY()
 	UInventoryWidget* _inventoryUI;
+
+	UPROPERTY()
+	UTexture2D* _defaultTexture;
 };

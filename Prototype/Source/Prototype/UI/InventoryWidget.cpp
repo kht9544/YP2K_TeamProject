@@ -3,6 +3,8 @@
 
 #include "UI/InventoryWidget.h"
 
+#include "Base/MyGameInstance.h"
+#include "Base/Managers/UIManager.h"
 #include "Components/UniformGridPanel.h"
 #include "Components/Widget.h"
 #include "Components/Button.h"
@@ -59,11 +61,6 @@ void UInventoryWidget::SetItemButtons()
 			//button->OnClicked.AddDynamic(this, UMyInventoryUI::ShowItem);
 			Button_.Add(button);
 
-			UImage* image = Cast<UImage>(button->GetChildAt(0));
-			if (image)
-			{
-				Image_.Add(image);
-			}
 			index++;
 		}
 	}
@@ -83,18 +80,23 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 	if (item == nullptr)
 	{
 		Button_[slotIndex]->SetItem(nullptr);
-		Image_[slotIndex]->SetBrushFromTexture(_defaultTexture);
+		Button_[slotIndex]->SetImage(T_DEFAULT);
+		Button_[slotIndex]->ButtonUpdate();
 	}
 	Button_[slotIndex]->SetItem(item);
 	UTexture2D* texture = item->GetTexture();
-	Image_[slotIndex]->SetBrushFromTexture(texture);
+	if (texture)
+	{
+		Button_[slotIndex]->SetImage(texture);
+		Button_[slotIndex]->ButtonUpdate();
+	}
 }
 
 void UInventoryWidget::ShowItem()
 {
 	if (_targetItem == nullptr)
 	{
-		ItemTexture->SetBrushFromTexture(_defaultTexture);
+		ItemTexture->SetBrushFromTexture(T_DEFAULT);
 		ItemDesc->SetText(FText::FromString(_defaultText));
 	}
 	else

@@ -43,7 +43,7 @@ ABaseItem::ABaseItem()
 	_trigger->SetSphereRadius(60.0f);
 
 	_meshComponent->SetCollisionProfileName(TEXT("Item"));
-	_trigger->SetCollisionProfileName(TEXT("Item"));
+	_trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }
 
 void ABaseItem::SetItemWithCode(int32 itemCode)
@@ -58,13 +58,13 @@ void ABaseItem::SetItemWithCode(int32 itemCode)
 			return;
 		}
 
+		_Texture = data->_Texture;
+		_Mesh = data->_Mesh;
+		_Value = data->_Value;
+		_Price = data->_Price;
 		_Name = data->_Name;
 		_Type = data->_Type;
 		_Description = data->_Description;
-		_Price = data->_Price;
-		_Value = data->_Value;
-		_Mesh = data->_Mesh;
-		_Texture = data->_Texture;
 
 		_meshComponent->SetStaticMesh(_Mesh);
 	}
@@ -96,8 +96,7 @@ void ABaseItem::Disable()
  {
 	 Super::PostInitializeComponents();
 
-	 _trigger->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::OnMyCharacterOverlap);
-	 _trigger->OnComponentEndOverlap.AddDynamic(this, &ABaseItem::OnMyCharacterOverlapEnd);
+	 _trigger->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::OnOverlapBegin);
  }
 
 // Called every frame
@@ -108,17 +107,7 @@ void ABaseItem::Tick(float DeltaTime)
 	
 }
 
-void ABaseItem::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	_player = Cast<AMyPlayer>(OverlappedComponent);
-	if (_player == nullptr)
-		return;
-	UE_LOG(LogTemp, Warning, TEXT("Player Collision!"));
-	_player->GetItem(this);
-	Disable();
-}
-
-void ABaseItem::OnMyCharacterOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ABaseItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 }
 

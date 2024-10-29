@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Creature.h"
 #include "../Item/Equip/EquipItem.h"
+#include "NiagaraSystem.h"
 #include "MyPlayer.generated.h"
 
 
@@ -62,7 +63,14 @@ public:
 	// Animation
 	float GetVertical() { return _vertical; }
 	float GetHorizontal() { return _horizontal; }
-	
+
+	virtual FString GetSwingSoundName() const override;
+	virtual FString GetHitSoundName() const override;
+	virtual FString GetGuardOn() const override;
+	virtual FString GetGuardOff() const override;
+	virtual FString GetSkillSound01() const override;
+	virtual FString GetSkillSound02()const override;
+	virtual FString GetSkillParticleEffect02() const override;
 	/*FName GuardStartSectionName;
 	FName GuardEndSectionName;
 	UPROPERTY(EditAnywhere, Category = "Animation")
@@ -173,6 +181,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class AMyDecal> _decal;
 
+	
+	//  YSR시도
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UNiagaraSystem* _decalNiagaraSystem; // 추가된 Niagara 시스템 변수
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UStatWidget *_statWidget;
 
@@ -210,6 +224,5 @@ public:
 	FTimerHandle ScreenShakeTimerHandle;
 	FTimerHandle MeteorTimerHandle;
 
-	
 
 };

@@ -42,6 +42,13 @@
 //hp
 #include "Components/ProgressBar.h"
 
+#include "../Base/Managers/SoundManager.h"
+#include "../Base/Managers/EffectManager.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
+
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
@@ -160,6 +167,16 @@ AMyPlayer::AMyPlayer()
 		_decal = MD.Class;
 	}
 
+	//  YSR시도
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> DecalNiagaraSystem(TEXT("/Script/Niagara.NiagaraSystem'/Game/Blueprint/VFX/NS_Meteor.NS_Meteor'"));
+	if (DecalNiagaraSystem.Succeeded())
+	{
+		_decalNiagaraSystem = DecalNiagaraSystem.Object; // 새로운 Niagara 시스템
+	}
+
+
+
+
 	static ConstructorHelpers::FClassFinder<UUserWidget> PlBar
 	(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerBar_UI.PlayerBar_UI_C'"));
 
@@ -269,26 +286,29 @@ void AMyPlayer::Tick(float DeltaTime)
 		auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
 		if (PlWidget)
 		{
-			int32 plMaxHp = _StatCom->GetMaxHp();
-			int32 pMaxMp = _StatCom->GetMaxMp();
-			float NewHPScaleX = (plMaxHp + 10.0f) / 1000.0f;
+			int32 PlMaxHp = _StatCom->GetMaxHp();
+			int32 PlMaxMp = _StatCom->GetMaxMp();
+			int32 PlCurHp = _StatCom->GetCurHp();
+			int32 PlCurMp = _StatCom->GetCurMp();
 
-			float NewMPScaleX = (pMaxMp + 0.5f) / 50.0f;
+			float HPPercent = float(PlCurHp) / float(PlMaxHp);
+			float MPPercent = float(PlCurMp) / float(PlMaxMp);
 
+			float NewHPScaleX = float(PlMaxHp) / 1000.0f;
+			float NewMPScaleX = float(PlMaxMp) / 50.0f;
 
 			if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
 			{
+				PlWidget->Pl_HPBar->SetPercent(HPPercent);
 				PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
-
 			}
 
 			if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
 			{
+				PlWidget->Pl_MPBar->SetPercent(MPPercent);
 				PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
 			}
-
 		}
-
 	}
 
 }
@@ -359,6 +379,41 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
 	// TODO:Update UI
 }
 
+FString AMyPlayer::GetSwingSoundName() const
+{
+	return "SwingSound_Sword_01";
+}
+
+FString AMyPlayer::GetHitSoundName() const
+{
+	return "TakeSound_Sword_01";
+}
+
+FString AMyPlayer::GetGuardOn() const
+{
+	return "ShieldGuard_On";
+}
+
+FString AMyPlayer::GetGuardOff() const
+{
+	return "ShieldGuard_Off";
+}
+
+FString AMyPlayer::GetSkillSound01() const
+{
+	return "Skill01_Sound";
+}
+
+FString AMyPlayer::GetSkillSound02() const
+{
+	return "Skill02_Sound";
+}
+
+FString AMyPlayer::GetSkillParticleEffect02() const
+{
+	return "NS_Meteor";
+}
+
 
 //void AMyPlayer::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 //{
@@ -402,11 +457,19 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
+<<<<<<< HEAD
 		AttackHit();
 		//  if(bIsGuarding)
 		//  	bIsGuarding = false;
 		//  _KnightanimInstance->PlayAttackMontage();
 		//  _isAttacking = true;
+=======
+		//AttackHit(); // Sound가 반복으로 중복출력됨..
+		 if(bIsGuarding)
+		 	bIsGuarding = false;
+		 _KnightanimInstance->PlayAttackMontage();
+		 _isAttacking = true;
+>>>>>>> main
 
 		//  _curAttackIndex %= 4;
 		//  _curAttackIndex++;
@@ -451,7 +514,7 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			{
 				PlayerAnimInstance->PlaySkill01Montage();  // Skill1 Animation
 			}
-			
+			SoundManager->PlaySound(*GetSkillSound01(), _hitPoint);
 		}
 	}
 }
@@ -480,6 +543,44 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
             if (MeteorDecal)
             {
                 MeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
+
+				if (_decalNiagaraSystem)
+				{
+					UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+						GetWorld(),
+						_decalNiagaraSystem,
+						DecalLocation,
+						FRotator::ZeroRotator
+					);
+
+					if (NiagaraComponent)
+					{
+						NiagaraComponent->SetRelativeScale3D(FVector(1.0f));  // 필요에 따라 크기 조절
+						NiagaraComponent->SetAutoDestroy(true);  // 일정 시간 후 자동으로 삭제
+
+						//FTimerHandle NiagaraDestroyHandle;
+						FTimerHandle NiagaraMovementHandle;
+						GetWorld()->GetTimerManager().SetTimer(NiagaraMovementHandle, [this, NiagaraComponent, MeteorDecal, DecalLocation ]()
+							{
+								if (NiagaraComponent && MeteorDecal)
+								{
+									// 나이아가라가 메테오 데칼과 함께 이동하도록 설정
+									FVector NewLocation = DecalLocation;  // 현재 위치를 데칼 위치로 설정
+									NiagaraComponent->SetWorldLocation(NewLocation);
+								}
+							}, 0.1f, true);  
+
+						// 메테오가 떨어진 후 나이아가라를 보이지 않도록 설정
+						FTimerHandle NiagaraDestroyHandle;
+						GetWorld()->GetTimerManager().SetTimer(NiagaraDestroyHandle, [NiagaraComponent]()
+							{
+								if (NiagaraComponent)
+								{
+									NiagaraComponent->DestroyComponent();
+								}
+							}, 3.0f, false);  // 3초 후 나이아가라 삭제
+					}
+				}
             }
 
             GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
@@ -492,7 +593,8 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
 			{
 				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
 			}
-
+			SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
+			
         }
     }
 }
@@ -657,6 +759,7 @@ void AMyPlayer::StartScreenShake()
 
 void AMyPlayer::CastMeteor()
 {
+
 }
 
 // void AMyPlayer::CheckForClimbableWall()

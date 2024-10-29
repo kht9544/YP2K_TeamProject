@@ -69,8 +69,6 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
-	class UTexture2D* _defaultTexture;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
 	FString _defaultText;
 
 	UPROPERTY()
@@ -83,8 +81,6 @@ private:
 	class UUniformGridPanel* ItemSlots;
 	UPROPERTY(meta = (BindWidget))
 	TArray<class UIndexedButton*> Button_;
-	UPROPERTY(meta = (BindWidget))
-	TArray<class UImage*> Image_;
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* ItemTexture;

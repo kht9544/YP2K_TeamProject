@@ -4,6 +4,7 @@
 #include "Base/MyGameInstance.h"
 
 #include "Base/Managers/UIManager.h"
+#include "Base/Managers/SoundManager.h"
 
 UMyGameInstance::UMyGameInstance()
 {
@@ -55,6 +56,14 @@ void UMyGameInstance::Init()
 	LoadPlayerStatus(_playerLevel);
 	auto statData = GetStatDataByLevel(_playerLevel);
 	auto EpicData = GetEpicDataByLevel(1);
+
+
+	FActorSpawnParameters parameters;
+	parameters.Name = TEXT("SoundManager");
+	_soundManager = GetWorld()->SpawnActor<ASoundManager>(FVector::ZeroVector, FRotator::ZeroRotator, parameters);
+	parameters.Name = TEXT("EffectManager");
+	_effectManager = GetWorld()->SpawnActor<AEffectManager>(FVector::ZeroVector, FRotator::ZeroRotator, parameters);
+
 }
 
 
