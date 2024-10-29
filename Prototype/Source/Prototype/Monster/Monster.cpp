@@ -4,6 +4,7 @@
 #include "Monster/Monster.h"
 #include "Components/CapsuleComponent.h"
 #include "../Player/MyPlayer.h"
+#include "Component/StatComponent.h"
 
 
 AMonster::AMonster()
@@ -12,6 +13,7 @@ AMonster::AMonster()
 
 	_capsuleComponent = GetCapsuleComponent();
     _capsuleComponent->OnComponentHit.AddDynamic(this, &AMonster::OnHit);
+
 }
 
 void AMonster::BeginPlay()
@@ -38,8 +40,20 @@ void AMonster::DropReword()
 
 float AMonster::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-    Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-    return 0.0f;
+	AMyPlayer* player = Cast<AMyPlayer>(DamageCauser);
+
+	float damaged = -_StatCom->AddCurHp(-Damage);
+	if (this->_StatCom->IsDead() && player != nullptr)
+	{
+		SetActorEnableCollision(false);
+		auto controller = GetController();
+		if (controller)
+			GetController()->UnPossess();
+		player->_StatCom->AddExp(GetExp());
+
+
+	}
+	return 0.0f;
 }
 
 void AMonster::LaunchFromPlayer(FVector LaunchDirection)

@@ -26,18 +26,11 @@ public:
 	void Play(FVector location, FRotator rotator);
 	bool IsPlaying();
 
-	UFUNCTION()
-	void End(class UParticleSystemComponent* particle);
-
-	UFUNCTION()
-	void EndNiagara (class UNiagaraComponent* particle);
-
-	//UFUNCTION()
-	//void EndSystem(class UParticleSystem* particle);
-
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UParticleSystemComponent* _particleCom;
+	
+	
+	UFUNCTION()
+	void End(UNiagaraComponent* niagaraComponent);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* _niagaraCom;
