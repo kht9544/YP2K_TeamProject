@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Monster/EpicMonster.h"
 #include "Monster/AI/AIController_Epic.h"
+#include "Monster/EpicMonster_witch.h"
 
 UBTTaskNode_FlyAttack::UBTTaskNode_FlyAttack()
 {
@@ -17,12 +18,16 @@ UBTTaskNode_FlyAttack::UBTTaskNode_FlyAttack()
 EBTNodeResult::Type UBTTaskNode_FlyAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type result = Super::ExecuteTask(OwnerComp, NodeMemory);
-	auto character = Cast<AEpicMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	//auto character = Cast<AEpicMonster>(OwnerComp.GetAIOwner()->GetPawn());
+	auto character = Cast<AEpicMonster_witch>(OwnerComp.GetAIOwner()->GetPawn());
+
 	if (character == nullptr)
 		return EBTNodeResult::Failed;
 
 	//character->RangedAttackhit();
-	character->testShot();
+	//character->testShot();
+	character->SumonedMonster();
+
 	_isAttacking = true;
 
 	//character->_attack
