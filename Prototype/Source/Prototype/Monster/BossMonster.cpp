@@ -18,6 +18,8 @@ ABossMonster::ABossMonster()
 	{
 		GetMesh()->SetSkeletalMesh(SM.Object);
 	}
+
+	_exp = 1000;
 }
 
 void ABossMonster::BeginPlay()
