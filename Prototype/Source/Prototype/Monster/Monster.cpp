@@ -40,6 +40,8 @@ void AMonster::DropReword()
 
 float AMonster::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser); // 노멀몬스터 타겟모션 나타남
+
 	AMyPlayer* player = Cast<AMyPlayer>(DamageCauser);
 
 	float damaged = -_StatCom->AddCurHp(-Damage);
