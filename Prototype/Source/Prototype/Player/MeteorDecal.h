@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Player/MyDecal.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 #include "MeteorDecal.generated.h"
 
 UCLASS()
@@ -25,8 +27,11 @@ protected:
     float _fallDuration;
     float _elapsedTime;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Meteor")
-    UStaticMeshComponent* MeteorMesh;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    UNiagaraComponent* _niagaraCom;
+
+    UPROPERTY(EditAnywhere, Category = "MeteorEffects")
+    UNiagaraSystem* _additionalEffect;
 
     UFUNCTION()
     void OnMeteorImpact();
