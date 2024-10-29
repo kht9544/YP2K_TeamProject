@@ -38,9 +38,6 @@ public:
 	
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	//test Dead?
-	bool bIsDead;
-
 	void LaunchFromPlayer(FVector LaunchDirection);
 
 	UFUNCTION()

@@ -77,8 +77,7 @@ public:
 	int32 GetCurHp() { return _curHp; }
 	int32 GetMaxHp() { return _maxHp; }
 	int32 GetLevel() { return _level; }
-	int32 GetExp() { return _curExp; } 
-	int32 GetNextExp() { return _nextExp; } //test
+	int32 GetExp() { return _curExp; }
 	int32 GetCurMp() { return _curMp; }
 	int32 GetMaxMp() { return _maxMp; }
 	//test

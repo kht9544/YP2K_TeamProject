@@ -167,6 +167,4 @@ void AEpicMonster_witch::SumonedMonster()
 			GetWorld()->SpawnActor<ANormalMonster>(_SumonedMonster, SpawLocation, SpawRotation);
 		}
 	}
-
-
 }

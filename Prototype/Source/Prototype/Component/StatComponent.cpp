@@ -274,31 +274,20 @@ void UStatComponent::AddAttackDamage(float amount)
 
 void UStatComponent::AddExp(int32 amount)
 {
-	//if (_level == 3)
-	//	return;
+	if (_level == 3)
+		return;
 	_curExp += amount;
 
-	if (_curExp >= _nextExp)
+	while (_curExp >= _nextExp)
 	{
 		_curExp -= _nextExp;
 		_level++;
-		_PILevelDelegate.Broadcast(_level);
-
-		_bonusPoint += 6;
-		_nextExp = 100 + (_level * 50);
-		
-	}
-	/*while (_curExp >= _nextExp)
-	{
-		_curExp -= _nextExp;
-		_level++;
-		_PILevelDelegate.Broadcast(_level);
-
-		_bonusPoint += 6;
 		_nextExp = 100 + (_level * 50); 
-		break;
+		_PILevelDelegate.Broadcast(_level);
 
-	}*/
+		_bonusPoint += 6;
+
+	}
 	float ratio = EXpRatio();
 	_PlEXPDelegate.Broadcast(ratio);
 }
