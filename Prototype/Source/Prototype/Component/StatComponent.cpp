@@ -113,14 +113,11 @@ void UStatComponent::SetBossLevelInit(int level)
 		Data = myGameInstance->GetBossDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
-		_curHp = 0;
-		_maxMp = Data->MaxMP;
-		_curMp = 0;
+		_curHp = _maxHp;
 		_str = Data->STR;
 		_dex = Data->DEX;
 		_int = Data->INT;
 		_nextExp = Data->EXP;
-		_curExp = 0;
 		SetHp(_maxHp);
 		SetMp(_maxMp);
 		_bonusPoint = Data->BonusPoint;
