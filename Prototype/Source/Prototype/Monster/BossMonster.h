@@ -28,7 +28,6 @@ public:
 
 	//void OnRushCompleted();
 
-	virtual FString GetBossMonsterAttack() const override;
 
 private:
 	virtual void BeginPlay() override;
