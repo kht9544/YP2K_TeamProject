@@ -83,10 +83,12 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 		Button_[slotIndex]->SetImage(T_DEFAULT);
 		Button_[slotIndex]->ButtonUpdate();
 	}
-	Button_[slotIndex]->SetItem(item);
-	UTexture2D* texture = item->GetTexture();
-	if (texture)
+	else
 	{
+		Button_[slotIndex]->SetItem(item);
+		UTexture2D* texture = item->GetTexture();
+		if (texture == nullptr) texture = T_DEFAULT;
+	
 		Button_[slotIndex]->SetImage(texture);
 		Button_[slotIndex]->ButtonUpdate();
 	}
@@ -97,11 +99,13 @@ void UInventoryWidget::ShowItem()
 	if (_targetItem == nullptr)
 	{
 		ItemTexture->SetBrushFromTexture(T_DEFAULT);
+		ItemName->SetText(FText::FromString(_defaultText));
 		ItemDesc->SetText(FText::FromString(_defaultText));
 	}
 	else
 	{
 		ItemTexture->SetBrushFromTexture(_targetItem->GetTexture());
+		ItemName->SetText(FText::FromString(_targetItem->GetName()));
 		ItemDesc->SetText(FText::FromString(_targetItem->GetDesc()));
 	}
 }

@@ -8,7 +8,7 @@
 
 class ABaseItem;
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32 slot, bool isDrop);
+DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32, bool);
 
 UCLASS()
 class PROTOTYPE_API UInventoryWidget : public UUserWidget

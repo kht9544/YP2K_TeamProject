@@ -29,6 +29,8 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
+
 	_ItemSlots.Init(nullptr, _itemSlotMax);
 	_EquipSlots.Add(TEXT("Helmet"));
 	_EquipSlots.Add(TEXT("UpperArmor"));
@@ -75,11 +77,16 @@ void UInventoryComponent::AddItem(int32 slot, ABaseItem *item)
 	// Fill into EmptySlot First
 	if (!_EmptySlots.IsEmpty())
 	{
+		//TODO : Filling Already filled slot
 		int32 emptyslot;
 		_EmptySlots.HeapPop(emptyslot, true);
-		SlotFullCheck();
-		UIupdate_Add(emptyslot, item);
-		return;
+		if (_ItemSlots[emptyslot] == nullptr)
+		{
+			SlotFullCheck();
+			_ItemSlots[emptyslot] = item;
+			UIupdate_Add(emptyslot, item);
+			return;
+		}
 	}
 	// Fill into Selected Slot
 	if (_ItemSlots[slot] == nullptr)
