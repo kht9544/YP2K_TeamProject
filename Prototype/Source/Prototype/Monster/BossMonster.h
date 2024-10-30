@@ -10,6 +10,7 @@
 /**
  * 
  */
+
 UCLASS()
 class PROTOTYPE_API ABossMonster : public AMonster
 {
@@ -22,7 +23,7 @@ public:
 	bool PerformGimmick();
 
 	void SetCanTeleport(bool CanTel){_CanTeleport = CanTel;}
-	
+	virtual FString GetBossMonsterAttack() const override;
 
 private:
 	// Called when the game starts or when spawned

@@ -31,6 +31,10 @@ ASoundManager::ASoundManager()
 	CreateSound("NormalMonster_AttackSound", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_N_AttackSound_BP.Monster_N_AttackSound_BP_C'");
 	CreateSound("NormalMonster_TakeDamageSound", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_N_TakeDamageSound_BP.Monster_N_TakeDamageSound_BP_C'");
 	CreateSound("NormalMonster_DeathSound", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_N_DeathSound_BP.Monster_N_DeathSound_BP_C'");
+
+	// BossMonster Sound
+	CreateSound("BossMonsterAttack_Hard", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Boss_AttackSound_BP.Monster_Boss_AttackSound_BP_C'");
+	CreateSound("BossMonsterPunch", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Boss_AttackSoundPunch_BP.Monster_Boss_AttackSoundPunch_BP_C'");
 }
 
 void ASoundManager::BeginPlay()
