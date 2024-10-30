@@ -37,9 +37,5 @@ void ABossObstacle::Tick(float DeltaTime)
 
 void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if(ABossMonster* Boss = Cast<ABossMonster>(OtherActor))
-	{
-		Destroy();
-	}
 }
 

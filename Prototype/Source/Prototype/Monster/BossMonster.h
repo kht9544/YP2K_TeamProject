@@ -20,15 +20,16 @@ public:
 	ABossMonster();
 
 	bool PerformGimmick();
+	void SpawnObstacles();
+	void Dash();
+	void CheckGimmickResult();
 
-	void Rush(); 
+	virtual void Jump() override;
 
-	void SetCanTeleport(bool CanTel){_CanTeleport = CanTel;}
-	
-	bool bIsDashing;
+	void OnRushCompleted();
+
 
 private:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 	virtual void Attack_AI() override;
@@ -36,12 +37,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class AMyDecal> _decal;
 
-	FTimerHandle DashTimerHandle;
-
-	bool _CanTeleport = false;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Obstacle", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ABossObstacle> _obstacle;
+
+	TArray<ABossObstacle*> SpawnedObstacles; 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
@@ -52,11 +51,10 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
     float DashDuration;
 
-    TArray<ABossObstacle*> SpawnedObstacles; 
+	int32 DashCount = 0;
 
-    int32 RemainingRushes = 5; 
+    int32 DestroyedObstacleCount = 0;
 
-   
-
-
+    bool bGimmickSuccess = false;
+    
 };

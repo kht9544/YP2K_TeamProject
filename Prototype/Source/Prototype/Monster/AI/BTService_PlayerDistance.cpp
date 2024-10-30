@@ -30,16 +30,11 @@ void UBTService_PlayerDistance::TickNode(UBehaviorTreeComponent &OwnerComp, uint
     if (ControlledPawn && PlayerActor)
     {
         float Distance = FVector::Dist(ControlledPawn->GetActorLocation(), PlayerActor->GetActorLocation());
-        UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), Distance);
+        OwnerComp.GetBlackboardComponent()->SetValueAsFloat("Distance",Distance);
 
         if (Distance < 300.0f)
         {
             OwnerComp.GetBlackboardComponent()->SetValueAsBool("ChaseTarget",true);
-            // OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::Melee);
-        }
-        else if (Distance < 1000.0f)
-        {
-            // OwnerComp.GetBlackboardComponent()->SetValueAsEnum("AttackRange", EAttackRange::Ranged);
         }
         else
         {

@@ -457,20 +457,11 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
-<<<<<<< HEAD
 		AttackHit();
 		//  if(bIsGuarding)
 		//  	bIsGuarding = false;
 		//  _KnightanimInstance->PlayAttackMontage();
 		//  _isAttacking = true;
-=======
-		//AttackHit(); // Sound가 반복으로 중복출력됨..
-		 if(bIsGuarding)
-		 	bIsGuarding = false;
-		 _KnightanimInstance->PlayAttackMontage();
-		 _isAttacking = true;
->>>>>>> main
-
 		//  _curAttackIndex %= 4;
 		//  _curAttackIndex++;
 

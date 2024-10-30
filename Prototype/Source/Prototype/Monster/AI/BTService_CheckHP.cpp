@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Monster/AI/BTService_CheckHP.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
@@ -39,8 +38,9 @@ void UBTService_CheckHP::TickNode(UBehaviorTreeComponent &OwnerComp, uint8 *Node
     OwnerComp.GetBlackboardComponent()->SetValueAsFloat("HpPersent", HealthPercentage);
 
     bool bGimmickExecuted = OwnerComp.GetBlackboardComponent()->GetValueAsBool("GimmickExecuted");
-    if (HealthPercentage <= 0.7f && !bGimmickExecuted)
+    if (HealthPercentage < 0.7f && !bGimmickExecuted)
     {
+        OwnerComp.GetBlackboardComponent()->SetValueAsBool("TriggerGimmick", true);
         bool bGimmickSuccess = boss->PerformGimmick();
 
         if (bGimmickSuccess)
