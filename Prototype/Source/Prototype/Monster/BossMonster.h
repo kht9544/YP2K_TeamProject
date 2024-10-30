@@ -20,13 +20,13 @@ public:
 	ABossMonster();
 
 	bool PerformGimmick();
-	void SpawnObstacles();
-	void Dash();
-	void CheckGimmickResult();
+	//void SpawnObstacles();
+	//void Dash();
+	//void CheckGimmickResult();
 
-	virtual void Jump() override;
+	//virtual void Jump() override;
 
-	void OnRushCompleted();
+	//void OnRushCompleted();
 
 
 private:
