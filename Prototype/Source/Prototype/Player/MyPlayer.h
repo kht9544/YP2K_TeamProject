@@ -71,13 +71,7 @@ public:
 	virtual FString GetSkillSound01() const override;
 	virtual FString GetSkillSound02()const override;
 	virtual FString GetSkillParticleEffect02() const override;
-	/*FName GuardStartSectionName;
-	FName GuardEndSectionName;
-	UPROPERTY(EditAnywhere, Category = "Animation")
-	UAnimMontage* GuardMontage;*/
-	
-	/*UFUNCTION()
-	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);*/
+
 
 private:
 	void Move(const FInputActionValue &value);
@@ -179,12 +173,7 @@ public:
 	class USkeletalMeshComponent* _shieldBodyMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
-    TSubclassOf<class AMyDecal> _decal;
-
-	
-	//  YSR시도
-	UPROPERTY(EditAnywhere, Category = "Effects")
-	UNiagaraSystem* _decalNiagaraSystem; // 추가된 Niagara 시스템 변수
+	TSubclassOf<class AMyDecal> _decal;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
