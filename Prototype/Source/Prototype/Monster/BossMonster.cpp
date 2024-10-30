@@ -6,6 +6,8 @@
 #include "../Animation/Monster_Boss01_AnimInstance.h"
 #include "../Player/Creature.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Base/MyGameInstance.h"
+#include "../Base/Managers/SoundManager.h"
 
 
 ABossMonster::ABossMonster()
@@ -50,12 +52,37 @@ void ABossMonster::Attack_AI()
 	if (_isAttacking == false && _bossMonster01_AnimInstance != nullptr)
 	{
 		_bossMonster01_AnimInstance->PlayAttackMontage();
+
+
 		_isAttacking = true;
 
 		int32 RandomSectionIndex = FMath::RandRange(1, 3);
 
+		FString soundKey;
+		if (RandomSectionIndex == 1)
+		{
+			soundKey = "BossMonsterAttack_Hard";
+		}
+		else if (RandomSectionIndex == 2)
+		{
+			soundKey = "BossMonsterPunch";
+		}
+		else if (RandomSectionIndex == 3)
+		{
+			soundKey = "BossMonsterRoar";
+		}
+
+		// 사운드 매니저를 사용해 사운드 출력
+		if (SoundManager && !soundKey.IsEmpty())
+		{
+			SoundManager->PlaySound(soundKey, GetActorLocation());
+		}
+
+
+
 		_bossMonster01_AnimInstance->JumpToSection(RandomSectionIndex);
 	}
+
 }
 
 bool ABossMonster::PerformGimmick()
@@ -66,3 +93,31 @@ bool ABossMonster::PerformGimmick()
 
     return false;
 }
+
+FString ABossMonster::GetBossMonsterAttack() const
+{
+	FString soundKey;
+
+	if (UAnimInstance* animInstance = GetMesh()->GetAnimInstance())
+	{
+		FName currentSection = animInstance->Montage_GetCurrentSection();
+
+		if (currentSection == "Attack1")
+		{
+			soundKey = "BossMonsterAttack_Hard";
+		}
+		else if (currentSection == "Attack2")
+		{
+			soundKey = "BossMonsterPunch";
+		}
+		else if (currentSection == "Attack3")
+		{
+			soundKey = "BossMonsterPunch";
+		}
+	}
+
+	return soundKey;
+}
+
+
+

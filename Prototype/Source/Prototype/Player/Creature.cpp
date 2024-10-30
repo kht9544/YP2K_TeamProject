@@ -138,6 +138,11 @@ FString ACreature::GetSkillSound02() const
 	return "default_Skill02";
 }
 
+FString ACreature::GetBossMonsterAttack() const
+{
+	return "default_BossMonsterAttack";
+}
+
 FString ACreature::GetSkillParticleEffect02() const
 {
 	return "default_Skill02_Effect";
