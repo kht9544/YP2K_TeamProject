@@ -100,5 +100,4 @@ protected:
 	int32 _Value;
 	UStaticMesh* _Mesh;
 	UTexture2D* _Texture;
-	USkeletalMesh* _Skeletal;
 };

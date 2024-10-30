@@ -17,4 +17,5 @@ class PROTOTYPE_API AShoulderGuard : public AEquipItem
 public:
 	AShoulderGuard();
 	
+	virtual void BeginPlay() override;
 };

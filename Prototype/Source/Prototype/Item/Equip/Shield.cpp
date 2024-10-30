@@ -10,4 +10,9 @@ AShield::AShield()
     AttachSocketName = FName(TEXT("lowerarm_twist_02_lSocket"));
 }
 
+void AShield::BeginPlay()
+{
+    SetItemWithCode(6);
+}
+
 

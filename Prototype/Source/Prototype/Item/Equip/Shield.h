@@ -17,4 +17,5 @@ class PROTOTYPE_API AShield : public AEquipItem
 public:
 	AShield();
 	
+	virtual void BeginPlay() override;
 };

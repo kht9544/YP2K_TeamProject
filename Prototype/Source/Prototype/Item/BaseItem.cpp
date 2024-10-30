@@ -44,7 +44,6 @@ void ABaseItem::SetItemWithCode(int32 itemCode)
 
 		_Texture = data->_Texture;
 		_Mesh = data->_Mesh;
-		_Skeletal = data->_Skeletal;
 		_Value = data->_Value;
 		_Price = data->_Price;
 		_Name = data->_Name;
@@ -94,6 +93,12 @@ void ABaseItem::Tick(float DeltaTime)
 
 void ABaseItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	_player = Cast<AMyPlayer>(OtherActor);
+	if (_player == nullptr)
+		return;
+	UE_LOG(LogTemp, Warning, TEXT("Player Collision!"));
+	_player->GetItem(this);
+	Disable();
 }
 
 void ABaseItem::GetItem()

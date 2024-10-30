@@ -9,6 +9,7 @@
 UENUM(BlueprintType)
 enum class EItemType : uint8
 {
+    Helmet,
     UpperArmor,
     LowerArmor,
     ShoulderArmor,
@@ -25,6 +26,8 @@ public:
     // Sets default values for this actor's properties
     AEquipItem();
 
+    virtual void SetItemWithCode(int32 itemCode)override;
+
     ItemType GetArmorType(){return _Type;}
     EItemType GetEquipType(){return _equipItemType;}
 
@@ -35,7 +38,9 @@ protected:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    virtual void EquipPlayer(class AMyPlayer* Player);
+    virtual void EquipPlayer();
+
+    virtual void UseItem() override;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Socket")
     FName AttachSocketName;
@@ -44,8 +49,6 @@ protected:
     EItemType _equipItemType;
 
 public:  
-    virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EquipItem")
     class USkeletalMesh* _equipItem;
 };

@@ -17,4 +17,5 @@ class PROTOTYPE_API AUpperArmor : public AEquipItem
 public:
 	AUpperArmor();
 	
+	virtual void BeginPlay() override;
 };

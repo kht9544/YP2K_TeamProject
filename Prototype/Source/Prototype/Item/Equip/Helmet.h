@@ -17,4 +17,6 @@ class PROTOTYPE_API AHelmet : public AEquipItem
 public:
 	AHelmet();
 	
+	virtual void BeginPlay() override;
+
 };

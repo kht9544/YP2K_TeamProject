@@ -1,4 +1,6 @@
 #include "Item/Equip/EquipItem.h"
+#include "Base/MyGameInstance.h"
+#include "Item/BaseItem.h"
 #include "../../Player/MyPlayer.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
@@ -14,6 +16,31 @@ AEquipItem::AEquipItem()
     _trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }
 
+void AEquipItem::SetItemWithCode(int32 itemCode)
+{
+    auto gameinstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+    if (gameinstance != nullptr)
+    {
+        FItemData* data = gameinstance->GetEquipItemData(itemCode);
+        if (data == nullptr || data->_Name == TEXT(""))
+        {
+            UE_LOG(LogTemp, Error, TEXT("Data Load Faild!"));
+            return;
+        }
+
+        _Texture = data->_Texture;
+        _Mesh = data->_Mesh;
+        _equipItem = data->_Skeletal;
+        _Value = data->_Value;
+        _Price = data->_Price;
+        _Name = data->_Name;
+        _Type = data->_Type;
+        _Description = data->_Description;
+
+        _meshComponent->SetStaticMesh(_Mesh);
+    }
+}
+
 // Called when the game starts or when spawned
 void AEquipItem::BeginPlay()
 {
@@ -27,9 +54,9 @@ void AEquipItem::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void AEquipItem::EquipPlayer(class AMyPlayer *Player)
+void AEquipItem::EquipPlayer()
 {
-    if (Player == nullptr)
+    if (_player == nullptr)
         return;
 
     if (_equipItem)
@@ -37,19 +64,19 @@ void AEquipItem::EquipPlayer(class AMyPlayer *Player)
         switch (_equipItemType)
         {
         case EItemType::UpperArmor:
-            Player->GetMesh()->SetSkeletalMesh(_equipItem);
+            _player->GetMesh()->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::LowerArmor:
-            Player->_lowerBodyMesh->SetSkeletalMesh(_equipItem);
+            _player->_lowerBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::ShoulderArmor:
-            Player->_shoulderBodyMesh->SetSkeletalMesh(_equipItem);
+            _player->_shoulderBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::Sword:
-            Player->_swordBodyMesh->SetSkeletalMesh(_equipItem);
+            _player->_swordBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::Shield:
-            Player->_shieldBodyMesh->SetSkeletalMesh(_equipItem);
+            _player->_shieldBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         default:
             break;
@@ -57,16 +84,11 @@ void AEquipItem::EquipPlayer(class AMyPlayer *Player)
     }
 }
 
-void AEquipItem::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
+void AEquipItem::UseItem()
 {
-    auto Player = Cast<AMyPlayer>(OtherActor);
-    if (Player)
+    if (_player)
     {
-        EquipPlayer(Player);
-        Player->ItemEquipped.Broadcast(this);
-        Destroy();
-       // _meshComponent->SetVisibility(false);
-        //_meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
+        EquipPlayer();
+        _player->ItemEquipped.Broadcast(this);
     }
 }

@@ -17,4 +17,5 @@ class PROTOTYPE_API ASword : public AEquipItem
 public:
 	ASword();
 	
+	virtual void BeginPlay()override;
 };

@@ -9,3 +9,8 @@ ASword::ASword()
     _equipItemType = EItemType::Sword;
     AttachSocketName = FName(TEXT("hand_rSocket"));
 }
+
+void ASword::BeginPlay()
+{
+    SetItemWithCode(5);
+}

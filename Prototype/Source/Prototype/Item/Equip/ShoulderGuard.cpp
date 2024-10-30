@@ -9,3 +9,10 @@ AShoulderGuard::AShoulderGuard()
     _equipItemType = EItemType::ShoulderArmor;
     AttachSocketName = FName(TEXT("chest_playeSocket"));
 }
+
+void AShoulderGuard::BeginPlay()
+{
+    Super::BeginPlay();
+
+    SetItemWithCode(2);
+}
