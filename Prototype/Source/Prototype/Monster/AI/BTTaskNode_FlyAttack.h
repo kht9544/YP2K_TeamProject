@@ -13,7 +13,8 @@ UCLASS()
 class PROTOTYPE_API UBTTaskNode_FlyAttack : public UBTTaskNode
 {
 	GENERATED_BODY()
-	
+public:
+
 	UBTTaskNode_FlyAttack();
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
@@ -22,4 +23,5 @@ class PROTOTYPE_API UBTTaskNode_FlyAttack : public UBTTaskNode
 
 private:
 	bool _isAttacking = false;
+	bool _SuMonster = false;
 };

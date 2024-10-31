@@ -10,7 +10,7 @@
 
 #include "Player/MyPlayer.h"
 
-#include "Monster/EpicMonster.h"
+#include "Monster/EpicMonster_witch.h"
 
 // Sets default values
 AEpicProjectile::AEpicProjectile()
@@ -91,15 +91,15 @@ void AEpicProjectile::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedCompon
 		FDamageEvent DamageEvent;
 		AController* EventInstigator = GetInstigatorController();
 
-		if (_Griffon != nullptr)
+		if (_Witch != nullptr)
 		{
-			AActor* DamageCauser = Cast<AActor>(_Griffon);
+			AActor* DamageCauser = Cast<AActor>(_Witch);
 
 			PlayerCh->TakeDamage(_damage, DamageEvent, EventInstigator, DamageCauser);
 
 			FVector hitPos = OtherActor->GetActorLocation();
 
-			FVector direction = _Griffon->GetActorForwardVector();
+			FVector direction = _Witch->GetActorForwardVector();
 			FRotator hitRotation = direction.Rotation();
 
 
@@ -111,7 +111,7 @@ void AEpicProjectile::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedCompon
 
 
 	auto player = Cast<AMyPlayer>(OtherActor);
-	Disable();
+	//Disable();
 	
 }
 
