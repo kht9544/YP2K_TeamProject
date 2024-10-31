@@ -102,7 +102,7 @@ void ABossMonster::JumpAttack(FVector TargetLocation)
     if (IsJumping)
         return;
 
-	TargetLocation.Z -= 98.0f;
+	
 	JumpStartTime = GetWorld()->GetTimeSeconds();
     IsJumping = true;
     FVector CurrentLocation = GetActorLocation();
@@ -120,6 +120,8 @@ void ABossMonster::JumpAttack(FVector TargetLocation)
     float TargetZOffset = TargetLocation.Z - CurrentLocation.Z;
 
     FVector LandingLocation = TargetLocation;
+
+	LandingLocation.Z-=98.0f;
 
     LaunchCharacter(JumpVelocity, true, true);
 
