@@ -35,7 +35,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,float DeltaSeconds)
 {
-    	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+    Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
 	if (_isAttacking == false)
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

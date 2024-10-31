@@ -39,8 +39,6 @@ void UBTService_PlayerDistance::TickNode(UBehaviorTreeComponent &OwnerComp, uint
         else
         {
             OwnerComp.GetBlackboardComponent()->SetValueAsBool("ChaseTarget",false);
-            float MaxHp = ControlledPawn->_StatCom->GetMaxHp();
-            ControlledPawn->_StatCom->SetHp(MaxHp);
         }
     }
 }

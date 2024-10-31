@@ -20,6 +20,9 @@ public:
 	ABossMonster();
 
 	bool PerformGimmick();
+	void JumpAttack(FVector TargetLocation);
+	virtual void Landed(const FHitResult& Hit) override;
+
 	//void SpawnObstacles();
 	//void Dash();
 	//void CheckGimmickResult();
@@ -45,16 +48,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
-    float DashSpeed;
+	bool IsJumping = false;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
-    float DashDuration;
-
-	int32 DashCount = 0;
-
-    int32 DestroyedObstacleCount = 0;
-
-    bool bGimmickSuccess = false;
-    
+	float JumpStartTime; 
+    float JumpDuration;
+  
 };
