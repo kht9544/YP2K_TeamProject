@@ -14,6 +14,8 @@
 #include "Components/TextBlock.h"
 
 #include "Item/BaseItem.h"
+#include "Item/Equip/EquipItem.h"
+#include "Item/Consumes/ConsumeItem.h"
 
 UInventoryWidget::UInventoryWidget(const FObjectInitializer& ObjectInitializer)
 	: UUserWidget(ObjectInitializer)
@@ -104,6 +106,14 @@ void UInventoryWidget::ShowItem()
 	}
 	else
 	{
+		if (Cast<AEquipItem>(_targetItem))
+		{
+			UseBtnText->SetText(FText::FromString(TEXT("Equip")));
+		}
+		else
+		{
+			UseBtnText->SetText(FText::FromString(TEXT("Use")));
+		}
 		ItemTexture->SetBrushFromTexture(_targetItem->GetTexture());
 		ItemName->SetText(FText::FromString(_targetItem->GetName()));
 		ItemDesc->SetText(FText::FromString(_targetItem->GetDesc()));
@@ -132,12 +142,57 @@ void UInventoryWidget::UseItem()
 	if (_targetItem == nullptr)
 		return;
 
-	ItemDrop.Broadcast(_targetIndex, false);
-
+	if (Cast<AEquipItem>(_targetItem))
+	{
+		if (!CheckCanEquip()) return;
+		ItemEquip.Broadcast(_targetIndex);
+	}
+	if (Cast<AConsumeItem>(_targetItem))
+	{
+		ItemDrop.Broadcast(_targetIndex, false);
+		ItemUse.Broadcast(_targetIndex);
+	}
 	_targetItem = nullptr;
 	ShowItem();
 	SetItemImage(_targetIndex, nullptr);
 	_targetIndex = -1;
+}
+
+bool UInventoryWidget::CheckCanEquip()
+{
+	AEquipItem* target = Cast<AEquipItem>(_targetItem);
+	bool result = false;
+	switch (target->GetEquipType())
+	{
+	case EItemType::Helmet:
+		if (Helmet->GetItem() == nullptr)
+			result = true;
+		break;
+	case EItemType::UpperArmor:
+		if (UpperArmor->GetItem() == nullptr)
+			result = true;
+		break;
+	case EItemType::LowerArmor:
+		if (LowerArmor->GetItem() == nullptr)
+			result = true;
+		break;
+	case EItemType::ShoulderArmor:
+		if (ShoulderGuard->GetItem() == nullptr)
+			result = true;
+		break;
+	case EItemType::Sword:
+		if (Sword->GetItem() == nullptr)
+			result = true;
+		break;
+	case EItemType::Shield:
+		if (Shield->GetItem() == nullptr)
+			result = true;
+		break;
+	default:
+		break;
+	}
+
+	return result;
 }
 
 void UInventoryWidget::SetTargetItem(int32 slotIndex)
