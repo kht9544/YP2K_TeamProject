@@ -7,6 +7,9 @@
 #include "Monster.h"
 #include "NormalMonster.generated.h"
 
+//	// creature에 해볼것.
+//class AEffectManager;
+
 UCLASS()
 class PROTOTYPE_API ANormalMonster : public AMonster
 {
@@ -19,6 +22,9 @@ public:
 	virtual FString GetHitSoundName() const override;
 	virtual FString GetGuardOff() const override;
 	virtual FString GetDeadSoundName() const override;
+
+	//// creature에 해볼것.
+	//virtual void OnDeath() override;
 
 protected:
 	// Called when the game starts or when spawned
