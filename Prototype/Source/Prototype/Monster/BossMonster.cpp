@@ -101,7 +101,15 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 
 	SoundManager->PlaySound(*GetGuardOff(), _hitPoint);
 
-	_StatCom->AddCurHp(-Damage/(4-ObstacleDestroyCount));
+	if(ObstacleDestroyCount >=5)
+	{
+		_StatCom->AddCurHp(-Damage);
+	}
+	else
+	{
+		_StatCom->AddCurHp(-Damage/(5-ObstacleDestroyCount));
+	}
+
 
 	if (_StatCom->IsDead())
 	{
@@ -116,6 +124,8 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 
 	return 0.0f;
 }
+
+
 
 bool ABossMonster::PerformGimmick()
 {
@@ -168,7 +178,6 @@ void ABossMonster::Landed(const FHitResult &Hit)
 	JumpDuration = LandTime - JumpStartTime;
 	IsJumping = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("Jump Duration: %f seconds"), JumpDuration);
 }
 
 
@@ -177,33 +186,62 @@ void ABossMonster::Dash(FVector TargetLocation)
 {
     if (IsDashing)
         return;
+	IsDashing = true;
 
-    IsDashing = true;
+    FVector StartLocation = GetActorLocation(); 
+    DashDirection = (TargetLocation - StartLocation).GetSafeNormal();
+    DashDirection.Z = 0.f;
 
-    FVector CurrentLocation = GetActorLocation();
-    FVector DashDirection = (TargetLocation - CurrentLocation).GetSafeNormal();
-
-    float DashDistance = 10000.0f;
-    float DashSpeed = 2000.0f;  
-    FVector DashEndLocation = CurrentLocation + DashDirection * DashDistance;
-
-    DrawDebugLine(GetWorld(), CurrentLocation, DashEndLocation, FColor::Red, false, 1.0f, 0, 5.0f);
+    DashEndLocation = StartLocation + DashDirection * DashDistance;
 
     FRotator LookAtRotation = DashDirection.Rotation();
     SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
 
-    float DashTime = DashDistance / DashSpeed;
-
-    LaunchCharacter(DashDirection * DashSpeed, true, true);
-
 	FTimerHandle DashTimerHandle;
-    GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashTime, false);
+     GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
 }
+
+void ABossMonster::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (IsDashing)
+	{
+		FVector CurrentLocation = GetActorLocation();
+		FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, DashEndLocation, DeltaTime, DashSpeed);
+
+		FHitResult HitResult;
+		SetActorLocation(NewLocation, true, &HitResult);
+
+		if (HitResult.bBlockingHit)
+		{
+			DashEnd();
+			AMyPlayer* Player = Cast<AMyPlayer>(HitResult.GetActor());
+			if(Player!=nullptr)
+			{
+				if (_bossMonster01_AnimInstance)
+                {
+                    _bossMonster01_AnimInstance->PlayUpAttackMontage();
+                }
+				FVector ThrowDirection = (Player->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+				ThrowDirection.Z = 1.f;
+                FVector ThrowForce = ThrowDirection * 1000.0f;
+                Player->LaunchCharacter(ThrowForce, true, true);
+			}
+		}
+		else if (FVector::DistSquared(NewLocation, DashEndLocation) <= KINDA_SMALL_NUMBER)
+		{
+			DashEnd();
+		}
+	}
+}
+
+
 
 void ABossMonster::DashEnd()
 {
     IsDashing = false;
 
-    //GetCharacterMovement()->StopMovementImmediately();
+    GetCharacterMovement()->StopMovementImmediately();
 }
 

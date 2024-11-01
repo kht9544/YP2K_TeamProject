@@ -12,6 +12,7 @@
 UBTTask_BossDash::UBTTask_BossDash()
 {
     NodeName = TEXT("Dash");
+    bNotifyTick = true; 
 }
 
 EBTNodeResult::Type UBTTask_BossDash::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -25,7 +26,7 @@ EBTNodeResult::Type UBTTask_BossDash::ExecuteTask(UBehaviorTreeComponent& OwnerC
     {
         FVector TargetLocation = TargetActor->GetActorLocation();
         boss->Dash(TargetLocation);
-        return EBTNodeResult::Succeeded;
+        return EBTNodeResult::InProgress;
     }
 
     return EBTNodeResult::Failed;

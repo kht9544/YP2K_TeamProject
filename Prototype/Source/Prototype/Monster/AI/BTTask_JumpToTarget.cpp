@@ -10,6 +10,7 @@
 UBTTask_JumpToTarget::UBTTask_JumpToTarget()
 {
     NodeName = TEXT("Jump");
+     bNotifyTick = true; 
 }
 
 EBTNodeResult::Type UBTTask_JumpToTarget::ExecuteTask(UBehaviorTreeComponent &OwnerComp, uint8 *NodeMemory)
@@ -25,19 +26,21 @@ EBTNodeResult::Type UBTTask_JumpToTarget::ExecuteTask(UBehaviorTreeComponent &Ow
     {
         FVector TargetLocation = TargetActor->GetActorLocation();
         boss->JumpAttack(TargetLocation);
-    }
-    else
-    {
-        return EBTNodeResult::Failed;
+        return EBTNodeResult::InProgress;
     }
 
-    return result;
+    return EBTNodeResult::Failed;
+
+
 }
 
 void UBTTask_JumpToTarget::TickTask(UBehaviorTreeComponent &OwnerComp, uint8 *NodeMemory, float DeltaSeconds)
 {
     Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-    if (_isJumping == false)
+     auto boss = Cast<ABossMonster>(OwnerComp.GetAIOwner()->GetPawn());
+    if (boss && !boss->GetIsJumping())
+    {
         FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+    }
 }
