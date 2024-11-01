@@ -31,12 +31,6 @@ EBTNodeResult::Type UBTTask_JumpToTarget::ExecuteTask(UBehaviorTreeComponent &Ow
         return EBTNodeResult::Failed;
     }
 
-    // character->_attackEndedDelegate.AddLambda(
-    // 	[this]() -> void
-    // 	{
-    // 		this->_isAttacking = false;
-    // 	});
-
     return result;
 }
 

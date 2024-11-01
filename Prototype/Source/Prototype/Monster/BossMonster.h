@@ -21,10 +21,15 @@ public:
 
 	bool PerformGimmick();
 	void JumpAttack(FVector TargetLocation);
+	bool GetIsDashing(){return IsDashing;}
 	virtual void Landed(const FHitResult& Hit) override;
 
+	void Dash(FVector TargetLocation);
+	void DashEnd();
+
+
 	//void SpawnObstacles();
-	//void Dash();
+	
 	//void CheckGimmickResult();
 
 	//virtual void Jump() override;
@@ -36,6 +41,8 @@ private:
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 	virtual void Attack_AI() override;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class AMyDecal> _decal;
@@ -48,7 +55,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
 
+	int ObstacleDestroyCount = 0;
+
 	bool IsJumping = false;
+	bool IsDashing = false;
 
 	float JumpStartTime; 
     float JumpDuration;

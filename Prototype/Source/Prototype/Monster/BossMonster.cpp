@@ -11,6 +11,7 @@
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "DrawDebugHelpers.h"
 
 ABossMonster::ABossMonster()
 {
@@ -90,6 +91,32 @@ void ABossMonster::Attack_AI()
 	}
 }
 
+float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
+{
+	UBaseAnimInstance *AnimInstance = Cast<UBaseAnimInstance>(GetMesh()->GetAnimInstance());
+	if (AnimInstance)
+	{
+		AnimInstance->PlayHitReactionMontage();
+	}
+
+	SoundManager->PlaySound(*GetGuardOff(), _hitPoint);
+
+	_StatCom->AddCurHp(-Damage/(4-ObstacleDestroyCount));
+
+	if (_StatCom->IsDead())
+	{
+		SoundManager->PlaySound(*GetDeadSoundName(), _hitPoint);
+
+		SetActorEnableCollision(false);
+		auto controller = GetController();
+		if (controller)
+			GetController()->UnPossess();
+		Destroy();
+	}
+
+	return 0.0f;
+}
+
 bool ABossMonster::PerformGimmick()
 {
 	UE_LOG(LogTemp, Warning, TEXT("StartGimmick"));
@@ -99,48 +126,84 @@ bool ABossMonster::PerformGimmick()
 
 void ABossMonster::JumpAttack(FVector TargetLocation)
 {
-    if (IsJumping)
-        return;
+	if (IsJumping)
+		return;
 
-	
 	JumpStartTime = GetWorld()->GetTimeSeconds();
-    IsJumping = true;
-    FVector CurrentLocation = GetActorLocation();
-    FVector JumpDirection = (TargetLocation - CurrentLocation).GetSafeNormal();
+	IsJumping = true;
 
-    float JumpHeight = 500.0f; 
-    float Gravity = GetWorld()->GetGravityZ();
-    float JumpVelocityZ = FMath::Sqrt(-2 * Gravity * JumpHeight);
-    FVector JumpVelocity = JumpDirection * 500.0f;
-    JumpVelocity.Z = JumpVelocityZ;
+	FVector CurrentLocation = GetActorLocation();
+	FVector JumpDirection = (TargetLocation - CurrentLocation).GetSafeNormal2D();
+	float HorizontalDistance = FVector::Dist2D(TargetLocation, CurrentLocation);
 
+	float JumpHeight = 500.0f;
+	float Gravity = GetWorld()->GetGravityZ();
+	float JumpVelocityZ = FMath::Sqrt(-2 * Gravity * JumpHeight);
 
-    float HorizontalDistance = (TargetLocation - CurrentLocation).Size2D();
-    float TimeToReach = FMath::Sqrt(2 * JumpHeight / -Gravity) + FMath::Sqrt(2 * (CurrentLocation.Z - TargetLocation.Z) / -Gravity);
-    float TargetZOffset = TargetLocation.Z - CurrentLocation.Z;
+	float TimeToReach = FMath::Sqrt(2 * JumpHeight / -Gravity) +
+						FMath::Sqrt(2 * (CurrentLocation.Z - TargetLocation.Z + JumpHeight) / -Gravity);
 
-    FVector LandingLocation = TargetLocation;
+	FVector JumpVelocity = JumpDirection * (HorizontalDistance / TimeToReach);
+	JumpVelocity.Z = JumpVelocityZ;
 
-	LandingLocation.Z-=98.0f;
+	FRotator LookAtRotation = (TargetLocation - CurrentLocation).Rotation();
+    SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
 
-    LaunchCharacter(JumpVelocity, true, true);
+	FVector LandingLocation = TargetLocation;
+	LandingLocation.Z -= 98.0f;
 
-    if (_decal)
-    {
-        AMyDecal* Decal = GetWorld()->SpawnActor<AMyDecal>(_decal, LandingLocation, FRotator::ZeroRotator);
-    }
+	LaunchCharacter(JumpVelocity, true, true);
+
+	if (_decal)
+	{
+		AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_decal, LandingLocation, FRotator::ZeroRotator);
+	}
 }
-
 
 void ABossMonster::Landed(const FHitResult &Hit)
 {
 	Super::Landed(Hit);
 
 	float LandTime = GetWorld()->GetTimeSeconds();
-    JumpDuration = LandTime - JumpStartTime;
+	JumpDuration = LandTime - JumpStartTime;
+	IsJumping = false;
 
-    IsJumping = false;
-
-    UE_LOG(LogTemp, Warning, TEXT("Jump Duration: %f seconds"), JumpDuration);
-
+	UE_LOG(LogTemp, Warning, TEXT("Jump Duration: %f seconds"), JumpDuration);
 }
+
+
+
+void ABossMonster::Dash(FVector TargetLocation)
+{
+    if (IsDashing)
+        return;
+
+    IsDashing = true;
+
+    FVector CurrentLocation = GetActorLocation();
+    FVector DashDirection = (TargetLocation - CurrentLocation).GetSafeNormal();
+
+    float DashDistance = 10000.0f;
+    float DashSpeed = 2000.0f;  
+    FVector DashEndLocation = CurrentLocation + DashDirection * DashDistance;
+
+    DrawDebugLine(GetWorld(), CurrentLocation, DashEndLocation, FColor::Red, false, 1.0f, 0, 5.0f);
+
+    FRotator LookAtRotation = DashDirection.Rotation();
+    SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
+
+    float DashTime = DashDistance / DashSpeed;
+
+    LaunchCharacter(DashDirection * DashSpeed, true, true);
+
+	FTimerHandle DashTimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashTime, false);
+}
+
+void ABossMonster::DashEnd()
+{
+    IsDashing = false;
+
+    //GetCharacterMovement()->StopMovementImmediately();
+}
+
