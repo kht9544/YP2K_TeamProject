@@ -7,6 +7,7 @@
 #include "UI/InventoryWidget.h"
 
 #include "Item/BaseItem.h"
+#include "Item/Equip/EquipItem.h"
 #include "Item/Equip/Helmet.h"
 #include "Item/Equip/UpperArmor.h"
 #include "Item/Equip/ShoulderGuard.h"
@@ -30,11 +31,12 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 
 	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
+	UIManager->GetInventoryUI()->ItemEquip.AddUObject(this, &UInventoryComponent::EquipItem);
 
 	_ItemSlots.Init(nullptr, _itemSlotMax);
 	_EquipSlots.Add(TEXT("Helmet"));
 	_EquipSlots.Add(TEXT("UpperArmor"));
-	_EquipSlots.Add(TEXT("ShoulderGuard"));
+	_EquipSlots.Add(TEXT("ShoulderArmor"));
 	_EquipSlots.Add(TEXT("LowerArmor"));
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
@@ -61,10 +63,6 @@ void UInventoryComponent::SlotFullCheck()
 	_isSlotFull = true;
 }
 
-void UInventoryComponent::TryEquip(FString part, int32 slot)
-{
-	// if there is already filled, exchange each.
-}
 
 void UInventoryComponent::AddItem(int32 slot, ABaseItem *item)
 {
@@ -147,12 +145,49 @@ void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)
 void UInventoryComponent::EquipItem(int32 slot)
 {
 	// TODO : Switch-case with EquipType Enum later
-	auto equipment = Cast<AHelmet>(_ItemSlots[slot]);
-	if (equipment != nullptr)
-	{
-		TryEquip(TEXT("Helmet"), slot);
+	auto equipment = Cast<AEquipItem>(_ItemSlots[slot]);
+	if (equipment == nullptr)
 		return;
+
+	switch (equipment->GetEquipType())
+	{
+	case EItemType::Helmet:
+		TryEquip(TEXT("Helmet"), slot);
+		break;
+	case EItemType::UpperArmor:
+		TryEquip(TEXT("UpperArmor"), slot);
+		break;
+	case EItemType::LowerArmor:
+		TryEquip(TEXT("LowerArmor"), slot);
+		break;
+	case EItemType::ShoulderArmor:
+		TryEquip(TEXT("ShoulderArmor"), slot);
+		break;
+	case EItemType::Sword:
+		TryEquip(TEXT("Sword"), slot);
+		break;
+	case EItemType::Shield:
+		TryEquip(TEXT("Shield"), slot);
+		break;
+	default:
+		break;
 	}
+}
+
+void UInventoryComponent::TryEquip(FString part, int32 slot)
+{
+	// if there is already filled, exchange each.
+	auto equipment = Cast<AEquipItem>(_ItemSlots[slot]);
+	if (equipment == nullptr)
+		return;
+
+	if (_EquipSlots[part] != nullptr)
+		_ItemSlots[slot] = _EquipSlots[part];
+	else
+		_ItemSlots[slot] = nullptr;
+
+	_EquipSlots[part] = equipment;
+	_EquipSlots[part]->EquipPlayer();
 }
 
 void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem *item)

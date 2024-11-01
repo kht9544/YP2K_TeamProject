@@ -30,10 +30,9 @@ public:
 	void SetStats();
 
 	void SetItemImage(int32 slotIndex, ABaseItem* item = nullptr);
+	void SetEquipImage(int32 slotIndex, ABaseItem* item = nullptr);
 
 	void ShowItem();
-
-	void ExchangeEquip(int32 slotIndex);
 
 	UFUNCTION()
 	void DropItem();

@@ -32,6 +32,7 @@ public:
 	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);
 	void EquipItem(int32 slot);
+	void TryEquip(FString part, int32 slot);
 
 private:
 	void UIupdate_Add(int32 slot, ABaseItem* item);
@@ -52,5 +53,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	TMap<FString, class AEquipItem*> _EquipSlots;
-	void TryEquip(FString part, int32 slot);
 };

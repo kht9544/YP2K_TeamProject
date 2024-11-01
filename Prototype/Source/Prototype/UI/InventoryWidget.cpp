@@ -96,6 +96,11 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 	}
 }
 
+void UInventoryWidget::SetEquipImage(int32 slotIndex, ABaseItem* item)
+{
+	//TODO : Setting Equip Item Buttons Image
+}
+
 void UInventoryWidget::ShowItem()
 {
 	if (_targetItem == nullptr)
@@ -120,10 +125,6 @@ void UInventoryWidget::ShowItem()
 	}
 }
 
-void UInventoryWidget::ExchangeEquip(int32 slotIndex)
-{
-}
-
 void UInventoryWidget::DropItem()
 {
 	if (_targetItem == nullptr)
@@ -144,18 +145,18 @@ void UInventoryWidget::UseItem()
 
 	if (Cast<AEquipItem>(_targetItem))
 	{
-		if (!CheckCanEquip()) return;
+		CheckCanEquip();
+
 		ItemEquip.Broadcast(_targetIndex);
 	}
 	if (Cast<AConsumeItem>(_targetItem))
 	{
 		ItemDrop.Broadcast(_targetIndex, false);
 		ItemUse.Broadcast(_targetIndex);
+		_targetItem = nullptr;
 	}
-	_targetItem = nullptr;
 	ShowItem();
-	SetItemImage(_targetIndex, nullptr);
-	_targetIndex = -1;
+	SetItemImage(_targetIndex, _targetItem);
 }
 
 bool UInventoryWidget::CheckCanEquip()
@@ -166,27 +167,87 @@ bool UInventoryWidget::CheckCanEquip()
 	{
 	case EItemType::Helmet:
 		if (Helmet->GetItem() == nullptr)
+		{
+			Helmet->SetItem(_targetItem);
+			_targetItem = nullptr;
 			result = true;
+		}
+		else
+		{
+			_targetItem = Helmet->GetItem();
+			Helmet->SetItem(target);
+			result = false;
+		}
 		break;
 	case EItemType::UpperArmor:
 		if (UpperArmor->GetItem() == nullptr)
+		{
+			UpperArmor->SetItem(_targetItem);
+			_targetItem = nullptr;
 			result = true;
+		}
+		else
+		{
+			_targetItem = UpperArmor->GetItem();
+			UpperArmor->SetItem(target);
+			result = false;
+		}
 		break;
 	case EItemType::LowerArmor:
 		if (LowerArmor->GetItem() == nullptr)
+		{
+			LowerArmor->SetItem(_targetItem);
+			_targetItem = nullptr;
 			result = true;
+		}
+		else
+		{
+			_targetItem = LowerArmor->GetItem();
+			LowerArmor->SetItem(target);
+			result = false;
+		}
 		break;
 	case EItemType::ShoulderArmor:
 		if (ShoulderGuard->GetItem() == nullptr)
+		{
+			ShoulderGuard->SetItem(_targetItem);
+			_targetItem = nullptr;
 			result = true;
+		}
+		else
+		{
+			_targetItem = ShoulderGuard->GetItem();
+			ShoulderGuard->SetItem(target);
+			result = false;
+		}
 		break;
 	case EItemType::Sword:
 		if (Sword->GetItem() == nullptr)
+		{
+			Sword->SetItem(_targetItem);
+			_targetItem = nullptr;
 			result = true;
+		}
+		else
+		{
+			_targetItem = Sword->GetItem();
+			Sword->SetItem(target);
+			result = false;
+		}
 		break;
 	case EItemType::Shield:
 		if (Shield->GetItem() == nullptr)
+		{
+			Shield->SetItem(_targetItem);
+			_targetItem = nullptr;
 			result = true;
+		}
+		else
+		{
+			_targetItem = Shield->GetItem();
+			Shield->SetItem(target);
+			result = false;
+		}
 		break;
 	default:
 		break;
