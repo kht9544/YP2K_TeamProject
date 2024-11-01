@@ -110,6 +110,7 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 		_StatCom->AddCurHp(-Damage/(5-ObstacleDestroyCount));
 	}
 
+
 	if (_StatCom->IsDead())
 	{
 		SoundManager->PlaySound(*GetDeadSoundName(), _hitPoint);
@@ -188,7 +189,7 @@ void ABossMonster::Dash(FVector TargetLocation)
 	IsDashing = true;
 
     FVector StartLocation = GetActorLocation(); 
-    FVector DashDirection = (TargetLocation - StartLocation).GetSafeNormal();
+    DashDirection = (TargetLocation - StartLocation).GetSafeNormal();
     DashDirection.Z = 0.f;
 
     DashEndLocation = StartLocation + DashDirection * DashDistance;
@@ -200,38 +201,41 @@ void ABossMonster::Dash(FVector TargetLocation)
      GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
 }
 
-
 void ABossMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    if (IsDashing)
-    {
-        FVector CurrentLocation = GetActorLocation();
-        FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, DashEndLocation, DeltaTime, DashSpeed);
+	if (IsDashing)
+	{
+		FVector CurrentLocation = GetActorLocation();
+		FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, DashEndLocation, DeltaTime, DashSpeed);
 
 		FHitResult HitResult;
-        FVector TraceStart = CurrentLocation;
-        FVector TraceEnd = TraceStart + DashDirection * 100.f;
-        FCollisionQueryParams CollisionParams;
-        CollisionParams.AddIgnoredActor(this); 
+		SetActorLocation(NewLocation, true, &HitResult);
 
-        bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
-        if (bHit)
-        {
-            UE_LOG(LogTemp, Warning, TEXT("Dash interrupted by obstacle"));
-            DashEnd();
-            return;
-        }
-
-        SetActorLocation(NewLocation);
-
-        if (FVector::DistSquared(NewLocation, DashEndLocation) <= KINDA_SMALL_NUMBER)
-        {
-            DashEnd();
-        }
-    }
+		if (HitResult.bBlockingHit)
+		{
+			DashEnd();
+			AMyPlayer* Player = Cast<AMyPlayer>(HitResult.GetActor());
+			if(Player!=nullptr)
+			{
+				if (_bossMonster01_AnimInstance)
+                {
+                    _bossMonster01_AnimInstance->PlayUpAttackMontage();
+                }
+				FVector ThrowDirection = (Player->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+				ThrowDirection.Z = 1.f;
+                FVector ThrowForce = ThrowDirection * 1000.0f;
+                Player->LaunchCharacter(ThrowForce, true, true);
+			}
+		}
+		else if (FVector::DistSquared(NewLocation, DashEndLocation) <= KINDA_SMALL_NUMBER)
+		{
+			DashEnd();
+		}
+	}
 }
+
 
 
 void ABossMonster::DashEnd()
