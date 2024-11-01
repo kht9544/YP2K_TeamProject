@@ -22,12 +22,7 @@ AEffectManager::AEffectManager()
 		
 	CreateNiagaraClass(TEXT("NS_Meteor"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/NS_Meteor_BP.NS_Meteor_BP_C'"));
 	
-	// Normal Monster Death
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> DeathEffect(TEXT("/Script/Niagara.NiagaraSystem'/Game/Blueprint/VFX/Niagara/P_DissolveEdge.P_DissolveEdge'"));
-	if (DeathEffect.Succeeded())
-	{
-		NiagaraEffects.Add("P_DissolveEdge", DeathEffect.Object);
-	}
+	
 }
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)
@@ -79,34 +74,6 @@ void AEffectManager::Play(FString name, FVector location, FRotator rotator)
 
 }
 
-
-UNiagaraComponent* AEffectManager::PlayAttachedEffect(const FString& Key, USceneComponent* AttachToComponent, FName AttachPointName)
-{
-	if (UNiagaraSystem** Effect = NiagaraEffects.Find(Key))
-	{
-		
-		
-
-
-		// NiagaraComponent를 Attach된 상태로 생성
-		UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
-			*Effect,
-			AttachToComponent,
-			AttachPointName,
-			FVector::ZeroVector,
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			true  // Attach 설정
-		);
-
-		if (NiagaraComponent)
-		{
-			NiagaraComponent->Activate(true);
-		}
-		return NiagaraComponent;
-	}
-	return nullptr;
-}
 
 void AEffectManager::BeginPlay()
 {
