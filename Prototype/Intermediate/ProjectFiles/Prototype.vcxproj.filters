@@ -283,6 +283,12 @@
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_FindTarget.h">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_LongFindTarget.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_LongFindTarget.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_PlayerDistance.cpp">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClCompile>

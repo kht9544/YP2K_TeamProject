@@ -23,25 +23,11 @@ EBTNodeResult::Type UBTTaskNode_FlyAttack::ExecuteTask(UBehaviorTreeComponent& O
 	if (character == nullptr)
 		return EBTNodeResult::Failed;
 
-	//character->RangedAttackhit();
-	//character->testShot();
-	//character->SumonedMonster();
 
-	//character->MeleeAttackhit();
+	character->MeleeAttackhit();
 
-	if (_SuMonster == false)
-	{
-		character->SumonedMonster();
-	}
-	else
-	{
-		character->MagicShot();
-	}
-
-	_SuMonster = true;
 	_isAttacking = true;
 
-	//character->_attack
 
 	return result;
 }

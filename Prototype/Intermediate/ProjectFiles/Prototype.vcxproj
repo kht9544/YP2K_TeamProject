@@ -405,6 +405,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_FindTarget.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_LongFindTarget.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTService_LongFindTarget.h"/>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_PlayerDistance.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
