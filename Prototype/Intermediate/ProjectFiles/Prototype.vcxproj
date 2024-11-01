@@ -429,6 +429,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTask_Attack.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTask_BossDash.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTask_BossDash.h"/>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTask_FindRandPos.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

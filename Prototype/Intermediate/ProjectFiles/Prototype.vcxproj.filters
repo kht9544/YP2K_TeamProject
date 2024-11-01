@@ -319,6 +319,12 @@
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTask_Attack.h">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTask_BossDash.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTTask_BossDash.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTTask_FindRandPos.cpp">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClCompile>
