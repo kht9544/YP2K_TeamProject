@@ -22,10 +22,12 @@ public:
 	bool PerformGimmick();
 	void JumpAttack(FVector TargetLocation);
 	bool GetIsDashing(){return IsDashing;}
+	bool GetIsJumping(){return IsJumping;}
 	virtual void Landed(const FHitResult& Hit) override;
 
 	void Dash(FVector TargetLocation);
 	void DashEnd();
+	void UpdateDash();
 
 
 	//void SpawnObstacles();
@@ -42,7 +44,7 @@ private:
 	virtual void PostInitializeComponents() override;
 	virtual void Attack_AI() override;
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
-
+	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class AMyDecal> _decal;
@@ -62,5 +64,10 @@ private:
 
 	float JumpStartTime; 
     float JumpDuration;
+
+	FVector DashEndLocation;
+	float DashDistance = 2000.0f;
+    float DashSpeed = 2000.0f; 
+	FVector DashDirection;
   
 };
