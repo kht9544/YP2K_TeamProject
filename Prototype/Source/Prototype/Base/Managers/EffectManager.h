@@ -8,6 +8,8 @@
 #include "NiagaraComponent.h"
 #include "EffectManager.generated.h"
 
+
+
 class AParticleEffect;
 
 UCLASS()

@@ -84,6 +84,10 @@ UNiagaraComponent* AEffectManager::PlayAttachedEffect(const FString& Key, UScene
 {
 	if (UNiagaraSystem** Effect = NiagaraEffects.Find(Key))
 	{
+		
+		
+
+
 		// NiagaraComponent를 Attach된 상태로 생성
 		UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
 			*Effect,
