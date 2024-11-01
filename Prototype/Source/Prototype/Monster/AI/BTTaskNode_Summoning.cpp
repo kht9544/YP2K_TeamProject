@@ -27,9 +27,9 @@ EBTNodeResult::Type UBTTaskNode_Summoning::ExecuteTask(UBehaviorTreeComponent& O
 	}
 
 	_SuMonster = true;
-	_isAttacking = true;
+	//_isAttacking = true;
 	
-	character->SumonedMonster();
+	//character->SumonedMonster();
 
 
 	_isAttacking = true;

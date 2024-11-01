@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 #include "EffectManager.generated.h"
+
+
 
 class AParticleEffect;
 
@@ -23,6 +27,17 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+
+public:
+
+	// 나이아가라 시스템을 키-값으로 관리하는 TMap
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+	TMap<FString, UNiagaraSystem*> NiagaraEffects;
+
+	// 특정 Skeletal Mesh에 이펙트를 Attach하여 재생
+	UNiagaraComponent* PlayAttachedEffect(const FString& Key, USceneComponent* AttachToComponent, FName AttachPointName = NAME_None);
+
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -37,5 +52,7 @@ private:
 
 	UPROPERTY()
 	class USceneComponent* _rootComponent;
+
+
 
 };
