@@ -51,6 +51,7 @@ public:
 	//TODO: Monster로 변경
 	void OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit);
 
+	void UpdateCamera();
 
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
 
@@ -85,6 +86,7 @@ private:
 	void Mouse(const FInputActionValue &value);
 	void GuardStart(const FInputActionValue &value);
 	void GuardEnd(const FInputActionValue &value);
+	void LockOn(const FInputActionValue &value);
 	// cheol
 	void StatUIOpen(const FInputActionValue &value);
 	void InvenUIOpen(const FInputActionValue &value);
@@ -96,6 +98,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment" , meta = (AllowPrivateAccess = "true"))
     TMap<EItemType, AEquipItem*> _EquipItems;
 
+	bool bIsLockOn = false;
 	bool bIsDashing;
 	FVector DashDirection;
 	float DashTimeElapsed;
@@ -141,6 +144,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction *_guardAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction *_LockOnAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent *_springArm;
@@ -209,9 +215,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCameraShakeBase> _cameraShakeClass;
 
-
 	FTimerHandle ScreenShakeTimerHandle;
 	FTimerHandle MeteorTimerHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy", meta = (AllowPrivateAccess = "true"))
+	class AMonster* _lockOnMonster;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+    float SmoothSpeed = 0.1f;
+
+
+
 
 
 };
