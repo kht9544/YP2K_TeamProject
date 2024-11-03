@@ -71,7 +71,7 @@ public:
 	virtual FString GetSkillSound01() const override;
 	virtual FString GetSkillSound02()const override;
 	virtual FString GetSkillParticleEffect02() const override;
-
+	virtual FString GetPlayerAttackHitEffect() const override;
 
 private:
 	void Move(const FInputActionValue &value);

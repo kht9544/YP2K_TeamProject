@@ -19,10 +19,12 @@ AEffectManager::AEffectManager()
 
 	_rootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
 	RootComponent = _rootComponent;
-		
+	
+	//Player : Skill 2 Meteor Niagara
 	CreateNiagaraClass(TEXT("NS_Meteor"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/NS_Meteor_BP.NS_Meteor_BP_C'"));
 	
-	
+	//Player : AttakHit Particle
+	CreateNiagaraClass(TEXT("P_Greystone_Novaborn_Primary_Impact"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_PlayerAttackHit_BP.P_PlayerAttackHit_BP_C'"));
 }
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)

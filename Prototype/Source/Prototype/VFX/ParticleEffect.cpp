@@ -15,22 +15,26 @@ AParticleEffect::AParticleEffect()
 {
 
 	PrimaryActorTick.bCanEverTick = false;
-
+	//나이아가라
 	_niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
 	RootComponent = _niagaraCom;
 
+	// 파티클
+	_particleCom = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleComponent"));
+	_particleCom->SetupAttachment(RootComponent);
 }
 
 
 void AParticleEffect::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//_particleCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::End);
-	//End(_particleCom);
-
+	// 나이아가라
 	_niagaraCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::End);
 	End(_niagaraCom);
+
+	// 파티클
+	_particleCom->OnSystemFinished.AddDynamic(this, &AParticleEffect::EndParticle);
+	EndParticle(_particleCom);
 }
 
 
@@ -42,16 +46,28 @@ void AParticleEffect::Tick(float DeltaTime)
 
 void AParticleEffect::Play(FVector location, FRotator rotator)
 {
-	if (_niagaraCom->IsActive())
+	if (_niagaraCom->IsActive() || _particleCom->IsActive())
 		return;
 
 	SetActorLocationAndRotation(location, rotator);
 	_niagaraCom->ActivateSystem();
+	_particleCom->ActivateSystem();
+
+
+
 }
 
 bool AParticleEffect::IsPlaying()
 {
-	return _niagaraCom->IsActive();
+	if (_niagaraCom->IsActive())
+		return true;
+
+	if (_particleCom->IsActive())
+		return true;
+
+	return false;
+
+	// return _niagaraCom->IsActive();
 }
 
 void AParticleEffect::End(UNiagaraComponent* niagaraComponent)
@@ -60,3 +76,8 @@ void AParticleEffect::End(UNiagaraComponent* niagaraComponent)
 		niagaraComponent->Deactivate();
 }
 
+void AParticleEffect::EndParticle(UParticleSystemComponent* particleComponent)
+{
+	if (particleComponent)
+		particleComponent->DeactivateSystem();
+}
