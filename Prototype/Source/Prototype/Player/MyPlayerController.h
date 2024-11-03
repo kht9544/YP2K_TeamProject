@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "MeteorDecalPool.h"
 #include "MyPlayerController.generated.h"
 
 /**
@@ -28,7 +29,13 @@ protected:
 
 	virtual void BeginPlay() override;
 
-private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AMeteorDecal> MeteorDecalClass;
+
+public:
+ 	UPROPERTY(EditAnywhere, Category = "Decal")
+	AMeteorDecalPool* MeteorDecalPool;
+
     UPROPERTY(EditAnywhere, Category = "UI")
     TSubclassOf<class USkillWidget_test> SkillWidgetClass;
 

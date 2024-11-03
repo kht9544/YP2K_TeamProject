@@ -51,7 +51,7 @@ public:
 	//TODO: Monster로 변경
 	void OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit);
 
-	void UpdateCamera();
+	void UpdateCamera(float DeltaTime);
 
 	void SetSkillOnCooldown(int32 index, bool cool) { SkillOnCooldown[index] = cool; }
 
@@ -222,7 +222,7 @@ public:
 	class AMonster* _lockOnMonster;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
-    float SmoothSpeed = 0.1f;
+    bool _fixedCamera = false;
 
 
 

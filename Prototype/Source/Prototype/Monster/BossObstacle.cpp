@@ -28,11 +28,11 @@ void ABossObstacle::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (TActorIterator<AEffectManager> It(GetWorld()); It; ++It)
-    {
-        EffectManager = *It;
-        break;
-    }	
+	// for (TActorIterator<AEffectManager> It(GetWorld()); It; ++It)
+    // {
+    //     EffectManager = *It;
+    //     break;
+    // }	
 }
 
 // Called every frame

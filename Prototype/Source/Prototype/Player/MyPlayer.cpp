@@ -248,7 +248,7 @@ void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UpdateCamera();
+	UpdateCamera(DeltaTime);
 
 	if (bIsDashing)
 	{
@@ -325,19 +325,25 @@ void AMyPlayer::OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit)
 	}
 }
 
-void AMyPlayer::UpdateCamera()
+void AMyPlayer::UpdateCamera(float DeltaTime)
 {
 	if (_lockOnMonster)
-    {
-        FVector EnemyLocation = _lockOnMonster->GetActorLocation();
-        FRotator NewRotation = FRotationMatrix::MakeFromX(EnemyLocation - GetActorLocation()).Rotator();
+	{
+		if(_lockOnMonster->_StatCom->IsDead())
+		{
+			_lockOnMonster = nullptr;
+			_fixedCamera = false;
+			return;
+		}
+		_fixedCamera = true;
 
-        FQuat CurrentRotation = GetControlRotation().Quaternion();
-        FQuat TargetRotation = NewRotation.Quaternion();
-        FQuat SmoothRotation = FQuat::Slerp(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds() * SmoothSpeed);
+		FVector LockedOnLocation = _lockOnMonster->GetActorLocation();
+		LockedOnLocation.Z -= 150.f;
+		const FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LockedOnLocation);
+		const FRotator InterpRotation = UKismetMathLibrary::RInterpTo(GetController()->GetControlRotation(), LookAtRotation, DeltaTime, 10.f);
+		GetController()->SetControlRotation(FRotator(InterpRotation.Pitch, InterpRotation.Yaw, GetController()->GetControlRotation().Roll));
+	}
 
-        GetController()->SetControlRotation(SmoothRotation.Rotator());
-    }
 }
 
 void AMyPlayer::EquipItem(AEquipItem *equipitem)
@@ -421,6 +427,8 @@ void AMyPlayer::Move(const FInputActionValue &value)
 
 void AMyPlayer::Look(const FInputActionValue &value)
 {
+	if (_fixedCamera)
+		return;
 	FVector2D LookAxisVector = value.Get<FVector2D>();
 
 	AddControllerYawInput(LookAxisVector.X);
@@ -504,43 +512,65 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 	{
 		if (SkillOnCooldown[1])
 			return;
+
+		SkillOnCooldown[1] = true;
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f); 
+		FVector DecalLocation;
+
+		if (_lockOnMonster)
+		{
+			DecalLocation = _lockOnMonster->GetActorLocation();
+			DecalLocation.Z -= _lockOnMonster->GetActorLocation().Z; // Z값을 조정
+		}
 		else
 		{
-			SkillOnCooldown[1] = true;
+			DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
+			DecalLocation.Z -= 98.0f; 
+		}
 
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = GetInstigator();
+		int MeteorCount = /*(_StatCom->GetInt()) / 10*/ 10;
 
-			// 메테오가 떨어질 위치 계산 (플레이어 앞 1000 단위)
-			FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f); // 하늘에서 시작
-			FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
-			DecalLocation.Z = 0.0f; // Z축을 0으로 설정하여 지면에 위치하게 함
+		AMeteorDecal *CenterMeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
+		if (CenterMeteorDecal)
+		{
+			CenterMeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
+		}
 
-			// 메테오 데칼 생성 및 메테오 소환
-			AMeteorDecal *MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
+		for (int i = 0; i < MeteorCount - 1; i++) 
+		{
+			float Angle = (i * (360.0f / (MeteorCount - 1))) * (PI / 180.0f); 
+			float Radius = 500.0f;
+
+			FVector SpawnLocation = DecalLocation;
+			SpawnLocation.X += FMath::Cos(Angle) * Radius; 
+			SpawnLocation.Y += FMath::Sin(Angle) * Radius; 
+
+			AMeteorDecal *MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
 			if (MeteorDecal)
 			{
-				// 메테오가 하늘에서 바닥으로 떨어지게 함
-				MeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
+				MeteorDecal->StartMeteor(MeteorStartLocation, SpawnLocation, 3.0f);
 			}
-
-			// 화면 흔들림과 메테오 폭발 타이머 설정
-			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
-			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false); // 3초 후 메테오 충돌
-
-			// 스킬 쿨다운 시작
-			_skillWidgetInstance->StartCooldown(1, 5.0f);
-
-			UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
-			if (PlayerAnimInstance)
-			{
-				PlayerAnimInstance->PlaySkill02Montage(); // Skill2 Animation
-			}
-			SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
 		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Decal Location : %f"), DecalLocation.Z);
+
+		_skillWidgetInstance->StartCooldown(1, 5.0f);
+
+		UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+		if (PlayerAnimInstance)
+		{
+			PlayerAnimInstance->PlaySkill02Montage(); 
+		}
+		SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
 	}
 }
+
+
 
 void AMyPlayer::Skill3(const FInputActionValue &value)
 {
@@ -608,50 +638,50 @@ void AMyPlayer::GuardEnd(const FInputActionValue &value)
 
 void AMyPlayer::LockOn(const FInputActionValue &value)
 {
-    bool isPressed = value.Get<bool>();
+	bool isPressed = value.Get<bool>();
 
-    if (isPressed)
-    {
-		UE_LOG(LogTemp, Warning, TEXT("Lockon Start"));
-        if (_lockOnMonster)
-        {
-            _lockOnMonster = nullptr; 
-        }
-        else
-        {
-            FHitResult HitResult;
-            FVector Start = GetActorLocation();
-            FVector ForwardVector = GetActorForwardVector();
-            float LockOnDistance = 1000.0f;
-            float LockOnAngle = 60.0f;
-            float HalfAngle = LockOnAngle / 2.0f;
+	if (isPressed)
+	{
+		if (_lockOnMonster)
+		{
+			_lockOnMonster = nullptr;
+			_fixedCamera = false;
+			return;
+		}
+		else
+		{
+			FHitResult HitResult;
+			FVector Start = GetActorLocation();
+			FVector ForwardVector = GetActorForwardVector();
+			float LockOnDistance = 2000.0f;
+			float LockOnAngle = 60.0f;
+			float HalfAngle = LockOnAngle / 2.0f;
 
-            for (float AngleOffset = -HalfAngle; AngleOffset <= HalfAngle; AngleOffset += 10.0f)
-            {
-                FQuat Rotation = FQuat::MakeFromEuler(FVector(0.0f, 0.0f, AngleOffset));
-                FVector End = Start + (Rotation.RotateVector(ForwardVector) * LockOnDistance);
+			for (float AngleOffset = -HalfAngle; AngleOffset <= HalfAngle; AngleOffset += 5.0f)
+			{
+				FQuat Rotation = FQuat::MakeFromEuler(FVector(0.0f, 0.0f, AngleOffset));
+				FVector End = Start + (Rotation.RotateVector(ForwardVector) * LockOnDistance);
 
-                FCollisionQueryParams CollisionParams;
+				FCollisionQueryParams CollisionParams;
 				CollisionParams.bTraceComplex = true;
-                CollisionParams.AddIgnoredActor(this);
+				CollisionParams.AddIgnoredActor(this);
 				DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 2.0f, 0, 1.0f);
 
-                if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams))
-                {
+				if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Pawn, CollisionParams))
+				{
 					DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
-                    AMonster* monster = Cast<AMonster>(HitResult.GetActor());
-                    if (monster != nullptr)
-                    {
-                        _lockOnMonster = monster;
-                        break; 
-                    }
-                }
-				 
-            }
-        }
-    }
+					AMonster *monster = Cast<AMonster>(HitResult.GetActor());
+					if (monster != nullptr)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("LockOnMonster"));
+						_lockOnMonster = monster;
+						break;
+					}
+				}
+			}
+		}
+	}
 }
-
 
 void AMyPlayer::GuardStart(const FInputActionValue &value)
 {
@@ -742,36 +772,3 @@ void AMyPlayer::StartScreenShake()
 	}
 }
 
-void AMyPlayer::CastMeteor()
-{
-}
-
-// void AMyPlayer::CheckForClimbableWall()
-// {
-// 	FVector Start = GetActorLocation();
-// 	FVector ForwardVector = GetActorForwardVector();
-// 	FVector End = Start + (ForwardVector * 100.0f);
-
-// 	FHitResult HitResult;
-// 	FCollisionQueryParams Params;
-// 	Params.AddIgnoredActor(this);
-
-// 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, Params);
-
-// 	if (bHit && HitResult.bBlockingHit)
-// 	{
-// 		if (!_parkourComp->bIsClimbing)
-// 		{
-// 			// 벽타기 시작
-// 			_parkourComp->StartClimbing(HitResult.ImpactNormal);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		if (_parkourComp->bIsClimbing)
-// 		{
-// 			// 벽이 없으므로 벽타기 멈추기
-// 			_parkourComp->StopClimbing();
-// 		}
-// 	}
-// }
