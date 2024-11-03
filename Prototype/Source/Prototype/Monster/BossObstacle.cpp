@@ -51,7 +51,7 @@ void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		{
 			EffectManager->Play(TEXT("P_BossObstacleDestroy"), GetActorLocation(), GetActorRotation());
 		}
-
+		boss->_StatCom->SetStun(true);
 		Destroy();
 	}
 	

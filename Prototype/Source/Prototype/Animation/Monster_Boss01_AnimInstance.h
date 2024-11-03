@@ -21,6 +21,8 @@ public:
 
 	virtual void PlayAttackMontage()override;
 
+	virtual void PlayStunMontage()override;
+
 	//어퍼컷
 	void PlayUpAttackMontage();
 
@@ -35,6 +37,9 @@ public:
 
 	UFUNCTION()
 	virtual void AnimNotify_Death();
+
+	//UFUNCTION()
+	//virtual void AnimNotify_StunEnd();
 
 private:
 	//어퍼컷

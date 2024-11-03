@@ -21,6 +21,15 @@ UMonster_Boss01_AnimInstance::UMonster_Boss01_AnimInstance()
 	{
 		_myUpAttackMontage = BM_02.Object;
 	}
+
+	//스턴
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> BM_03
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/BossMonster/BossMonster01_Stun.BossMonster01_Stun'"));
+
+	if (BM_03.Succeeded())
+	{
+		_myStunMontage = BM_03.Object;
+	}
 }
 
 void UMonster_Boss01_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -31,6 +40,11 @@ void UMonster_Boss01_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UMonster_Boss01_AnimInstance::PlayAttackMontage()
 {
 	Super::PlayAttackMontage();
+}
+
+void UMonster_Boss01_AnimInstance::PlayStunMontage()
+{
+	Super::PlayStunMontage();
 }
 
 void UMonster_Boss01_AnimInstance::PlayUpAttackMontage()
@@ -55,4 +69,5 @@ void UMonster_Boss01_AnimInstance::AnimNotify_Death()
 {
 	_deathDelegate.Broadcast();
 }
+
 

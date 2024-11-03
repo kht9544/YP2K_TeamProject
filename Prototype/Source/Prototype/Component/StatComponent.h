@@ -92,6 +92,7 @@ public:
 	void SetStr(int32 newstr);
 	void SetDex(int32 newdex);
 	void SetInt(int32 newint);
+	void SetStun(bool stun){_stunned = stun;}
 	float HpRatio() { return _curHp / (float)_maxHp; }
 
 
@@ -119,7 +120,6 @@ public:
 	PIEXP _PlEXPDelegate;
 	PILevel _PILevelDelegate;
 	
-
 	//int attckDamage(int32 Attpower, int32 str,int32 dex,int32 _int);
 
 
@@ -160,6 +160,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _nextExp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
+    bool _stunned;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
+    float _stunDuration;
+
+	float _stunTimer;
 
 
 };
