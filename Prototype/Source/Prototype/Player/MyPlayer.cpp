@@ -402,6 +402,11 @@ FString AMyPlayer::GetSkillParticleEffect02() const
 	return "NS_Meteor";
 }
 
+FString AMyPlayer::GetPlayerAttackHitEffect() const
+{
+	return "P_Greystone_Novaborn_Primary_Impact";
+}
+
 void AMyPlayer::Move(const FInputActionValue &value)
 {
 	if (bIsGuarding)

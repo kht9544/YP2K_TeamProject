@@ -114,14 +114,13 @@ void AEpicMonster_witch::Attack_AI()
 void AEpicMonster_witch::MagicShot()
 {
 	
-
 		if (_projectileClass)
 		{
 			FVector forward = GetActorForwardVector();
-			FName HandSocketName = TEXT("TEST_SO");
+			FName HandSocketName = TEXT("Magic_hand");
 		
 
-			FVector fireLocation = GetMesh()->GetSocketLocation(HandSocketName);//GetActorLocation() + (forward * 150);
+			FVector fireLocation = GetMesh()->GetSocketLocation(HandSocketName);
 
 			FRotator fireRotation = forward.Rotation();
 

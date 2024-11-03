@@ -40,24 +40,6 @@ FString ANormalMonster::GetDeadSoundName() const
 	return "NormalMonster_DeathSound";
 }
 
-// creature에 해볼것.
-//void ANormalMonster::OnDeath()
-//{
-//	Super::OnDeath();
-//
-//	if (EffectManager)
-//	{
-//		UE_LOG(LogTemp, Warning, TEXT("EffectManager is valid in OnDeath."));
-//		// NormalMonster의 Skeletal Mesh에 사망 이펙트를 Attach하여 재생
-//		EffectManager->PlayAttachedEffect("P_DissolveEdge", GetMesh());
-//	}
-//	else
-//	{
-//		UE_LOG(LogTemp, Error, TEXT("EffectManager is not valid in OnDeath!"));
-//	}
-//
-//}
-
 // Called when the game starts or when spawned
 void ANormalMonster::BeginPlay()
 {

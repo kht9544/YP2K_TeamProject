@@ -42,6 +42,7 @@ public:
 	virtual FString GetSkillSound02() const;
 	virtual FString GetBossMonsterAttack() const;
 	virtual FString GetSkillParticleEffect02() const;
+	virtual FString GetPlayerAttackHitEffect() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);

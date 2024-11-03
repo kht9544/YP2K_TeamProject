@@ -90,6 +90,7 @@ void ACreature::AttackHit()
 
 				_hitPoint = hitResult.ImpactPoint;
 				SoundManager->PlaySound(*GetHitSoundName(), _hitPoint);
+				EffectManager->Play(*GetPlayerAttackHitEffect(), _hitPoint);
 			}
 		}
 	}
@@ -146,6 +147,11 @@ FString ACreature::GetBossMonsterAttack() const
 FString ACreature::GetSkillParticleEffect02() const
 {
 	return "default_Skill02_Effect";
+}
+
+FString ACreature::GetPlayerAttackHitEffect() const
+{
+	return "default_AttackHit_Effect";
 }
 
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)

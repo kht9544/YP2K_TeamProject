@@ -19,15 +19,12 @@ AEffectManager::AEffectManager()
 
 	_rootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
 	RootComponent = _rootComponent;
-		
+	
+	//Player : Skill 2 Meteor Niagara
 	CreateNiagaraClass(TEXT("NS_Meteor"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/NS_Meteor_BP.NS_Meteor_BP_C'"));
 	
-	// Normal Monster Death
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> DeathEffect(TEXT("/Script/Niagara.NiagaraSystem'/Game/Blueprint/VFX/Niagara/P_DissolveEdge.P_DissolveEdge'"));
-	if (DeathEffect.Succeeded())
-	{
-		NiagaraEffects.Add("P_DissolveEdge", DeathEffect.Object);
-	}
+	//Player : AttakHit Particle
+	CreateNiagaraClass(TEXT("P_Greystone_Novaborn_Primary_Impact"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_PlayerAttackHit_BP.P_PlayerAttackHit_BP_C'"));
 }
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)
@@ -79,34 +76,6 @@ void AEffectManager::Play(FString name, FVector location, FRotator rotator)
 
 }
 
-
-UNiagaraComponent* AEffectManager::PlayAttachedEffect(const FString& Key, USceneComponent* AttachToComponent, FName AttachPointName)
-{
-	if (UNiagaraSystem** Effect = NiagaraEffects.Find(Key))
-	{
-		
-		
-
-
-		// NiagaraComponent를 Attach된 상태로 생성
-		UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
-			*Effect,
-			AttachToComponent,
-			AttachPointName,
-			FVector::ZeroVector,
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			true  // Attach 설정
-		);
-
-		if (NiagaraComponent)
-		{
-			NiagaraComponent->Activate(true);
-		}
-		return NiagaraComponent;
-	}
-	return nullptr;
-}
 
 void AEffectManager::BeginPlay()
 {
