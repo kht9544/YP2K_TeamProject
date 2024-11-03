@@ -28,13 +28,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-public:
-
-
-
 protected:
 
 	virtual void BeginPlay() override;
+
 
 private:
 

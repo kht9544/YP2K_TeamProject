@@ -188,14 +188,20 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 		if (_StatCom->IsDead())
 		{
 			SoundManager->PlaySound(*GetDeadSoundName(), _hitPoint);
-
+			
 			SetActorEnableCollision(false);
 			auto controller = GetController();
 			if (controller)
 				GetController()->UnPossess();
-			Destroy();
+
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle_Destroy, this, &ACreature::DelayedDestroy, 2.0f, false);
 		}
 	}
 
 	return 0.0f;
+}
+
+void ACreature::DelayedDestroy()
+{
+	Destroy();
 }
