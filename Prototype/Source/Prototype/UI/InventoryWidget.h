@@ -7,8 +7,12 @@
 #include "InventoryWidget.generated.h"
 
 class ABaseItem;
+class UIndexedButton;
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32, bool);
+DECLARE_MULTICAST_DELEGATE_OneParam(ItemUseDelegate, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(ItemEquipDelegate, int32);
+
 
 UCLASS()
 class PROTOTYPE_API UInventoryWidget : public UUserWidget
@@ -26,15 +30,16 @@ public:
 	void SetStats();
 
 	void SetItemImage(int32 slotIndex, ABaseItem* item = nullptr);
-
+	void SetEquipImage(int32 slotIndex, ABaseItem* item = nullptr);
+	void UpdateEquip();
 	void ShowItem();
-
-	void ExchangeEquip(int32 slotIndex);
 
 	UFUNCTION()
 	void DropItem();
 	UFUNCTION()
 	void UseItem();
+
+	bool CheckCanEquip();
 
 private:
 	void SetTargetItem(int32 slotIndex);
@@ -65,7 +70,9 @@ private:
 
 public:
 	//Delegate
-	ItemDropDelegate ItemDrop;
+	ItemDropDelegate  ItemDrop;
+	ItemUseDelegate   ItemUse;
+	ItemEquipDelegate ItemEquip;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
@@ -80,7 +87,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UUniformGridPanel* ItemSlots;
 	UPROPERTY(meta = (BindWidget))
-	TArray<class UIndexedButton*> Button_;
+	TArray<UIndexedButton*> Button_;
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* ItemTexture;
@@ -92,22 +99,26 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* DropBtn;
 	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* DropBtnText;
+	UPROPERTY(meta = (BindWidget))
 	class UButton* UseBtn;
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* UseBtnText;
 
 	UPROPERTY(meta = (BindWidget))
 	class UUniformGridPanel* EquipSlots;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Helmet;
+	UIndexedButton* Helmet;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* ShoulderGuard;
+	UIndexedButton* ShoulderGuard;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* UpperArmor;
+	UIndexedButton* UpperArmor;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* LowerArmor;
+	UIndexedButton* LowerArmor;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Sword;
+	UIndexedButton* Sword;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Shield;
+	UIndexedButton* Shield;
 
 
 	UPROPERTY(meta = (BindWidget))

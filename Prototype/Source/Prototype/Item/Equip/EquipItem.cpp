@@ -45,7 +45,6 @@ void AEquipItem::SetItemWithCode(int32 itemCode)
 void AEquipItem::BeginPlay()
 {
     Super::BeginPlay();
-    //_trigger->OnComponentBeginOverlap.AddDynamic(this, &AEquipItem::OnOverlapBegin);
 }
 
 // Called every frame

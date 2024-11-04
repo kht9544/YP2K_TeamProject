@@ -14,6 +14,8 @@
 #include "Components/TextBlock.h"
 
 #include "Item/BaseItem.h"
+#include "Item/Equip/EquipItem.h"
+#include "Item/Consumes/ConsumeItem.h"
 
 UInventoryWidget::UInventoryWidget(const FObjectInitializer& ObjectInitializer)
 	: UUserWidget(ObjectInitializer)
@@ -94,6 +96,22 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 	}
 }
 
+void UInventoryWidget::SetEquipImage(int32 slotIndex, ABaseItem* item)
+{
+	//TODO : Setting Equip Item Buttons Image
+
+}
+
+void UInventoryWidget::UpdateEquip()
+{
+	Helmet->ButtonUpdate();
+	ShoulderGuard->ButtonUpdate();
+	UpperArmor->ButtonUpdate();
+	LowerArmor->ButtonUpdate();
+	Sword->ButtonUpdate();
+	Shield->ButtonUpdate();
+}
+
 void UInventoryWidget::ShowItem()
 {
 	if (_targetItem == nullptr)
@@ -104,14 +122,18 @@ void UInventoryWidget::ShowItem()
 	}
 	else
 	{
+		if (Cast<AEquipItem>(_targetItem))
+		{
+			UseBtnText->SetText(FText::FromString(TEXT("Equip")));
+		}
+		else
+		{
+			UseBtnText->SetText(FText::FromString(TEXT("Use")));
+		}
 		ItemTexture->SetBrushFromTexture(_targetItem->GetTexture());
 		ItemName->SetText(FText::FromString(_targetItem->GetName()));
 		ItemDesc->SetText(FText::FromString(_targetItem->GetDesc()));
 	}
-}
-
-void UInventoryWidget::ExchangeEquip(int32 slotIndex)
-{
 }
 
 void UInventoryWidget::DropItem()
@@ -132,13 +154,110 @@ void UInventoryWidget::UseItem()
 	if (_targetItem == nullptr)
 		return;
 
-	UE_LOG(LogTemp, Warning, TEXT("UseItem"));
-	ItemDrop.Broadcast(_targetIndex, false);
+	if (Cast<AEquipItem>(_targetItem))
+	{
+		CheckCanEquip();
 
-	_targetItem = nullptr;
+		ItemEquip.Broadcast(_targetIndex);
+	}
+	if (Cast<AConsumeItem>(_targetItem))
+	{
+		ItemDrop.Broadcast(_targetIndex, false);
+		ItemUse.Broadcast(_targetIndex);
+		_targetItem = nullptr;
+	}
 	ShowItem();
-	SetItemImage(_targetIndex, nullptr);
-	_targetIndex = -1;
+	SetItemImage(_targetIndex, _targetItem);
+}
+
+bool UInventoryWidget::CheckCanEquip()
+{
+	AEquipItem* target = Cast<AEquipItem>(_targetItem);
+	bool result = false;
+	switch (target->GetEquipType())
+	{
+	case EItemType::Helmet:
+		if (Helmet->GetItem() == nullptr)
+		{
+			Helmet->SetItem(_targetItem);
+			_targetItem = nullptr;
+			result = true;
+		}
+		else
+		{
+			_targetItem = Helmet->GetItem();
+			Helmet->SetItem(target);
+			result = false;
+		}
+		break;
+	case EItemType::UpperArmor:
+		if (UpperArmor->GetItem() == nullptr)
+		{
+			UpperArmor->SetItem(_targetItem);
+			_targetItem = nullptr;
+			result = true;
+		}
+		else
+		{
+			_targetItem = UpperArmor->GetItem();
+			UpperArmor->SetItem(target);
+			result = false;
+		}
+		break;
+	case EItemType::LowerArmor:
+		_targetItem = LowerArmor->GetItem();
+		LowerArmor->SetItem(target);
+		result = false;
+		break;
+	case EItemType::ShoulderArmor:
+		if (ShoulderGuard->GetItem() == nullptr)
+		{
+			ShoulderGuard->SetItem(_targetItem);
+			_targetItem = nullptr;
+			result = true;
+		}
+		else
+		{
+			_targetItem = ShoulderGuard->GetItem();
+			ShoulderGuard->SetItem(target);
+			result = false;
+		}
+		break;
+	case EItemType::Sword:
+		if (Sword->GetItem() == nullptr)
+		{
+			Sword->SetItem(_targetItem);
+			_targetItem = nullptr;
+			result = true;
+		}
+		else
+		{
+			_targetItem = Sword->GetItem();
+			Sword->SetItem(target);
+			result = false;
+		}
+		break;
+	case EItemType::Shield:
+		if (Shield->GetItem() == nullptr)
+		{
+			Shield->SetItem(_targetItem);
+			_targetItem = nullptr;
+			result = true;
+		}
+		else
+		{
+			_targetItem = Shield->GetItem();
+			Shield->SetItem(target);
+			result = false;
+		}
+		break;
+	default:
+		break;
+	}
+
+	UpdateEquip();
+
+	return result;
 }
 
 void UInventoryWidget::SetTargetItem(int32 slotIndex)

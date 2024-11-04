@@ -31,7 +31,7 @@ public:
     ItemType GetArmorType(){return _Type;}
     EItemType GetEquipType(){return _equipItemType;}
 
-protected:
+public:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
   
@@ -41,6 +41,8 @@ protected:
     virtual void EquipPlayer();
 
     virtual void UseItem() override;
+
+protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Socket")
     FName AttachSocketName;
