@@ -4,6 +4,8 @@
 #include "Monster/BossObstacle.h"
 #include "BossMonster.h"
 #include "Components/BoxComponent.h"
+#include "../Base/Managers/EffectManager.h"
+#include "EngineUtils.h"  
 #include "Components/StaticMeshComponent.h"
 
 // Sets default values
@@ -25,7 +27,12 @@ ABossObstacle::ABossObstacle()
 void ABossObstacle::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// for (TActorIterator<AEffectManager> It(GetWorld()); It; ++It)
+    // {
+    //     EffectManager = *It;
+    //     break;
+    // }	
 }
 
 // Called every frame
@@ -37,5 +44,16 @@ void ABossObstacle::Tick(float DeltaTime)
 
 void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
+	ABossMonster* boss = Cast<ABossMonster>(OtherActor);
+	if(boss != nullptr &&(boss->GetIsJumping() || boss->GetIsDashing()))
+	{
+		if (EffectManager)
+		{
+			EffectManager->Play(TEXT("P_BossObstacleDestroy"), GetActorLocation(), GetActorRotation());
+		}
+		boss->_StatCom->SetStun(true);
+		Destroy();
+	}
+	
 }
 

@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 #include "EffectManager.generated.h"
+
+
 
 class AParticleEffect;
 
@@ -23,9 +27,11 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+
 protected:
 
 	virtual void BeginPlay() override;
+
 
 private:
 
@@ -37,5 +43,7 @@ private:
 
 	UPROPERTY()
 	class USceneComponent* _rootComponent;
+
+
 
 };

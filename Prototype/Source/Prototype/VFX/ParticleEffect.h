@@ -28,12 +28,19 @@ public:
 
 private:
 	
-	
+	UFUNCTION()
+	void EndParticle(class UParticleSystemComponent* particleComponent);
+
 	UFUNCTION()
 	void End(UNiagaraComponent* niagaraComponent);
 
+	// 나이아가라
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* _niagaraCom;
 	
+	// 파티클
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UParticleSystemComponent* _particleCom;
+
 
 };

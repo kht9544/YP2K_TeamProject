@@ -33,13 +33,13 @@ public:
 
 	void MeleeAttackhit();
 
-	void RangedAttackhit();
+	virtual void Attack_AI() override;
 
 	//test shoot
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AEpicProjectile> _projectileClass;
 
-	void testShot();
+	void MagicShot();
 
 	void SumonedMonster();
 

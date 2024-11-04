@@ -21,6 +21,11 @@ public:
 
 	virtual void PlayAttackMontage()override;
 
+	virtual void PlayStunMontage()override;
+
+	//어퍼컷
+	void PlayUpAttackMontage();
+
 	virtual void JumpToSection(int32 sectionIndex) override;
 
 	AttackDelegate _attackDelegate;
@@ -32,5 +37,14 @@ public:
 
 	UFUNCTION()
 	virtual void AnimNotify_Death();
+
+	//UFUNCTION()
+	//virtual void AnimNotify_StunEnd();
+
+private:
+	//어퍼컷
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))
+	class UAnimMontage* _myUpAttackMontage;
+
 
 };

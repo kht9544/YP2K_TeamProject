@@ -33,5 +33,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
     class UStaticMeshComponent* ObstacleMesh;
 
+
+	UPROPERTY()
+	class AEffectManager* EffectManager;
+
 	
 };

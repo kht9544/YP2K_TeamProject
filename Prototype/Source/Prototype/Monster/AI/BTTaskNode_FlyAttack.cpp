@@ -5,7 +5,6 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Monster/EpicMonster.h"
 #include "Monster/AI/AIController_Epic.h"
 #include "Monster/EpicMonster_witch.h"
 
@@ -24,13 +23,11 @@ EBTNodeResult::Type UBTTaskNode_FlyAttack::ExecuteTask(UBehaviorTreeComponent& O
 	if (character == nullptr)
 		return EBTNodeResult::Failed;
 
-	//character->RangedAttackhit();
-	//character->testShot();
-	character->SumonedMonster();
+
+	character->MeleeAttackhit();
 
 	_isAttacking = true;
 
-	//character->_attack
 
 	return result;
 }

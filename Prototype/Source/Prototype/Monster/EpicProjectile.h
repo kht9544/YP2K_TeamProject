@@ -29,7 +29,7 @@ public:
 
 	UFUNCTION()
 	void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
-	void Griffon(class AEpicMonster* archer) { _Griffon = archer; }
+	void WitchMa(class AEpicMonster_witch* archer) { _Witch = archer; }
 	void SetDamage(int32 Amount) { _damage = Amount; }
 
 	void Init();
@@ -46,8 +46,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* _movementCom;
 	
+
+
+	// witch	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
-	class AEpicMonster* _Griffon;
+	class AEpicMonster_witch* _Witch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	int32 _damage;

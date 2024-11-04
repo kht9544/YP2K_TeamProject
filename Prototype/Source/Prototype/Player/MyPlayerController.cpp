@@ -2,6 +2,7 @@
 
 #include "MyPlayerController.h"
 #include "EnhancedInputSubsystems.h"
+#include "MeteorDecal.h"
 #include "../UI/SkillWidget_test.h"
 
 
@@ -30,6 +31,14 @@ void AMyPlayerController::BeginPlay()
             SkillWidgetInstance->AddToViewport();
         }
     }
+
+    MeteorDecalPool = GetWorld()->SpawnActor<AMeteorDecalPool>();
+	if (MeteorDecalPool)
+	{
+		MeteorDecalPool->MeteorClass = MeteorDecalClass;
+		MeteorDecalPool->InitializePool(20);
+	}
+
 
 
 

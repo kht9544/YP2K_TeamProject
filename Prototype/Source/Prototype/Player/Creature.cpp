@@ -90,6 +90,7 @@ void ACreature::AttackHit()
 
 				_hitPoint = hitResult.ImpactPoint;
 				SoundManager->PlaySound(*GetHitSoundName(), _hitPoint);
+				EffectManager->Play(*GetPlayerAttackHitEffect(), _hitPoint);
 			}
 		}
 	}
@@ -148,6 +149,11 @@ FString ACreature::GetSkillParticleEffect02() const
 	return "default_Skill02_Effect";
 }
 
+FString ACreature::GetPlayerAttackHitEffect() const
+{
+	return "default_AttackHit_Effect";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;
@@ -182,14 +188,20 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 		if (_StatCom->IsDead())
 		{
 			SoundManager->PlaySound(*GetDeadSoundName(), _hitPoint);
-
+			
 			SetActorEnableCollision(false);
 			auto controller = GetController();
 			if (controller)
 				GetController()->UnPossess();
-			Destroy();
+
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle_Destroy, this, &ACreature::DelayedDestroy, 2.0f, false);
 		}
 	}
 
 	return 0.0f;
+}
+
+void ACreature::DelayedDestroy()
+{
+	Destroy();
 }

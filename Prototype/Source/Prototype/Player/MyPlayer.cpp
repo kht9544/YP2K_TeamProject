@@ -24,7 +24,7 @@
 #include "UI/StatWidget.h"
 #include "Components/WidgetComponent.h"
 
-//MiniMap
+// MiniMap
 #include "GameFramework/Actor.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "PaperSpriteComponent.h"
@@ -38,8 +38,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/PlayerBarWidget.h"
 
-
-//hp
+// hp
 #include "Components/ProgressBar.h"
 
 #include "../Base/Managers/SoundManager.h"
@@ -47,7 +46,6 @@
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
-
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -57,7 +55,6 @@ AMyPlayer::AMyPlayer()
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
-
 
 	_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -97,8 +94,6 @@ AMyPlayer::AMyPlayer()
 	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
 	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
-
-	
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> USM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Face_Pos.Free_Body_Face_Pos'"));
 	if (USM.Succeeded())
 	{
@@ -138,7 +133,6 @@ AMyPlayer::AMyPlayer()
 
 	//_parkourComp = CreateDefaultSubobject<UParkourComponent_Test>(TEXT("ParkourComponent"));
 
-
 	static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
 		TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
 	if (StatClass.Succeeded())
@@ -167,8 +161,7 @@ AMyPlayer::AMyPlayer()
 		_decal = MD.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> PlBar
-	(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerBar_UI.PlayerBar_UI_C'"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> PlBar(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerBar_UI.PlayerBar_UI_C'"));
 
 	if (PlBar.Succeeded())
 	{
@@ -184,13 +177,11 @@ AMyPlayer::AMyPlayer()
 		}
 	}
 
-
 	_dashDistance = 1000.f;
 	_dashSpeed = 3000.f;
 	bIsDashing = false;
 	DashDuration = _dashDistance / _dashSpeed;
 	DashTimeElapsed = 0.f;
-
 }
 
 // Called when the game starts or when spawned
@@ -209,8 +200,6 @@ void AMyPlayer::BeginPlay()
 		_MiniMap->AddToViewport();
 	}
 
-
-
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
 	{
@@ -219,13 +208,11 @@ void AMyPlayer::BeginPlay()
 	SkillOnCooldown.Init(false, 4);
 }
 
-
 void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-		_StatCom->SetLevelInit(1);
-
+	_StatCom->SetLevelInit(1);
 
 	if (_Widget)
 	{
@@ -243,10 +230,9 @@ void AMyPlayer::PostInitializeComponents()
 			_StatCom->_PlMPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlMPBar);
 			_StatCom->_PlEXPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlExpBar);
 		}
-
 	}
 
-	ItemEquipped.AddDynamic(this,&AMyPlayer::EquipItem);
+	ItemEquipped.AddDynamic(this, &AMyPlayer::EquipItem);
 
 	_KnightanimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	if (_KnightanimInstance->IsValidLowLevelFast())
@@ -255,14 +241,15 @@ void AMyPlayer::PostInitializeComponents()
 		_KnightanimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
 		_KnightanimInstance->_deathDelegate_Knight.AddUObject(this, &AMyPlayer::Disable);
 	}
-
-
 }
 
 // Called every frame
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	UpdateCamera(DeltaTime);
+
 	if (bIsDashing)
 	{
 		PerformDash(DeltaTime);
@@ -297,10 +284,9 @@ void AMyPlayer::Tick(float DeltaTime)
 			}
 		}
 	}
-
 }
 
-float AMyPlayer::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float AMyPlayer::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 	return 0.0f;
@@ -326,9 +312,9 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_InvenOpenAction, ETriggerEvent::Started, this, &AMyPlayer::InvenUIOpen);
 		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Started, this, &AMyPlayer::GuardStart);
 		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Completed, this, &AMyPlayer::GuardEnd);
+		EnhancedInputComponent->BindAction(_LockOnAction, ETriggerEvent::Started, this, &AMyPlayer::LockOn);
 	}
 }
-
 
 void AMyPlayer::OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit)
 {
@@ -339,12 +325,33 @@ void AMyPlayer::OnMonsterHit(class AMonster *HitMonster, const FHitResult &Hit)
 	}
 }
 
-void AMyPlayer::EquipItem(AEquipItem* equipitem)
+void AMyPlayer::UpdateCamera(float DeltaTime)
 {
-	SetEquipItem(equipitem->GetEquipType(),equipitem);
+	if (_lockOnMonster)
+	{
+		if(_lockOnMonster->_StatCom->IsDead())
+		{
+			_lockOnMonster = nullptr;
+			_fixedCamera = false;
+			return;
+		}
+		_fixedCamera = true;
+
+		FVector LockedOnLocation = _lockOnMonster->GetActorLocation();
+		LockedOnLocation.Z -= 150.f;
+		const FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LockedOnLocation);
+		const FRotator InterpRotation = UKismetMathLibrary::RInterpTo(GetController()->GetControlRotation(), LookAtRotation, DeltaTime, 10.f);
+		GetController()->SetControlRotation(FRotator(InterpRotation.Pitch, InterpRotation.Yaw, GetController()->GetControlRotation().Roll));
+	}
+
 }
 
-void AMyPlayer::GetItem(ABaseItem* item)
+void AMyPlayer::EquipItem(AEquipItem *equipitem)
+{
+	SetEquipItem(equipitem->GetEquipType(), equipitem);
+}
+
+void AMyPlayer::GetItem(ABaseItem *item)
 {
 	if (item == nullptr)
 		return;
@@ -352,16 +359,16 @@ void AMyPlayer::GetItem(ABaseItem* item)
 	_inventoryComponent->AddItem(0, item);
 }
 
-void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem* equipitem)
+void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem *equipitem)
 {
-    if (_EquipItems.Contains(equiptype))
-    {
-		//TODO 
-        return;
-    }
-    else
-    {
-        _EquipItems.Add(equiptype, equipitem);
+	if (_EquipItems.Contains(equiptype))
+	{
+		// TODO
+		return;
+	}
+	else
+	{
+		_EquipItems.Add(equiptype, equipitem);
 	}
 	// TODO:Update UI
 }
@@ -401,9 +408,14 @@ FString AMyPlayer::GetSkillParticleEffect02() const
 	return "NS_Meteor";
 }
 
+FString AMyPlayer::GetPlayerAttackHitEffect() const
+{
+	return "P_Greystone_Novaborn_Primary_Impact";
+}
+
 void AMyPlayer::Move(const FInputActionValue &value)
 {
-	if(bIsGuarding)
+	if (bIsGuarding)
 		return;
 	FVector2D MovementVector = value.Get<FVector2D>();
 
@@ -415,6 +427,8 @@ void AMyPlayer::Move(const FInputActionValue &value)
 
 void AMyPlayer::Look(const FInputActionValue &value)
 {
+	if (_fixedCamera)
+		return;
 	FVector2D LookAxisVector = value.Get<FVector2D>();
 
 	AddControllerYawInput(LookAxisVector.X);
@@ -427,7 +441,7 @@ void AMyPlayer::JumpA(const FInputActionValue &value)
 
 	if (isPressed)
 	{
-		if(!_isAttacking)
+		if (!_isAttacking)
 			ACharacter::Jump();
 	}
 }
@@ -438,17 +452,16 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
-		 if(bIsGuarding)
-		 	bIsGuarding = false;
-		 _KnightanimInstance->PlayAttackMontage();
-		 _isAttacking = true;
+		if (bIsGuarding)
+			bIsGuarding = false;
+		_KnightanimInstance->PlayAttackMontage();
+		_isAttacking = true;
 
-		 _curAttackIndex %= 4;
-		 _curAttackIndex++;
+		_curAttackIndex %= 4;
+		_curAttackIndex++;
 
-		 _KnightanimInstance->JumpToSection(_curAttackIndex);
+		_KnightanimInstance->JumpToSection(_curAttackIndex);
 	}
-
 }
 
 void AMyPlayer::Skill1(const FInputActionValue &value)
@@ -467,15 +480,11 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			FVector2D MovementInput = _moveVector;
 			UE_LOG(LogTemp, Warning, TEXT("%f"), GetVelocity().Size());
 
-		
-
-
 			if (GetVelocity().Size() > 300.f)
 			{
 				FVector Forward = GetActorForwardVector() * MovementInput.Y;
 				FVector Right = GetActorRightVector() * MovementInput.X;
 				DashDirection = (Forward + Right).GetSafeNormal();
-
 			}
 			else
 			{
@@ -485,17 +494,17 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			DashTimeElapsed = 0.f;
 			_skillWidgetInstance->StartCooldown(0, 5.0f);
 
-			UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+			UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 			if (PlayerAnimInstance)
 			{
-				PlayerAnimInstance->PlaySkill01Montage();  // Skill1 Animation
+				PlayerAnimInstance->PlaySkill01Montage(); // Skill1 Animation
 			}
 			SoundManager->PlaySound(*GetSkillSound01(), _hitPoint);
 		}
 	}
 }
 
-void AMyPlayer::Skill2(const FInputActionValue& value)
+void AMyPlayer::Skill2(const FInputActionValue &value)
 {
 	bool isPressed = value.Get<bool>();
 
@@ -503,45 +512,61 @@ void AMyPlayer::Skill2(const FInputActionValue& value)
 	{
 		if (SkillOnCooldown[1])
 			return;
+
+		SkillOnCooldown[1] = true;
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f); 
+		FVector DecalLocation;
+
+		if (_lockOnMonster)
+		{
+			DecalLocation = _lockOnMonster->GetActorLocation();
+			DecalLocation.Z -= _lockOnMonster->GetActorLocation().Z; // Z값을 조정
+		}
 		else
 		{
-			SkillOnCooldown[1] = true;
+			DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
+			DecalLocation.Z -= 98.0f; 
+		}
 
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = GetInstigator();
+		int MeteorCount = /*(_StatCom->GetInt()) / 10*/ 10;
 
-			// 메테오가 떨어질 위치 계산 (플레이어 앞 1000 단위)
-			FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f);  // 하늘에서 시작
-			FVector DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
-			DecalLocation.Z = 0.0f;  // Z축을 0으로 설정하여 지면에 위치하게 함
+		AMeteorDecal *CenterMeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
+		if (CenterMeteorDecal)
+		{
+			CenterMeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
+		}
 
-			// 메테오 데칼 생성 및 메테오 소환
-			AMeteorDecal* MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
+		for (int i = 0; i < MeteorCount - 1; i++) 
+		{
+			float Angle = (i * (360.0f / (MeteorCount - 1))) * (PI / 180.0f); 
+			float Radius = 500.0f;
+
+			FVector SpawnLocation = DecalLocation;
+			SpawnLocation.X += FMath::Cos(Angle) * Radius; 
+			SpawnLocation.Y += FMath::Sin(Angle) * Radius; 
+
+			AMeteorDecal *MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
 			if (MeteorDecal)
 			{
-				// 메테오가 하늘에서 바닥으로 떨어지게 함
-				MeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
-
+				MeteorDecal->StartMeteor(MeteorStartLocation, SpawnLocation, 3.0f);
 			}
-
-
-			// 화면 흔들림과 메테오 폭발 타이머 설정
-			GetWorld()->GetTimerManager().SetTimer(ScreenShakeTimerHandle, this, &AMyPlayer::StartScreenShake, 0.1f, true);
-			GetWorld()->GetTimerManager().SetTimer(MeteorTimerHandle, this, &AMyPlayer::CastMeteor, 3.0f, false);  // 3초 후 메테오 충돌
-
-			// 스킬 쿨다운 시작
-			_skillWidgetInstance->StartCooldown(1, 5.0f);
-
-
-			UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
-			if (PlayerAnimInstance)
-			{
-				PlayerAnimInstance->PlaySkill02Montage();  // Skill2 Animation
-			}
-			SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
-
 		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Decal Location : %f"), DecalLocation.Z);
+
+		_skillWidgetInstance->StartCooldown(1, 5.0f);
+
+		UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+		if (PlayerAnimInstance)
+		{
+			PlayerAnimInstance->PlaySkill02Montage(); 
+		}
+		SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
 	}
 }
 
@@ -604,12 +629,58 @@ void AMyPlayer::GuardEnd(const FInputActionValue &value)
 {
 	bIsGuarding = false;
 
-	UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	if (PlayerAnimInstance)
 	{
 		PlayerAnimInstance->PlayGuardMontage(bIsGuarding);
 	}
+}
 
+void AMyPlayer::LockOn(const FInputActionValue &value)
+{
+	bool isPressed = value.Get<bool>();
+
+	if (isPressed)
+	{
+		if (_lockOnMonster)
+		{
+			_lockOnMonster = nullptr;
+			_fixedCamera = false;
+			return;
+		}
+		else
+		{
+			FHitResult HitResult;
+			FVector Start = GetActorLocation();
+			FVector ForwardVector = GetActorForwardVector();
+			float LockOnDistance = 2000.0f;
+			float LockOnAngle = 60.0f;
+			float HalfAngle = LockOnAngle / 2.0f;
+
+			for (float AngleOffset = -HalfAngle; AngleOffset <= HalfAngle; AngleOffset += 5.0f)
+			{
+				FQuat Rotation = FQuat::MakeFromEuler(FVector(0.0f, 0.0f, AngleOffset));
+				FVector End = Start + (Rotation.RotateVector(ForwardVector) * LockOnDistance);
+
+				FCollisionQueryParams CollisionParams;
+				CollisionParams.bTraceComplex = true;
+				CollisionParams.AddIgnoredActor(this);
+				DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 2.0f, 0, 1.0f);
+
+				if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Pawn, CollisionParams))
+				{
+					DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
+					AMonster *monster = Cast<AMonster>(HitResult.GetActor());
+					if (monster != nullptr)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("LockOnMonster"));
+						_lockOnMonster = monster;
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
 void AMyPlayer::GuardStart(const FInputActionValue &value)
@@ -617,14 +688,12 @@ void AMyPlayer::GuardStart(const FInputActionValue &value)
 	bIsGuarding = true;
 
 	// Animation
-	UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	if (PlayerAnimInstance)
 	{
 		PlayerAnimInstance->PlayGuardMontage(bIsGuarding);
 	}
-
 }
-
 
 // cheol
 void AMyPlayer::StatUIOpen(const FInputActionValue &value)
@@ -647,7 +716,7 @@ void AMyPlayer::StatUIOpen(const FInputActionValue &value)
 	}
 }
 
-void AMyPlayer::InvenUIOpen(const FInputActionValue& value)
+void AMyPlayer::InvenUIOpen(const FInputActionValue &value)
 {
 	bool isPressed = value.Get<bool>();
 
@@ -703,37 +772,3 @@ void AMyPlayer::StartScreenShake()
 	}
 }
 
-void AMyPlayer::CastMeteor()
-{
-
-}
-
-// void AMyPlayer::CheckForClimbableWall()
-// {
-// 	FVector Start = GetActorLocation();
-// 	FVector ForwardVector = GetActorForwardVector();
-// 	FVector End = Start + (ForwardVector * 100.0f);
-
-// 	FHitResult HitResult;
-// 	FCollisionQueryParams Params;
-// 	Params.AddIgnoredActor(this);
-
-// 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, Params);
-
-// 	if (bHit && HitResult.bBlockingHit)
-// 	{
-// 		if (!_parkourComp->bIsClimbing)
-// 		{
-// 			// 벽타기 시작
-// 			_parkourComp->StartClimbing(HitResult.ImpactNormal);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		if (_parkourComp->bIsClimbing)
-// 		{
-// 			// 벽이 없으므로 벽타기 멈추기
-// 			_parkourComp->StopClimbing();
-// 		}
-// 	}
-// }

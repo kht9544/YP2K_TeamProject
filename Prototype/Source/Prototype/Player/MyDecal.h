@@ -26,6 +26,7 @@ public:
 	void DeActiveEvent(FVector location);
 
 	void SetLoop(bool loop) { _bLoop = loop; }
+	void SetTime (float time) {_delayTime = time;}
 
 	FieldAttack _fieldAttackDelegate;
 

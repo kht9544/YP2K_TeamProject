@@ -20,8 +20,18 @@ public:
 	ABossMonster();
 
 	bool PerformGimmick();
+	void JumpAttack(FVector TargetLocation);
+	bool GetIsDashing(){return IsDashing;}
+	bool GetIsJumping(){return IsJumping;}
+	virtual void Landed(const FHitResult& Hit) override;
+
+	void Dash(FVector TargetLocation);
+	void DashEnd();
+	void UpdateDash();
+
+
 	//void SpawnObstacles();
-	//void Dash();
+	
 	//void CheckGimmickResult();
 
 	//virtual void Jump() override;
@@ -33,6 +43,8 @@ private:
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 	virtual void Attack_AI() override;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class AMyDecal> _decal;
@@ -45,16 +57,17 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
-    float DashSpeed;
+	int ObstacleDestroyCount = 0;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash",meta = (AllowPrivateAccess = "true"))
-    float DashDuration;
+	bool IsJumping = false;
+	bool IsDashing = false;
 
-	int32 DashCount = 0;
+	float JumpStartTime; 
+    float JumpDuration;
 
-    int32 DestroyedObstacleCount = 0;
-
-    bool bGimmickSuccess = false;
-    
+	FVector DashEndLocation;
+	float DashDistance = 2000.0f;
+    float DashSpeed = 2000.0f; 
+	FVector DashDirection;
+  
 };

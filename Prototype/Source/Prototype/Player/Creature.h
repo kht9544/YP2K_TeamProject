@@ -42,6 +42,7 @@ public:
 	virtual FString GetSkillSound02() const;
 	virtual FString GetBossMonsterAttack() const;
 	virtual FString GetSkillParticleEffect02() const;
+	virtual FString GetPlayerAttackHitEffect() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
@@ -57,6 +58,11 @@ public:
 	UStatComponent* _StatCom;
 
 protected:
+	FTimerHandle TimerHandle_Destroy;
+	UFUNCTION()
+	void DelayedDestroy();
+
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	bool _isAttacking = false;
 

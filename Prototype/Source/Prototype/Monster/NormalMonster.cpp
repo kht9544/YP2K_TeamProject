@@ -6,6 +6,9 @@
 #include "../Player/Creature.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "Base/MyGameInstance.h"
+#include "../Base/Managers/EffectManager.h"
+
 // Sets default values
 ANormalMonster::ANormalMonster()
 {

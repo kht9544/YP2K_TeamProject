@@ -52,6 +52,14 @@ void UBaseAnimInstance::PlayAttackMontage()
 	}
 }
 
+void UBaseAnimInstance::PlayStunMontage()
+{
+	if (!Montage_IsPlaying(_myStunMontage))
+	{
+		Montage_Play(_myStunMontage);
+	}
+}
+
 void UBaseAnimInstance::PlayHitReactionMontage()
 {
 	if (HitReactionMontage)

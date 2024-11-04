@@ -7,6 +7,7 @@
 #include "Monster.h"
 #include "NormalMonster.generated.h"
 
+
 UCLASS()
 class PROTOTYPE_API ANormalMonster : public AMonster
 {
@@ -19,6 +20,7 @@ public:
 	virtual FString GetHitSoundName() const override;
 	virtual FString GetGuardOff() const override;
 	virtual FString GetDeadSoundName() const override;
+
 
 protected:
 	// Called when the game starts or when spawned
