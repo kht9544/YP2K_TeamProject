@@ -45,5 +45,5 @@ void UMonster_N_AnimInstance::AnimNotify_Attackhit()
 
 void UMonster_N_AnimInstance::AnimNotify_Death()
 {
-	_deathDelegate.Broadcast();
+	_death_N_MonsterDelegate.Broadcast();
 }

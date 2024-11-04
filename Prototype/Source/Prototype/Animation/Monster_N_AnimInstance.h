@@ -26,7 +26,7 @@ public:
 
 	AttackDelegate _attackDelegate;
 
-	DeathDelegate _deathDelegate;
+	DeathDelegate _death_N_MonsterDelegate;
 
 	UFUNCTION()
 	virtual void AnimNotify_Attackhit();
