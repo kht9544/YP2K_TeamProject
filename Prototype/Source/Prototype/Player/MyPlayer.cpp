@@ -533,7 +533,7 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 			DecalLocation.Z -= 98.0f; 
 		}
 
-		int MeteorCount = /*(_StatCom->GetInt()) / 10*/ 10;
+		int MeteorCount = (_StatCom->GetInt()) / 10;
 
 		AMeteorDecal *CenterMeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
 		if (CenterMeteorDecal)

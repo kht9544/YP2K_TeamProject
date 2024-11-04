@@ -132,6 +132,7 @@ void UInventoryWidget::UseItem()
 	if (_targetItem == nullptr)
 		return;
 
+	UE_LOG(LogTemp, Warning, TEXT("UseItem"));
 	ItemDrop.Broadcast(_targetIndex, false);
 
 	_targetItem = nullptr;

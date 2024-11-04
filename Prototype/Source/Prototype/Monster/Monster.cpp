@@ -60,8 +60,7 @@ float AMonster::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent,
 
 void AMonster::LaunchFromPlayer(FVector LaunchDirection)
 {
-    FVector UpVector(0.0f, 0.0f, 200.f);
-	LaunchCharacter((LaunchDirection * _launchLength) + UpVector, true, true);
+	LaunchCharacter((LaunchDirection * _launchLength) + _upVector, true, true);
 }
 
 void AMonster::OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit)

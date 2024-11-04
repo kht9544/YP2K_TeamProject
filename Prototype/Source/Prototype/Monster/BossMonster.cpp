@@ -198,7 +198,7 @@ void ABossMonster::Dash(FVector TargetLocation)
     SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
 
 	FTimerHandle DashTimerHandle;
-     GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
+    GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
 }
 
 void ABossMonster::Tick(float DeltaTime)

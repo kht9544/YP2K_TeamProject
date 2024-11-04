@@ -60,9 +60,7 @@ void UStatComponent::SetLevelInit(int level)
 		Data = myGameInstance->GetStatDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
-		_curHp = 0;
 		_maxMp = Data->MaxMP;
-		_curMp = 0;
 		_str = Data->STR;
 		_dex = Data->DEX;
 		_int = Data->INT;
@@ -87,9 +85,7 @@ void UStatComponent::SetEpicLevelInit(int level)
 		Data = myGameInstance->GetEpicDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
-		_curHp = 0;
 		_maxMp = Data->MaxMP;
-		_curMp = 0;
 		_str = Data->STR;
 		_dex = Data->DEX;
 		_int = Data->INT;

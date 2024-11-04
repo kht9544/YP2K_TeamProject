@@ -23,6 +23,7 @@ ANormalMonster::ANormalMonster()
 	}
 
 	_launchLength = 1000.0f;
+	_upVector = {0.0f,0.0f,200.f};
 }
 
 FString ANormalMonster::GetHitSoundName() const
