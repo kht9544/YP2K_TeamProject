@@ -30,7 +30,9 @@ ABossMonster::ABossMonster()
 		_decal = MD.Class;
 	}
 
+	ObstacleDestroyCount = 0;
 	_exp = 1;
+	
 }
 
 void ABossMonster::BeginPlay()
@@ -107,6 +109,7 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 	}
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Boss Takedamage : %f"),Damage/(5-ObstacleDestroyCount));
 		_StatCom->AddCurHp(-Damage/(5-ObstacleDestroyCount));
 	}
 
@@ -243,5 +246,10 @@ void ABossMonster::DashEnd()
     IsDashing = false;
 
     GetCharacterMovement()->StopMovementImmediately();
+}
+
+void ABossMonster::DestroyObstacle()
+{
+	ObstacleDestroyCount++;
 }
 

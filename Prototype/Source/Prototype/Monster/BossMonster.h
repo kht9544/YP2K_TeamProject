@@ -29,6 +29,8 @@ public:
 	void DashEnd();
 	void UpdateDash();
 
+	void DestroyObstacle();
+
 
 	//void SpawnObstacles();
 	
@@ -57,7 +59,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
 
-	int ObstacleDestroyCount = 0;
+	int32 ObstacleDestroyCount;
 
 	bool IsJumping = false;
 	bool IsDashing = false;
