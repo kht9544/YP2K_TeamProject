@@ -58,6 +58,11 @@ public:
 	UStatComponent* _StatCom;
 
 protected:
+	FTimerHandle TimerHandle_Destroy;
+	UFUNCTION()
+	void DelayedDestroy();
+
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	bool _isAttacking = false;
 
