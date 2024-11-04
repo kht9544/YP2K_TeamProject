@@ -205,18 +205,9 @@ bool UInventoryWidget::CheckCanEquip()
 		}
 		break;
 	case EItemType::LowerArmor:
-		if (LowerArmor->GetItem() == nullptr)
-		{
-			LowerArmor->SetItem(_targetItem);
-			_targetItem = nullptr;
-			result = true;
-		}
-		else
-		{
-			_targetItem = LowerArmor->GetItem();
-			LowerArmor->SetItem(target);
-			result = false;
-		}
+		_targetItem = LowerArmor->GetItem();
+		LowerArmor->SetItem(target);
+		result = false;
 		break;
 	case EItemType::ShoulderArmor:
 		if (ShoulderGuard->GetItem() == nullptr)
