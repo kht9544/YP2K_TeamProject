@@ -31,7 +31,7 @@ public:
 
 	void SetItemImage(int32 slotIndex, ABaseItem* item = nullptr);
 	void SetEquipImage(int32 slotIndex, ABaseItem* item = nullptr);
-
+	void UpdateEquip();
 	void ShowItem();
 
 	UFUNCTION()

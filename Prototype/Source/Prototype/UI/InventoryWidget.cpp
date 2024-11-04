@@ -99,6 +99,17 @@ void UInventoryWidget::SetItemImage(int32 slotIndex, ABaseItem* item)
 void UInventoryWidget::SetEquipImage(int32 slotIndex, ABaseItem* item)
 {
 	//TODO : Setting Equip Item Buttons Image
+
+}
+
+void UInventoryWidget::UpdateEquip()
+{
+	Helmet->ButtonUpdate();
+	ShoulderGuard->ButtonUpdate();
+	UpperArmor->ButtonUpdate();
+	LowerArmor->ButtonUpdate();
+	Sword->ButtonUpdate();
+	Shield->ButtonUpdate();
 }
 
 void UInventoryWidget::ShowItem()
@@ -252,6 +263,8 @@ bool UInventoryWidget::CheckCanEquip()
 	default:
 		break;
 	}
+
+	UpdateEquip();
 
 	return result;
 }
