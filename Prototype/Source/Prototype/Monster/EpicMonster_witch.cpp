@@ -50,7 +50,7 @@ void AEpicMonster_witch::PostInitializeComponents()
 	{
 		_monster_N_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
 		_monster_N_AnimInstance->_attackDelegate.AddUObject(this, &AEpicMonster_witch::MeleeAttackhit);
-		_monster_N_AnimInstance->_deathDelegate.AddUObject(this, &AMonster::Disable);
+		_monster_N_AnimInstance->_death_N_MonsterDelegate.AddUObject(this, &AMonster::Disable);
 	}
 }
 
