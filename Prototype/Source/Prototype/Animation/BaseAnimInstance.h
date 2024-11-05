@@ -50,6 +50,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stun", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _myStunMontage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AttackFarMontage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* AttackMagicMontage;
 
 };

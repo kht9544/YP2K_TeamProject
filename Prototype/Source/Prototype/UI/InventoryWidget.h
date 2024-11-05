@@ -26,11 +26,9 @@ class PROTOTYPE_API UInventoryWidget : public UUserWidget
 public:
 
 	void SetItemButtons();
-	void SetEquipButtons();
 	void SetStats();
 
-	void SetItemImage(int32 slotIndex, ABaseItem* item = nullptr);
-	void SetEquipImage(int32 slotIndex, ABaseItem* item = nullptr);
+	void UpdateSlot(int32 slotIndex, ABaseItem* item = nullptr);
 	void UpdateEquip();
 	void ShowItem();
 
@@ -39,7 +37,7 @@ public:
 	UFUNCTION()
 	void UseItem();
 
-	bool CheckCanEquip();
+	void CheckCanEquip();
 
 private:
 	void SetTargetItem(int32 slotIndex);
