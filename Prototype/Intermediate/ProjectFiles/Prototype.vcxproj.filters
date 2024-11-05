@@ -64,6 +64,12 @@
     <ClInclude Include="..\..\Source\Prototype\Animation\Monster_Boss01_AnimInstance.h">
       <Filter>Source\Prototype\Animation</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Animation\Monster_Epic01_Anim.cpp">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Animation\Monster_Epic01_Anim.h">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Animation\Monster_N_AnimInstance.cpp">
       <Filter>Source\Prototype\Animation</Filter>
     </ClCompile>
