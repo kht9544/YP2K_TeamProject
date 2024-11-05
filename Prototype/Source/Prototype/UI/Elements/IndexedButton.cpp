@@ -11,14 +11,16 @@ void UIndexedButton::ButtonUpdate()
 {
 	FSlateBrush imageBrush;
 
-	if (_image != nullptr)
-	{
-		imageBrush.SetResourceObject(_image);
-	}
+	if (_item)
+		SetImage(_item->GetTexture());
 	else
-	{
+		SetImage(T_DEFAULT);
+
+	if (_image != nullptr)
+		imageBrush.SetResourceObject(_image);
+	else
 		imageBrush.SetResourceObject(T_DEFAULT);
-	}
+
 	imageBrush.ImageSize = FVector2D(200.0f, 200.0f);
 
 	FButtonStyle btnStyle;

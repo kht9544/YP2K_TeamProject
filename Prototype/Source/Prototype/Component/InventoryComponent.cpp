@@ -192,12 +192,12 @@ void UInventoryComponent::TryEquip(FString part, int32 slot)
 
 void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem *item)
 {
-	UIManager->GetInventoryUI()->SetItemImage(slot, item);
+	UIManager->GetInventoryUI()->UpdateSlot(slot, item);
 }
 
 void UInventoryComponent::UIupdate_Pop(int32 slot)
 {
-	UIManager->GetInventoryUI()->SetItemImage(slot, nullptr);
+	UIManager->GetInventoryUI()->UpdateSlot(slot, nullptr);
 }
 
 void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem *item)
