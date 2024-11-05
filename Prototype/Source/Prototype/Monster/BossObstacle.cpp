@@ -47,10 +47,10 @@ void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	ABossMonster* boss = Cast<ABossMonster>(OtherActor);
 	if(boss != nullptr &&(boss->GetIsJumping() || boss->GetIsDashing()))
 	{
-		if (EffectManager)
-		{
-			EffectManager->Play(TEXT("P_BossObstacleDestroy"), GetActorLocation(), GetActorRotation());
-		}
+		// if (EffectManager)
+		// {
+		// 	EffectManager->Play(TEXT("P_BossObstacleDestroy"), GetActorLocation(), GetActorRotation());
+		// }
 		boss->DestroyObstacle();
 		boss->_StatCom->SetStun(true);
 		Destroy();

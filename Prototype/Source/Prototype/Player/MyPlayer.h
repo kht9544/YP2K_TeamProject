@@ -224,6 +224,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
     bool _fixedCamera = false;
 
+	UPROPERTY(EditAnywhere, Category = "Skills")
+	TSubclassOf<class AFireball> _fireball;
+
 
 
 

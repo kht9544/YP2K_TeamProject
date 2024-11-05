@@ -16,6 +16,7 @@
 #include "MyPlayerController.h"
 #include "../UI/SkillWidget_test.h"
 #include "MeteorDecal.h"
+#include "Fireball.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // chelo
@@ -159,6 +160,12 @@ AMyPlayer::AMyPlayer()
 	if (MD.Succeeded())
 	{
 		_decal = MD.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder<AFireball>FB(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Player/Fireball_BP.Fireball_BP_C'"));
+	if (FB.Succeeded())
+	{
+		_fireball = FB.Class;
 	}
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> PlBar(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerBar_UI.PlayerBar_UI_C'"));
@@ -600,6 +607,17 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 		{
 			SkillOnCooldown[3] = true;
 			_skillWidgetInstance->StartCooldown(3, 10.0f);
+			 if (_fireball != nullptr)
+            {
+                FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f; 
+                FRotator spawnRotation = GetControlRotation();
+
+                AFireball* Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
+                if (Fireball)
+                {
+					UE_LOG(LogTemp, Warning, TEXT("Spawn fireball"));
+                }
+            }
 		}
 	}
 }

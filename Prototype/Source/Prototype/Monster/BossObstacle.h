@@ -34,8 +34,8 @@ private:
     class UStaticMeshComponent* ObstacleMesh;
 
 
-	UPROPERTY()
-	class AEffectManager* EffectManager;
+	// UPROPERTY()
+	// class AEffectManager* EffectManager;
 
 	
 };
