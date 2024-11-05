@@ -14,6 +14,16 @@ DECLARE_MULTICAST_DELEGATE_OneParam(PlMP, float);
 DECLARE_MULTICAST_DELEGATE_OneParam(PIEXP, float);
 DECLARE_MULTICAST_DELEGATE_OneParam(PILevel, int32);
 
+UENUM()
+enum class StatType
+{
+	HP,
+	MP,
+	STR,
+	DEX,
+	INT
+};
+
 USTRUCT()
 struct FMyStatData : public FTableRowBase
 {
