@@ -21,8 +21,13 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void JumpToSection(int32 sectionIndex);
 	virtual void PlayAttackMontage();
+	// BossMonster
 	virtual void PlayStunMontage();
 	virtual void PlayDashMontage();
+	//EpicMonster
+	virtual void PlayAttackFarMontage();
+	virtual void PlayAttackMagicMontage();
+	
 	//UFUNCTION(BlueprintCallable) 블루프린트와 연결하려면 이것사용
 	void PlayHitReactionMontage();
 
@@ -47,6 +52,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* HitReactionMontage;
 
+
+	// BossMonster
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stun", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _myStunMontage;
 
@@ -54,11 +62,13 @@ protected:
 	class UAnimMontage* _myDashingMontage;
 
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* AttackFarMontage;
+	// EpicMonster
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* AttackMagicMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = true))
+	class UAnimMontage* _attackFarMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = true))
+	class UAnimMontage* _attackMagicMontage;
 
 
 

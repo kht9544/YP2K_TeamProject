@@ -16,4 +16,26 @@ class PROTOTYPE_API UMonster_Epic01_Anim : public UBaseAnimInstance
 	
 public:
 	UMonster_Epic01_Anim();
+
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	virtual void PlayAttackMontage()override;
+
+	virtual void JumpToSection(int32 sectionIndex) override;
+
+
+	virtual void PlayAttackFarMontage() override;
+	virtual void PlayAttackMagicMontage() override;
+
+
+	AttackDelegate _attackDelegate;
+
+	DeathDelegate _death_Epic_MonsterDelegate;
+
+	UFUNCTION()
+	virtual void AnimNotify_Attackhit();
+
+	UFUNCTION()
+	virtual void AnimNotify_Death();
+
 };
