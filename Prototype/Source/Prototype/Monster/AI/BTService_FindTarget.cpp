@@ -32,7 +32,7 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent &OwnerComp, uint8 *N
     ABossMonster* boss = Cast<ABossMonster>(currentPawn);
     if(boss!=nullptr)
     {
-        searchRadius = 1500.f;
+        searchRadius = 3000.f;
     }
 
 

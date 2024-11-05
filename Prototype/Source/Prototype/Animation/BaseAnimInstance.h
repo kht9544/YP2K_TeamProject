@@ -9,6 +9,7 @@
 
 DECLARE_MULTICAST_DELEGATE(AttackDelegate);
 DECLARE_MULTICAST_DELEGATE(DeathDelegate);
+DECLARE_MULTICAST_DELEGATE(StunEndDelegate);
 
 UCLASS()
 class PROTOTYPE_API UBaseAnimInstance : public UAnimInstance

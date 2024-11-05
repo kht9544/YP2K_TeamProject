@@ -30,6 +30,10 @@ UMonster_Boss01_AnimInstance::UMonster_Boss01_AnimInstance()
 	{
 		_myStunMontage = BM_03.Object;
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No stun"));
+	}
 }
 
 void UMonster_Boss01_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -68,6 +72,11 @@ void UMonster_Boss01_AnimInstance::AnimNotify_Attackhit()
 void UMonster_Boss01_AnimInstance::AnimNotify_Death()
 {
 	_deathDelegate.Broadcast();
+}
+
+void UMonster_Boss01_AnimInstance::AnimNotify_StunEnd()
+{
+	_stunDelegate.Broadcast();
 }
 
 

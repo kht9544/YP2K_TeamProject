@@ -31,12 +31,16 @@ public:
 	AttackDelegate _attackDelegate;
 
 	DeathDelegate _deathDelegate;
+	StunEndDelegate _stunDelegate;
 
 	UFUNCTION()
 	virtual void AnimNotify_Attackhit();
 
 	UFUNCTION()
 	virtual void AnimNotify_Death();
+
+	UFUNCTION()
+	virtual void AnimNotify_StunEnd();
 
 	//UFUNCTION()
 	//virtual void AnimNotify_StunEnd();

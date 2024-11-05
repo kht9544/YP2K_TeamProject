@@ -4,7 +4,7 @@
 #include "../Player/MyPlayer.h"
 #include "../Animation/Monster_Boss01_AnimInstance.h"
 #include "../Player/Creature.h"
-#include "../Player/MyDecal.h"
+#include "Engine/DecalActor.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Base/MyGameInstance.h"
 #include "../Base/Managers/SoundManager.h"
@@ -24,7 +24,7 @@ ABossMonster::ABossMonster()
 		GetMesh()->SetSkeletalMesh(SM.Object);
 	}
 
-	static ConstructorHelpers::FClassFinder<AMyDecal> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/BasicDecal_BP.BasicDecal_BP_C'"));
+	static ConstructorHelpers::FClassFinder<ADecalActor> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/DashDecal.DashDecal_C'"));
 	if (MD.Succeeded())
 	{
 		_decal = MD.Class;
@@ -54,6 +54,7 @@ void ABossMonster::PostInitializeComponents()
 		_bossMonster01_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
 		_bossMonster01_AnimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
 		_bossMonster01_AnimInstance->_deathDelegate.AddUObject(this, &AMonster::Disable);
+		_bossMonster01_AnimInstance->_stunDelegate.AddUObject(this, &ABossMonster::StunEnd);
 	}
 }
 
@@ -139,7 +140,7 @@ bool ABossMonster::PerformGimmick()
 
 void ABossMonster::JumpAttack(FVector TargetLocation)
 {
-	if (IsJumping)
+	if (IsJumping||IsStun||IsDashing)
 		return;
 
 	JumpStartTime = GetWorld()->GetTimeSeconds();
@@ -167,10 +168,6 @@ void ABossMonster::JumpAttack(FVector TargetLocation)
 
 	LaunchCharacter(JumpVelocity, true, true);
 
-	if (_decal)
-	{
-		AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_decal, LandingLocation, FRotator::ZeroRotator);
-	}
 }
 
 void ABossMonster::Landed(const FHitResult &Hit)
@@ -187,9 +184,11 @@ void ABossMonster::Landed(const FHitResult &Hit)
 
 void ABossMonster::Dash(FVector TargetLocation)
 {
-    if (IsDashing)
+    if (IsDashing || IsStun||IsJumping)
         return;
 	IsDashing = true;
+
+	
 
     FVector StartLocation = GetActorLocation(); 
     DashDirection = (TargetLocation - StartLocation).GetSafeNormal();
@@ -198,7 +197,28 @@ void ABossMonster::Dash(FVector TargetLocation)
     DashEndLocation = StartLocation + DashDirection * DashDistance;
 
     FRotator LookAtRotation = DashDirection.Rotation();
+
+	if (_decal)
+    {
+		UE_LOG(LogTemp, Warning, TEXT("Spawn decal"));
+		FVector location = GetActorLocation();
+		location.Z=0.0f;
+		location.X-= 500.f;
+
+        ADecalActor* Decal = GetWorld()->SpawnActor<ADecalActor>(_decal, location, LookAtRotation);
+        if (Decal)
+        {
+            Decal->SetLifeSpan(1.0f);
+        }
+    }
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No decal"));
+	}
+
     SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
+
+	
 
 	FTimerHandle DashTimerHandle;
     GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
@@ -244,12 +264,19 @@ void ABossMonster::Tick(float DeltaTime)
 void ABossMonster::DashEnd()
 {
     IsDashing = false;
-
     GetCharacterMovement()->StopMovementImmediately();
+}
+
+void ABossMonster::StunEnd()
+{
+	IsStun = false;
 }
 
 void ABossMonster::DestroyObstacle()
 {
+	IsStun = true;
 	ObstacleDestroyCount++;
+	_bossMonster01_AnimInstance->PlayStunMontage();
+	GetCharacterMovement()->StopMovementImmediately();
 }
 
