@@ -277,6 +277,12 @@
     <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTDecorator_CanAttack.h">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTDecorator_Stun.cpp">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Monster\AI\BTDecorator_Stun.h">
+      <Filter>Source\Prototype\Monster\AI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Monster\AI\BTService_CheckHP.cpp">
       <Filter>Source\Prototype\Monster\AI</Filter>
     </ClCompile>
