@@ -22,7 +22,7 @@ public:
 	virtual void JumpToSection(int32 sectionIndex);
 	virtual void PlayAttackMontage();
 	virtual void PlayStunMontage();
-
+	virtual void PlayDashMontage();
 	//UFUNCTION(BlueprintCallable) 블루프린트와 연결하려면 이것사용
 	void PlayHitReactionMontage();
 
@@ -50,10 +50,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stun", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _myStunMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stun", Meta = (AllowPrivateAccess = true))
+	class UAnimMontage* _myDashingMontage;
+
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AttackFarMontage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* AttackMagicMontage;
+
+
 
 };

@@ -60,6 +60,14 @@ void UBaseAnimInstance::PlayStunMontage()
 	}
 }
 
+void UBaseAnimInstance::PlayDashMontage()
+{
+	if (!Montage_IsPlaying(_myDashingMontage))
+	{
+		Montage_Play(_myDashingMontage);
+	}
+}
+
 void UBaseAnimInstance::PlayHitReactionMontage()
 {
 	if (HitReactionMontage)

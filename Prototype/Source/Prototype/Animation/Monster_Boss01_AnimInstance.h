@@ -19,9 +19,11 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	virtual void PlayAttackMontage()override;
+	virtual void PlayAttackMontage() override;
 
-	virtual void PlayStunMontage()override;
+	virtual void PlayStunMontage() override;
+
+	virtual void PlayDashMontage() override;
 
 	//어퍼컷
 	void PlayUpAttackMontage();

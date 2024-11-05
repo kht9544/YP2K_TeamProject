@@ -188,6 +188,10 @@ void ABossMonster::Dash(FVector TargetLocation)
         return;
 	IsDashing = true;
 
+	if (IsDashing == true)
+	{
+		_bossMonster01_AnimInstance->PlayDashMontage();
+	}
 	
 
     FVector StartLocation = GetActorLocation(); 
