@@ -150,7 +150,7 @@ void AEpicMonster_witch::SumonedMonster()
 {
 	if (_SumonedMonster != nullptr)
 	{
-		for (int i = 0; i < 2; ++i)
+		for (int i = 0; i <= 4; ++i)
 		{
 			FVector SpawLocation = GetActorLocation() + FMath::VRand() * 200.0f;
 			FRotator SpawRotation = FRotator::ZeroRotator;
@@ -160,7 +160,6 @@ void AEpicMonster_witch::SumonedMonster()
 			if (Noram)
 			{
 				Noram->SpawnDefaultController();
-
 			}
 
 			

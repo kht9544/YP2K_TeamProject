@@ -23,7 +23,7 @@ EBTNodeResult::Type UBTTaskNode_MagicBall::ExecuteTask(UBehaviorTreeComponent& O
 	if (character == nullptr)
 		return EBTNodeResult::Failed;
 	
-		//character->MagicShot();
+		character->MagicShot();
 		character->testDecalSkill();
 	
 
