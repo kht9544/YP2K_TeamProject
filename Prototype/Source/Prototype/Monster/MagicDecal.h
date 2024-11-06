@@ -35,6 +35,8 @@ public:
     float _damageAmount = 100.0f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DECAL, meta = (AllowPrivateAccess = "true"))
     float _damageRadius = 300.0f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DECAL, meta = (AllowPrivateAccess = "true"))
+    class UNiagaraComponent* _MagicDecalNiargar;
 private:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DECAL, meta = (AllowPrivateAccess = "true"))
@@ -56,7 +58,5 @@ private:
 
     FTimerHandle _damageTimerHandle;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DECAL, meta = (AllowPrivateAccess = "true"))
-    class UNiagaraComponent* _MagicDecalNiargar;
 
 };

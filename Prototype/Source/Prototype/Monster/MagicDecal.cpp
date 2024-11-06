@@ -17,6 +17,7 @@ AMagicDecal::AMagicDecal()
     _damageInterval = 1.0f;
     _damageAmount = 100.0f;
     _MagicDecalNiargar = CreateDefaultSubobject<UNiagaraComponent>(TEXT("MagicNiagaraComponent"));
+
 }
 
 void AMagicDecal::BeginPlay()
@@ -66,6 +67,7 @@ void AMagicDecal::Active(FVector location)
 {
     _bIsPlay = true;
     SetActorLocation(location);
+    _MagicDecalNiargar->SetWorldLocation(location);
 }
 
 void AMagicDecal::DeActiveEvent(FVector location)

@@ -176,12 +176,14 @@ void AEpicMonster_witch::testDecalSkill()
 		FVector forward = GetActorForwardVector();
 		FVector fireLocation = GetActorLocation() + (forward * 150);
 		fireLocation.Z -= 90.0f;
+		// 데칼 생성 위치 랜덤? fireLocation 값 랜덤하게 반경은 ? 
 		FRotator fireRotation = forward.Rotation();
 
 
 
 
 		AMagicDecal* decal = GetWorld()->SpawnActor<AMagicDecal>(_tedecal, fireLocation, FRotator::ZeroRotator);
+		
 		if (decal)
 		{
 
