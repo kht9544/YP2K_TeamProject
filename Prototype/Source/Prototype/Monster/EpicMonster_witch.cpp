@@ -67,14 +67,6 @@ void AEpicMonster_witch::PostInitializeComponents()
 		_monster_Epic_AnimInstance->_death_Epic_MonsterDelegate.AddUObject(this, &AMonster::Disable);
 
 	}
-
-	/*auto _monster_N_AnimInstance = Cast<UMonster_N_AnimInstance>(GetMesh()->GetAnimInstance());
-	if (_monster_N_AnimInstance->IsValidLowLevelFast())
-	{
-		_monster_N_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
-		_monster_N_AnimInstance->_attackDelegate.AddUObject(this, &AEpicMonster_witch::MeleeAttackhit);
-		_monster_N_AnimInstance->_death_N_MonsterDelegate.AddUObject(this, &AMonster::Disable);
-	}*/
 }
 
 void AEpicMonster_witch::Tick(float DeltaTime)
@@ -141,7 +133,7 @@ void AEpicMonster_witch::Attack_AI()
 		_monster_Epic_AnimInstance->JumpToSection(_curAttackIndex);
 	}
 
-
+	
 }
 
 
@@ -151,6 +143,9 @@ void AEpicMonster_witch::MagicShot()
 	
 		if (_projectileClass)
 		{
+			_monster_Epic_AnimInstance->PlayAttackFarMontage();
+			_curAttackIndex = 1;
+
 			FVector forward = GetActorForwardVector();
 			FName HandSocketName = TEXT("Magic_hand");
 		
@@ -175,6 +170,7 @@ void AEpicMonster_witch::SumonedMonster()
 {
 	if (_SumonedMonster != nullptr)
 	{
+
 		for (int i = 0; i <= 4; ++i)
 		{
 			FVector SpawLocation = GetActorLocation() + FMath::VRand() * 200.0f;
@@ -209,7 +205,7 @@ void AEpicMonster_witch::testDecalSkill()
 		playerPos.Z = 0.0f;
 		FVector DecalPos = playerPos + FVector(X, Y, 0.0f);
 
-
+		
 
 
 		AMagicDecal* decal = GetWorld()->SpawnActor<AMagicDecal>(_tedecal, fireLocation, FRotator::ZeroRotator);
@@ -219,6 +215,9 @@ void AEpicMonster_witch::testDecalSkill()
 
 			UE_LOG(LogTemp, Error, TEXT("Test Decal"));
 			
+			_monster_Epic_AnimInstance->PlayAttackDotrMontage();
+			_curAttackIndex = 0;
+
 			decal->Active(DecalPos);  
 			decal->SetLifeSpan(10.0f);
 		}

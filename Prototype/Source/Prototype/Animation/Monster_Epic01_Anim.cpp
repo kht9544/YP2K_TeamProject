@@ -24,6 +24,14 @@ UMonster_Epic01_Anim::UMonster_Epic01_Anim()
 		_attackFarMontage = Monster_Epic_01_AttackFar.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Monster_Epic_01_AttackMagic
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/EpicMonster/EpicMonster01_AnimMontage_Far.EpicMonster01_AnimMontage_Far2'"));
+
+	if (Monster_Epic_01_AttackMagic.Succeeded())
+	{
+		_attackMagicMontage = Monster_Epic_01_AttackMagic.Object;
+	}
+
 }
 
 void UMonster_Epic01_Anim::NativeUpdateAnimation(float DeltaSeconds)
@@ -55,4 +63,9 @@ void UMonster_Epic01_Anim::AnimNotify_Death()
 void UMonster_Epic01_Anim::PlayAttackFarMontage()
 {
 	Super::PlayAttackFarMontage();
+}
+
+void UMonster_Epic01_Anim::PlayAttackDotrMontage()
+{
+	Super::PlayAttackDotrMontage();
 }

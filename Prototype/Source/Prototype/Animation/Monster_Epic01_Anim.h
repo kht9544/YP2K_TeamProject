@@ -26,7 +26,7 @@ public:
 
 	virtual void PlayAttackFarMontage() override;
 
-
+	virtual void PlayAttackDotrMontage() override;
 
 	AttackDelegate _attackDelegate;
 
