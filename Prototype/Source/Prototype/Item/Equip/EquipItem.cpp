@@ -2,6 +2,7 @@
 #include "Base/MyGameInstance.h"
 #include "Item/BaseItem.h"
 #include "../../Player/MyPlayer.h"
+#include "Component/StatComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -89,5 +90,7 @@ void AEquipItem::UseItem()
     {
         EquipPlayer();
         _player->ItemEquipped.Broadcast(this);
+
+        _player->GetStatComponent()->ModStat(_ModStatType, _Value);
     }
 }

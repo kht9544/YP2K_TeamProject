@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseItem.generated.h"
 
+enum class StatType;
+
 UENUM()
 enum class ItemType
 {
@@ -26,6 +28,8 @@ struct FItemData : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ItemType _Type;
+
+	//TODO : Add ModStatType in ItemTable, EquipTable
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString _Description;
@@ -95,6 +99,7 @@ protected:
 
 	FString _Name;
 	ItemType _Type;
+	StatType _ModStatType;
 	FString _Description;
 	int32 _Price;
 	int32 _Value;

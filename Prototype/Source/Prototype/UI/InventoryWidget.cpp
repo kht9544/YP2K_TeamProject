@@ -28,6 +28,7 @@ bool UInventoryWidget::Initialize()
 	bool result = Super::Initialize();
 
 	SetItemButtons();
+	SetStats();
 
 	Button_[0]->OnClicked.AddDynamic(this, &UInventoryWidget::TargetItem0);
 	Button_[1]->OnClicked.AddDynamic(this, &UInventoryWidget::TargetItem1);
@@ -78,7 +79,7 @@ void UInventoryWidget::SetStats()
 		UTextBlock* textblock = Cast<UTextBlock>(widgets[i]);
 		_originStat.Add(textblock);
 	}
-	for (int i = 15; i <= widgets.Num(); i++)
+	for (int i = 15; i < widgets.Num(); i++)
 	{
 		UTextBlock* textblock = Cast<UTextBlock>(widgets[i]);
 		_modStat.Add(textblock);
@@ -197,24 +198,23 @@ void UInventoryWidget::CheckCanEquip()
 	UpdateEquip();
 }
 
-void UInventoryWidget::UpdateStat(int32 statType, int32 amount)
+void UInventoryWidget::UpdateStat()
 {
-	UpdateOriginStat(statType, amount);
-	UpdateModStat(statType, amount);
+	_originStat[0]->SetText(_modStat[0]->GetText());
+	_originStat[1]->SetText(_modStat[1]->GetText());
+	_originStat[2]->SetText(_modStat[2]->GetText());
+	_originStat[3]->SetText(_modStat[3]->GetText());
+	_originStat[4]->SetText(_modStat[4]->GetText());
 }
 
 void UInventoryWidget::UpdateOriginStat(int32 statType, int32 amount)
 {
-	int32 slot = statType + 5;
-
-	//_originStat[slot]->SetText(FText::FromString(TEXT("%d", &amount)));
+	_originStat[statType]->SetText(FText::FromString(FString::FromInt(amount)));
 }
 
 void UInventoryWidget::UpdateModStat(int32 statType, int32 amount)
 {
-	int32 slot = statType + 15;
-
-	//_modStat[slot]->SetText(FText::FromString(TEXT("%d", &amount)));
+	_modStat[statType]->SetText(FText::FromString(FString::FromInt(amount)));
 }
 
 void UInventoryWidget::SetTargetItem(int32 slotIndex)

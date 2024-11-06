@@ -40,7 +40,7 @@ public:
 	void CheckCanEquip();
 
 
-	void UpdateStat(int32 statType, int32 amount);
+	void UpdateStat();
 	void UpdateOriginStat(int32 statType, int32 amount);
 	void UpdateModStat(int32 statType, int32 amount);
 

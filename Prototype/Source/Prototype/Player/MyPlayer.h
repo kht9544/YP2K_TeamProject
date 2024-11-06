@@ -43,6 +43,8 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
 
+	UStatComponent* GetStatComponent() { return _StatCom; }
+
 	UPROPERTY(BlueprintAssignable,Category = "Equipment")
 	FOnItemEquipped ItemEquipped;
 	
