@@ -23,8 +23,8 @@ EBTNodeResult::Type UBTTaskNode_FlyAttack::ExecuteTask(UBehaviorTreeComponent& O
 	if (character == nullptr)
 		return EBTNodeResult::Failed;
 
-
-	character->MeleeAttackhit();
+	character->Attack_AI();
+	//character->MeleeAttackhit();
 
 	_isAttacking = true;
 
