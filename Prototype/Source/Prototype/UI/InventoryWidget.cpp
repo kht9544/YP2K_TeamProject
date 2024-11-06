@@ -16,6 +16,7 @@
 #include "Item/BaseItem.h"
 #include "Item/Equip/EquipItem.h"
 #include "Item/Consumes/ConsumeItem.h"
+#include "Component/StatComponent.h"
 
 UInventoryWidget::UInventoryWidget(const FObjectInitializer& ObjectInitializer)
 	: UUserWidget(ObjectInitializer)
@@ -27,6 +28,7 @@ bool UInventoryWidget::Initialize()
 	bool result = Super::Initialize();
 
 	SetItemButtons();
+	SetStats();
 
 	Button_[0]->OnClicked.AddDynamic(this, &UInventoryWidget::TargetItem0);
 	Button_[1]->OnClicked.AddDynamic(this, &UInventoryWidget::TargetItem1);
@@ -60,7 +62,6 @@ void UInventoryWidget::SetItemButtons()
 		{
 			button->SetIndex(index);
 			button->SetIsEnabled(true);
-			//button->OnClicked.AddDynamic(this, UMyInventoryUI::ShowItem);
 			Button_.Add(button);
 
 			index++;
@@ -70,6 +71,19 @@ void UInventoryWidget::SetItemButtons()
 
 void UInventoryWidget::SetStats()
 {
+	TArray<UWidget*> widgets;
+	widgets = StatSlots->GetAllChildren();
+
+	for (int i = 5; i < 10; i++)
+	{
+		UTextBlock* textblock = Cast<UTextBlock>(widgets[i]);
+		_originStat.Add(textblock);
+	}
+	for (int i = 15; i < widgets.Num(); i++)
+	{
+		UTextBlock* textblock = Cast<UTextBlock>(widgets[i]);
+		_modStat.Add(textblock);
+	}
 }
 
 void UInventoryWidget::UpdateSlot(int32 slotIndex, ABaseItem* item)
@@ -182,6 +196,25 @@ void UInventoryWidget::CheckCanEquip()
 	}
 
 	UpdateEquip();
+}
+
+void UInventoryWidget::UpdateStat()
+{
+	_originStat[0]->SetText(_modStat[0]->GetText());
+	_originStat[1]->SetText(_modStat[1]->GetText());
+	_originStat[2]->SetText(_modStat[2]->GetText());
+	_originStat[3]->SetText(_modStat[3]->GetText());
+	_originStat[4]->SetText(_modStat[4]->GetText());
+}
+
+void UInventoryWidget::UpdateOriginStat(int32 statType, int32 amount)
+{
+	_originStat[statType]->SetText(FText::FromString(FString::FromInt(amount)));
+}
+
+void UInventoryWidget::UpdateModStat(int32 statType, int32 amount)
+{
+	_modStat[statType]->SetText(FText::FromString(FString::FromInt(amount)));
 }
 
 void UInventoryWidget::SetTargetItem(int32 slotIndex)

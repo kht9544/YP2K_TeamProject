@@ -14,6 +14,16 @@ DECLARE_MULTICAST_DELEGATE_OneParam(PlMP, float);
 DECLARE_MULTICAST_DELEGATE_OneParam(PIEXP, float);
 DECLARE_MULTICAST_DELEGATE_OneParam(PILevel, int32);
 
+UENUM()
+enum class StatType
+{
+	HP,
+	MP,
+	STR,
+	DEX,
+	INT
+};
+
 USTRUCT()
 struct FMyStatData : public FTableRowBase
 {
@@ -96,8 +106,6 @@ public:
 	void SetStun(bool stun){_stunned = stun;}
 	float HpRatio() { return _curHp / (float)_maxHp; }
 
-
-
 	void SetHp(int32 hp);
 	void SetMp(int32 mp);
 	int AddCurHp(int32 amount);
@@ -105,6 +113,8 @@ public:
 
 	void AddAttackDamage(float amount);
 	void AddExp(int32 amount);
+
+	void ModStat(StatType stat, int32 amount);
 
 	void SetLevelInit(int level);
 	// cheol 에픽몬스터 
@@ -133,21 +143,36 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _maxHp;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
+	int32 _modHp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _curMp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _maxMp;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
+	int32 _modMp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _str;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
+	int32 _modStr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _dex;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
+	int32 _modDex;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _int;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
+	int32 _modInt;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _attackDamage;

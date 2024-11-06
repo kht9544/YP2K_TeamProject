@@ -10,7 +10,7 @@
 #include "../Item/BaseItem.h"
 #include "MyGameInstance.generated.h"
 
-
+#define GAMEINSTANCE Cast<UMyGameInstance>(GetWorld()->GetGameInstance())
 #define UIManager Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()
 #define T_DEFAULT Cast<UMyGameInstance>(GetWorld()->GetGameInstance())->GetUIManager()->GetDefaultTexture()
 #define SoundManager Cast<UMyGameInstance>(GetGameInstance())->GetSoundManager()

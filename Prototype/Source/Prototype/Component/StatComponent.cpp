@@ -3,6 +3,9 @@
 
 #include "Component/StatComponent.h"
 #include "Base/MyGameInstance.h"
+#include "Base/Managers/UIManager.h"
+#include "UI/InventoryWidget.h"
+#include "Player/MyPlayer.h"
 #include "Player/MyPlayerController.h"
 #include "TimerManager.h"
 
@@ -53,12 +56,11 @@ void UStatComponent::SetLevelInit(int level)
 	// 실행하고 중단점 잡고 데이터테이블 값은 몇으로 나오는지 실행해볼것
 	// 스탯데이터테이블도 다시 만들어보기
 
-	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	FMyStatData* Data = nullptr;
 
-	if (myGameInstance)
+	if (GAMEINSTANCE)
 	{
-		Data = myGameInstance->GetStatDataByLevel(level);
+		Data = GAMEINSTANCE->GetStatDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
 		_maxMp = Data->MaxMP;
@@ -72,6 +74,16 @@ void UStatComponent::SetLevelInit(int level)
 		_bonusPoint = Data->BonusPoint;
 		_PILevelDelegate.Broadcast(_level);
 
+		if (Cast<AMyPlayer>(GetOwner()))
+		{
+			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::HP, _maxHp);
+			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::MP, _maxMp);
+			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::STR, _str);
+			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::DEX, _dex);
+			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::INT, _int);
+
+			UIManager->GetInventoryUI()->UpdateStat();
+		}
 	}
 
 }
@@ -327,7 +339,21 @@ void UStatComponent::AddExp(int32 amount)
 	_PlEXPDelegate.Broadcast(ratio);
 }
 
-
-
-
-
+void UStatComponent::ModStat(StatType stat, int32 amount)
+{
+	switch (stat)
+	{
+	case StatType::HP:
+		break;
+	case StatType::MP:
+		break;
+	case StatType::STR:
+		break;
+	case StatType::DEX:
+		break;
+	case StatType::INT:
+		break;
+	default:
+		break;
+	}
+}

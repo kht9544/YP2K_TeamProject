@@ -39,6 +39,11 @@ public:
 
 	void CheckCanEquip();
 
+
+	void UpdateStat();
+	void UpdateOriginStat(int32 statType, int32 amount);
+	void UpdateModStat(int32 statType, int32 amount);
+
 private:
 	void SetTargetItem(int32 slotIndex);
 	UFUNCTION()
@@ -122,4 +127,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UUniformGridPanel* StatSlots;
 	
+	UPROPERTY(meta = (BindWidget))
+	TArray<class UTextBlock*> _originStat;
+	
+	UPROPERTY(meta = (BindWidget))
+	TArray<class UTextBlock*> _modStat;
 };
