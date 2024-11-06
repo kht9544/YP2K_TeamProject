@@ -176,8 +176,14 @@ void AEpicMonster_witch::testDecalSkill()
 		FVector forward = GetActorForwardVector();
 		FVector fireLocation = GetActorLocation() + (forward * 150);
 		fireLocation.Z -= 90.0f;
-		// 데칼 생성 위치 랜덤? fireLocation 값 랜덤하게 반경은 ? 
 		FRotator fireRotation = forward.Rotation();
+
+		float randFloat = FMath::FRandRange(0, PI * 2.0f);
+		float X = cosf(randFloat) * 600.0f;
+		float Y = sinf(randFloat) * 600.0f;
+		FVector playerPos = GetOwner()->GetActorLocation();
+		playerPos.Z = 0.0f;
+		FVector DecalPos = playerPos + FVector(X, Y, 0.0f);
 
 
 
@@ -188,11 +194,8 @@ void AEpicMonster_witch::testDecalSkill()
 		{
 
 			UE_LOG(LogTemp, Error, TEXT("Test Decal"));
-			//decal->
-			decal->Active(fireLocation);  // 데칼 위치 활성화
-
-			//	decal->SetDecalDamgage(100);
-				//decal->SetActorScale3D(FVector(3.0f, 3.0f, 1.0f));  
+			
+			decal->Active(DecalPos);  
 			decal->SetLifeSpan(5.0f);
 		}
 	}
