@@ -30,6 +30,21 @@ UMonster_Boss01_AnimInstance::UMonster_Boss01_AnimInstance()
 	{
 		_myStunMontage = BM_03.Object;
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No stun"));
+	}
+
+	// Dash
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> BM_04
+	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/BossMonster/BossMonster01_Dashing.BossMonster01_Dashing'"));
+	if (BM_04.Succeeded())
+	{
+		_myDashingMontage = BM_04.Object;
+	}
+
+
+
 }
 
 void UMonster_Boss01_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -45,6 +60,11 @@ void UMonster_Boss01_AnimInstance::PlayAttackMontage()
 void UMonster_Boss01_AnimInstance::PlayStunMontage()
 {
 	Super::PlayStunMontage();
+}
+
+void UMonster_Boss01_AnimInstance::PlayDashMontage()
+{
+	Super::PlayDashMontage();
 }
 
 void UMonster_Boss01_AnimInstance::PlayUpAttackMontage()
@@ -68,6 +88,11 @@ void UMonster_Boss01_AnimInstance::AnimNotify_Attackhit()
 void UMonster_Boss01_AnimInstance::AnimNotify_Death()
 {
 	_deathDelegate.Broadcast();
+}
+
+void UMonster_Boss01_AnimInstance::AnimNotify_StunEnd()
+{
+	_stunDelegate.Broadcast();
 }
 
 

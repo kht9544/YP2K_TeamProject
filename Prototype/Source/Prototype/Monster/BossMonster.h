@@ -23,11 +23,14 @@ public:
 	void JumpAttack(FVector TargetLocation);
 	bool GetIsDashing(){return IsDashing;}
 	bool GetIsJumping(){return IsJumping;}
+	bool GetIsStun(){return IsStun;}
 	virtual void Landed(const FHitResult& Hit) override;
 
 	void Dash(FVector TargetLocation);
 	void DashEnd();
 	void UpdateDash();
+	void StunEnd();
+	void DestroyObstacle();
 
 
 	//void SpawnObstacles();
@@ -47,7 +50,7 @@ private:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
-    TSubclassOf<class AMyDecal> _decal;
+    TSubclassOf<class ADecalActor> _decal;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Obstacle", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ABossObstacle> _obstacle;
@@ -57,10 +60,11 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
 
-	int ObstacleDestroyCount = 0;
+	int32 ObstacleDestroyCount;
 
 	bool IsJumping = false;
 	bool IsDashing = false;
+	bool IsStun = false;
 
 	float JumpStartTime; 
     float JumpDuration;

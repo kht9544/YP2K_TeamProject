@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController_NormalMonster.h"
 #include "../Monster.h"
+#include "../BossMonster.h"
 #include "../../Player/MyPlayer.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/OverlapResult.h"
@@ -27,6 +28,13 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent &OwnerComp, uint8 *N
     auto world = GetWorld();
     FVector center = currentPawn->GetActorLocation();
     float searchRadius = 500.0f;
+
+    ABossMonster* boss = Cast<ABossMonster>(currentPawn);
+    if(boss!=nullptr)
+    {
+        searchRadius = 3000.f;
+    }
+
 
     if (world == nullptr)
         return;

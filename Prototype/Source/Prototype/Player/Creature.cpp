@@ -86,7 +86,7 @@ void ACreature::AttackHit()
 			{
 				FDamageEvent DamageEvent;
 				//TODO: 데미지 변경
-				hitResult.GetActor()->TakeDamage(10.0f, DamageEvent, GetController(), this);
+				hitResult.GetActor()->TakeDamage(_StatCom->GetStr(), DamageEvent, GetController(), this);
 
 				_hitPoint = hitResult.ImpactPoint;
 				SoundManager->PlaySound(*GetHitSoundName(), _hitPoint);

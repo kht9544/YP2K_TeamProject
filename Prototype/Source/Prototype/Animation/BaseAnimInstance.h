@@ -9,6 +9,7 @@
 
 DECLARE_MULTICAST_DELEGATE(AttackDelegate);
 DECLARE_MULTICAST_DELEGATE(DeathDelegate);
+DECLARE_MULTICAST_DELEGATE(StunEndDelegate);
 
 UCLASS()
 class PROTOTYPE_API UBaseAnimInstance : public UAnimInstance
@@ -20,8 +21,13 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void JumpToSection(int32 sectionIndex);
 	virtual void PlayAttackMontage();
+	// BossMonster
 	virtual void PlayStunMontage();
-
+	virtual void PlayDashMontage();
+	//EpicMonster
+	virtual void PlayAttackFarMontage();
+	virtual void PlayAttackMagicMontage();
+	
 	//UFUNCTION(BlueprintCallable) 블루프린트와 연결하려면 이것사용
 	void PlayHitReactionMontage();
 
@@ -46,8 +52,23 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* HitReactionMontage;
 
+
+	// BossMonster
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stun", Meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _myStunMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stun", Meta = (AllowPrivateAccess = true))
+	class UAnimMontage* _myDashingMontage;
+
+
+	// EpicMonster
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = true))
+	class UAnimMontage* _attackFarMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = true))
+	class UAnimMontage* _attackMagicMontage;
 
 
 

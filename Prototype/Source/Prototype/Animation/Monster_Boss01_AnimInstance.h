@@ -19,9 +19,11 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	virtual void PlayAttackMontage()override;
+	virtual void PlayAttackMontage() override;
 
-	virtual void PlayStunMontage()override;
+	virtual void PlayStunMontage() override;
+
+	virtual void PlayDashMontage() override;
 
 	//어퍼컷
 	void PlayUpAttackMontage();
@@ -31,12 +33,16 @@ public:
 	AttackDelegate _attackDelegate;
 
 	DeathDelegate _deathDelegate;
+	StunEndDelegate _stunDelegate;
 
 	UFUNCTION()
 	virtual void AnimNotify_Attackhit();
 
 	UFUNCTION()
 	virtual void AnimNotify_Death();
+
+	UFUNCTION()
+	virtual void AnimNotify_StunEnd();
 
 	//UFUNCTION()
 	//virtual void AnimNotify_StunEnd();

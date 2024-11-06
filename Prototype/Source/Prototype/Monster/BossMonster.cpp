@@ -4,7 +4,7 @@
 #include "../Player/MyPlayer.h"
 #include "../Animation/Monster_Boss01_AnimInstance.h"
 #include "../Player/Creature.h"
-#include "../Player/MyDecal.h"
+#include "Engine/DecalActor.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Base/MyGameInstance.h"
 #include "../Base/Managers/SoundManager.h"
@@ -24,12 +24,13 @@ ABossMonster::ABossMonster()
 		GetMesh()->SetSkeletalMesh(SM.Object);
 	}
 
-	static ConstructorHelpers::FClassFinder<AMyDecal> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/BasicDecal_BP.BasicDecal_BP_C'"));
+	static ConstructorHelpers::FClassFinder<ADecalActor> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/DashDecal.DashDecal_C'"));
 	if (MD.Succeeded())
 	{
 		_decal = MD.Class;
 	}
 
+	ObstacleDestroyCount = 0;
 	_exp = 1;
 }
 
@@ -52,6 +53,7 @@ void ABossMonster::PostInitializeComponents()
 		_bossMonster01_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
 		_bossMonster01_AnimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
 		_bossMonster01_AnimInstance->_deathDelegate.AddUObject(this, &AMonster::Disable);
+		_bossMonster01_AnimInstance->_stunDelegate.AddUObject(this, &ABossMonster::StunEnd);
 	}
 }
 
@@ -101,15 +103,15 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 
 	SoundManager->PlaySound(*GetGuardOff(), _hitPoint);
 
-	if(ObstacleDestroyCount >=5)
+	if (ObstacleDestroyCount >= 5)
 	{
 		_StatCom->AddCurHp(-Damage);
 	}
 	else
 	{
-		_StatCom->AddCurHp(-Damage/(5-ObstacleDestroyCount));
+		UE_LOG(LogTemp, Warning, TEXT("Boss Takedamage : %f"), Damage / (5 - ObstacleDestroyCount));
+		_StatCom->AddCurHp(-Damage / (5 - ObstacleDestroyCount));
 	}
-
 
 	if (_StatCom->IsDead())
 	{
@@ -125,8 +127,6 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 	return 0.0f;
 }
 
-
-
 bool ABossMonster::PerformGimmick()
 {
 	UE_LOG(LogTemp, Warning, TEXT("StartGimmick"));
@@ -136,7 +136,7 @@ bool ABossMonster::PerformGimmick()
 
 void ABossMonster::JumpAttack(FVector TargetLocation)
 {
-	if (IsJumping)
+	if (IsJumping || IsStun || IsDashing)
 		return;
 
 	JumpStartTime = GetWorld()->GetTimeSeconds();
@@ -157,17 +157,12 @@ void ABossMonster::JumpAttack(FVector TargetLocation)
 	JumpVelocity.Z = JumpVelocityZ;
 
 	FRotator LookAtRotation = (TargetLocation - CurrentLocation).Rotation();
-    SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
+	SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
 
 	FVector LandingLocation = TargetLocation;
 	LandingLocation.Z -= 98.0f;
 
 	LaunchCharacter(JumpVelocity, true, true);
-
-	if (_decal)
-	{
-		AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_decal, LandingLocation, FRotator::ZeroRotator);
-	}
 }
 
 void ABossMonster::Landed(const FHitResult &Hit)
@@ -177,28 +172,52 @@ void ABossMonster::Landed(const FHitResult &Hit)
 	float LandTime = GetWorld()->GetTimeSeconds();
 	JumpDuration = LandTime - JumpStartTime;
 	IsJumping = false;
-
 }
-
-
 
 void ABossMonster::Dash(FVector TargetLocation)
 {
-    if (IsDashing)
-        return;
+	if (IsDashing || IsStun || IsJumping)
+		return;
 	IsDashing = true;
 
-    FVector StartLocation = GetActorLocation(); 
-    DashDirection = (TargetLocation - StartLocation).GetSafeNormal();
-    DashDirection.Z = 0.f;
+	if (IsDashing == true)
+	{
+		_bossMonster01_AnimInstance->PlayDashMontage();
+	}
 
-    DashEndLocation = StartLocation + DashDirection * DashDistance;
+	FVector StartLocation = GetActorLocation();
+	DashDirection = (TargetLocation - StartLocation).GetSafeNormal();
+	DashDirection.Z = 0.f;
 
-    FRotator LookAtRotation = DashDirection.Rotation();
-    SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
+	DashEndLocation = StartLocation + DashDirection * DashDistance;
+
+	FRotator LookAtRotation = DashDirection.Rotation();
+
+	if (_decal)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawn decal"));
+		FVector location = GetActorLocation();
+
+		FVector forwardVector = GetActorForwardVector();
+		float decalLengthOffset = 1300.0f;
+		location += forwardVector * decalLengthOffset;
+		location.Z = 0.0f;
+
+		ADecalActor* Decal = GetWorld()->SpawnActor<ADecalActor>(_decal, location, LookAtRotation);
+		if (Decal)
+		{
+			Decal->SetLifeSpan(1.0f);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No decal"));
+	}
+
+	SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
 
 	FTimerHandle DashTimerHandle;
-     GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
+	GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
 }
 
 void ABossMonster::Tick(float DeltaTime)
@@ -216,17 +235,17 @@ void ABossMonster::Tick(float DeltaTime)
 		if (HitResult.bBlockingHit)
 		{
 			DashEnd();
-			AMyPlayer* Player = Cast<AMyPlayer>(HitResult.GetActor());
-			if(Player!=nullptr)
+			AMyPlayer *Player = Cast<AMyPlayer>(HitResult.GetActor());
+			if (Player != nullptr)
 			{
 				if (_bossMonster01_AnimInstance)
-                {
-                    _bossMonster01_AnimInstance->PlayUpAttackMontage();
-                }
+				{
+					_bossMonster01_AnimInstance->PlayUpAttackMontage();
+				}
 				FVector ThrowDirection = (Player->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 				ThrowDirection.Z = 1.f;
-                FVector ThrowForce = ThrowDirection * 1000.0f;
-                Player->LaunchCharacter(ThrowForce, true, true);
+				FVector ThrowForce = ThrowDirection * 1000.0f;
+				Player->LaunchCharacter(ThrowForce, true, true);
 			}
 		}
 		else if (FVector::DistSquared(NewLocation, DashEndLocation) <= KINDA_SMALL_NUMBER)
@@ -236,12 +255,21 @@ void ABossMonster::Tick(float DeltaTime)
 	}
 }
 
-
-
 void ABossMonster::DashEnd()
 {
-    IsDashing = false;
-
-    GetCharacterMovement()->StopMovementImmediately();
+	IsDashing = false;
+	GetCharacterMovement()->StopMovementImmediately();
 }
 
+void ABossMonster::StunEnd()
+{
+	IsStun = false;
+}
+
+void ABossMonster::DestroyObstacle()
+{
+	IsStun = true;
+	ObstacleDestroyCount++;
+	_bossMonster01_AnimInstance->PlayStunMontage();
+	GetCharacterMovement()->StopMovementImmediately();
+}

@@ -60,6 +60,30 @@ void UBaseAnimInstance::PlayStunMontage()
 	}
 }
 
+void UBaseAnimInstance::PlayDashMontage()
+{
+	if (!Montage_IsPlaying(_myDashingMontage))
+	{
+		Montage_Play(_myDashingMontage);
+	}
+}
+
+void UBaseAnimInstance::PlayAttackFarMontage()
+{
+	if (!Montage_IsPlaying(_attackFarMontage))
+	{
+		Montage_Play(_attackFarMontage);
+	}
+}
+
+void UBaseAnimInstance::PlayAttackMagicMontage()
+{
+	if (!Montage_IsPlaying(_attackMagicMontage))
+	{
+		Montage_Play(_attackMagicMontage);
+	}
+}
+
 void UBaseAnimInstance::PlayHitReactionMontage()
 {
 	if (HitReactionMontage)
