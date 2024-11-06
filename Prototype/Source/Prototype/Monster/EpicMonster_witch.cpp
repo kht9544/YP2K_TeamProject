@@ -13,6 +13,8 @@
 #include "../Animation/Monster_N_AnimInstance.h"
 #include "Monster/AI/AIController_NormalMonster.h"
 
+#include "Monster/MagicDecal.h"
+
 AEpicMonster_witch::AEpicMonster_witch()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -23,6 +25,14 @@ AEpicMonster_witch::AEpicMonster_witch()
 	if (witch.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(witch.Object);
+	}
+
+	static ConstructorHelpers::FClassFinder<AMagicDecal> Wide
+	(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/MagicDecal_BP.MagicDecal_BP_C''"));
+
+	if (Wide.Succeeded())
+	{
+		_tedecal = Wide.Class;
 	}
 
 
@@ -154,6 +164,39 @@ void AEpicMonster_witch::SumonedMonster()
 			}
 
 			
+		}
+	}
+}
+
+void AEpicMonster_witch::testDecalSkill()
+{
+
+	if (_tedecal)
+	{
+		FVector forward = GetActorForwardVector();
+		FVector fireLocation = GetActorLocation() + (forward * 150);
+		fireLocation.Z -= 90.0f;
+		FRotator fireRotation = forward.Rotation();
+
+		float randFloat = FMath::FRandRange(0, PI * 2.0f);
+		float X = cosf(randFloat) * 600.0f;
+		float Y = sinf(randFloat) * 600.0f;
+		FVector playerPos = GetOwner()->GetActorLocation();
+		playerPos.Z = 0.0f;
+		FVector DecalPos = playerPos + FVector(X, Y, 0.0f);
+
+
+
+
+		AMagicDecal* decal = GetWorld()->SpawnActor<AMagicDecal>(_tedecal, fireLocation, FRotator::ZeroRotator);
+		
+		if (decal)
+		{
+
+			UE_LOG(LogTemp, Error, TEXT("Test Decal"));
+			
+			decal->Active(DecalPos);  
+			decal->SetLifeSpan(5.0f);
 		}
 	}
 }

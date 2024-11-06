@@ -43,7 +43,12 @@ public:
 
 	void SumonedMonster();
 
+	void testDecalSkill();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sumonedmonster, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ANormalMonster> _SumonedMonster;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AMagicDecal> _tedecal;
 };
