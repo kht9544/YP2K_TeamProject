@@ -26,7 +26,6 @@ AEffectManager::AEffectManager()
 	//Player : AttakHit Particle
 	CreateNiagaraClass(TEXT("P_Greystone_Novaborn_Primary_Impact"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_PlayerAttackHit_BP.P_PlayerAttackHit_BP_C'"));
 
-	
 }
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)

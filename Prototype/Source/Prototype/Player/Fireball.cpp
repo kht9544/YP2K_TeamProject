@@ -76,7 +76,7 @@ void AFireball::Tick(float DeltaTime)
         Player = nullptr;
         FVector Direction = (NearestMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 
-        _moveCom->Velocity = Direction * 1000.0f; 
+        _moveCom->Velocity = Direction * 2000.0f; 
 
         OrbitSpeed = 0.0f;
         OrbitRadius = 0.0f;
@@ -86,7 +86,7 @@ void AFireball::Tick(float DeltaTime)
 AMonster* AFireball::FindNearestMonster()
 {
 
-    float SearchRadius = OrbitRadius + 500.0f;
+    float SearchRadius = OrbitRadius + 300.0f;
     FVector FireballLocation = GetActorLocation();
 
     TArray<FHitResult> HitResults;

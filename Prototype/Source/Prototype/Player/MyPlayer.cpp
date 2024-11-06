@@ -207,7 +207,7 @@ void AMyPlayer::BeginPlay()
 		_MiniMap->AddToViewport();
 	}
 
-	AMyPlayerController* MyController = Cast<AMyPlayerController>(GetController());
+	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
 	{
 		_skillWidgetInstance = MyController->SkillWidgetInstance;
@@ -503,9 +503,17 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 			if (PlayerAnimInstance)
 			{
-				PlayerAnimInstance->PlaySkill01Montage(); // Skill1 Animation
+				PlayerAnimInstance->PlaySkill01Montage();
 			}
 			SoundManager->PlaySound(*GetSkillSound01(), _hitPoint);
+
+			if (_StatCom->GetInt() >= 40)
+			{
+				FVector TeleportLocation = GetActorLocation() + DashDirection * _dashSpeed * 1.0f;
+				SetActorLocation(TeleportLocation, true);
+
+				bIsDashing = false;
+			}
 		}
 	}
 }
@@ -588,23 +596,23 @@ void AMyPlayer::Skill3(const FInputActionValue &value)
 			_skillWidgetInstance->StartCooldown(2, 5.0f);
 			if (_fireball != nullptr)
 			{
-				int FireballCount = _StatCom->GetInt()/10;						 
-				FRotator spawnRotation = GetActorRotation(); 
+				int FireballCount = _StatCom->GetInt() / 10;
+				FRotator spawnRotation = GetActorRotation();
 
 				for (int i = 0; i < FireballCount; i++)
 				{
-					float Angle = (i * (360.0f / FireballCount)) * (PI / 180.0f); 
-					float Radius = 500.0f;										  
+					float Angle = (i * (360.0f / FireballCount)) * (PI / 180.0f);
+					float Radius = 500.0f;
 
 					FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 150.0f;
 					spawnLocation.X += FMath::Cos(Angle) * Radius;
 					spawnLocation.Y += FMath::Sin(Angle) * Radius;
 					spawnLocation.Z = GetActorLocation().Z;
 
-					UE_LOG(LogTemp, Warning, TEXT("X:%f,Y:%f,Z:%f"),spawnLocation.X,spawnLocation.Y,spawnLocation.Z);
-					AFireball* Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
+					UE_LOG(LogTemp, Warning, TEXT("X:%f,Y:%f,Z:%f"), spawnLocation.X, spawnLocation.Y, spawnLocation.Z);
+					AFireball *Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
 
-					if(Fireball)
+					if (Fireball)
 					{
 						Fireball->InitializeOrbit(Radius, Angle, FireballCount);
 					}
@@ -634,7 +642,7 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 
 void AMyPlayer::Mouse(const FInputActionValue &value)
 {
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	APlayerController *PlayerController = Cast<APlayerController>(GetController());
 
 	if (PlayerController)
 	{
@@ -657,7 +665,7 @@ void AMyPlayer::GuardEnd(const FInputActionValue &value)
 {
 	bIsGuarding = false;
 
-	UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	if (PlayerAnimInstance)
 	{
 		PlayerAnimInstance->PlayGuardMontage(bIsGuarding);
@@ -698,7 +706,7 @@ void AMyPlayer::LockOn(const FInputActionValue &value)
 				if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Pawn, CollisionParams))
 				{
 					DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
-					AMonster* monster = Cast<AMonster>(HitResult.GetActor());
+					AMonster *monster = Cast<AMonster>(HitResult.GetActor());
 					if (monster != nullptr)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("LockOnMonster"));
@@ -716,7 +724,7 @@ void AMyPlayer::GuardStart(const FInputActionValue &value)
 	bIsGuarding = true;
 
 	// Animation
-	UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	if (PlayerAnimInstance)
 	{
 		PlayerAnimInstance->PlayGuardMontage(bIsGuarding);
