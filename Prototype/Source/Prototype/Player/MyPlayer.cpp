@@ -610,6 +610,9 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 			return;
 		else
 		{
+			_StatCom->SetStatBoost(_StatCom->GetInt());
+
+
 			SkillOnCooldown[3] = true;
 			_skillWidgetInstance->StartCooldown(3, 10.0f);
 		}

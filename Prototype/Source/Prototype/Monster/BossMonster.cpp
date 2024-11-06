@@ -4,6 +4,7 @@
 #include "../Player/MyPlayer.h"
 #include "../Animation/Monster_Boss01_AnimInstance.h"
 #include "../Player/Creature.h"
+#include "../Player/MyDecal.h"
 #include "Engine/DecalActor.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Base/MyGameInstance.h"
@@ -28,6 +29,12 @@ ABossMonster::ABossMonster()
 	if (MD.Succeeded())
 	{
 		_decal = MD.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder<AMyDecal> DA(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/BasicDecal_BP.BasicDecal_BP_C'"));
+	if (DA.Succeeded())
+	{
+		_landDecal = DA.Class;
 	}
 
 	ObstacleDestroyCount = 0;
@@ -163,6 +170,15 @@ void ABossMonster::JumpAttack(FVector TargetLocation)
 	LandingLocation.Z -= 98.0f;
 
 	LaunchCharacter(JumpVelocity, true, true);
+
+	if (_landDecal)
+	{
+		AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_landDecal, LandingLocation, FRotator::ZeroRotator);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("nolanddecal"));
+	}
 }
 
 void ABossMonster::Landed(const FHitResult &Hit)
@@ -193,26 +209,22 @@ void ABossMonster::Dash(FVector TargetLocation)
 
 	FRotator LookAtRotation = DashDirection.Rotation();
 
-	if (_decal)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawn decal"));
-		FVector location = GetActorLocation();
+	// if (_decal)
+	// {
+	// 	FVector location = GetActorLocation();
 
-		FVector forwardVector = GetActorForwardVector();
-		float decalLengthOffset = 1300.0f;
-		location += forwardVector * decalLengthOffset;
-		location.Z = 0.0f;
+	// 	FVector forwardVector = GetActorForwardVector();
+	// 	float decalLengthOffset = 1300.0f;
+	// 	location += forwardVector * decalLengthOffset;
+	// 	location.Z = 0.0f;
 
-		ADecalActor* Decal = GetWorld()->SpawnActor<ADecalActor>(_decal, location, LookAtRotation);
-		if (Decal)
-		{
-			Decal->SetLifeSpan(1.0f);
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No decal"));
-	}
+	// 	ADecalActor* Decal = GetWorld()->SpawnActor<ADecalActor>(_decal, location, LookAtRotation);
+	// 	if (Decal)
+	// 	{
+	// 		Decal->SetLifeSpan(1.0f);
+	// 	}
+	// }
+
 
 	SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
 

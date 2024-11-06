@@ -52,6 +52,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class ADecalActor> _decal;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<class AMyDecal> _landDecal;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Obstacle", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ABossObstacle> _obstacle;
 

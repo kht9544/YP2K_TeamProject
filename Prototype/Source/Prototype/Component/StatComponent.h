@@ -92,6 +92,7 @@ public:
 	void SetStr(int32 newstr);
 	void SetDex(int32 newdex);
 	void SetInt(int32 newint);
+	void SetStatBoost(int32 rate);
 	void SetStun(bool stun){_stunned = stun;}
 	float HpRatio() { return _curHp / (float)_maxHp; }
 
