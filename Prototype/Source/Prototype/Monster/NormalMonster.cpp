@@ -22,6 +22,7 @@ ANormalMonster::ANormalMonster()
 		GetMesh()->SetSkeletalMesh(PS.Object);
 	}
 
+	_exp = 50;
 	_launchLength = 1000.0f;
 	_upVector = {0.0f,0.0f,200.f};
 }

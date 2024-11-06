@@ -54,6 +54,7 @@ void AEpicProjectile::BeginPlay()
 
 	GetWorldTimerManager().SetTimer(_timerHandle, this, &AEpicProjectile::Disable, 1.5f, false);
 
+
 }
 
 // Called every frame
@@ -106,11 +107,11 @@ void AEpicProjectile::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedCompon
 
 
 		}
-
+		Disable();
 	}
 
 
-	auto player = Cast<AMyPlayer>(OtherActor);
+	//auto player = Cast<AMyPlayer>(OtherActor);
 	//Disable();
 	
 }
