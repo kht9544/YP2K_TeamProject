@@ -25,6 +25,8 @@ public:
 	void testDecalSkill();
 	void MeleeAttackhit();
 
+	virtual void Attack_AI() override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,7 +37,6 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	virtual void Attack_AI() override;
 
 
 
