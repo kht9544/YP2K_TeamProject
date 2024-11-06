@@ -25,7 +25,7 @@ public:
 
 
 	virtual void PlayAttackFarMontage() override;
-	virtual void PlayAttackMagicMontage() override;
+
 
 
 	AttackDelegate _attackDelegate;
@@ -37,5 +37,7 @@ public:
 
 	UFUNCTION()
 	virtual void AnimNotify_Death();
+
+
 
 };

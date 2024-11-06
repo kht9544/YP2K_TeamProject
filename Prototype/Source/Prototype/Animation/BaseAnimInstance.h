@@ -26,7 +26,7 @@ public:
 	virtual void PlayDashMontage();
 	//EpicMonster
 	virtual void PlayAttackFarMontage();
-	virtual void PlayAttackMagicMontage();
+
 	
 	//UFUNCTION(BlueprintCallable) 블루프린트와 연결하려면 이것사용
 	void PlayHitReactionMontage();
@@ -66,9 +66,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = true))
 	class UAnimMontage* _attackFarMontage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = true))
-	class UAnimMontage* _attackMagicMontage;
 
 
 

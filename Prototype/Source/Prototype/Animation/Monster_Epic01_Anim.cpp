@@ -15,22 +15,13 @@ UMonster_Epic01_Anim::UMonster_Epic01_Anim()
 		_myAnimMontage = Monster_Epic_01_AttackNear.Object;
 	}
 
-	// 원거리공격 몽타주
+	// 원거리공격, 도트마법 몽타주
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> Monster_Epic_01_AttackFar
 	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/EpicMonster/EpicMonster01_AnimMontage_Far.EpicMonster01_AnimMontage_Far'"));
 
 	if (Monster_Epic_01_AttackFar.Succeeded())
 	{
 		_attackFarMontage = Monster_Epic_01_AttackFar.Object;
-	}
-
-	// 도트마법 몽타주
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> Monster_Epic_01_Magic
-	(TEXT("/Script/Engine.AnimMontage'/Game/Blueprint/Animation/Monster/EpicMonster/EpicMonster01_AnimMontage_Far2.EpicMonster01_AnimMontage_Far2'"));
-
-	if (Monster_Epic_01_Magic.Succeeded())
-	{
-		_attackMagicMontage = Monster_Epic_01_Magic.Object;
 	}
 
 }
@@ -50,15 +41,6 @@ void UMonster_Epic01_Anim::JumpToSection(int32 sectionIndex)
 	Super::JumpToSection(sectionIndex);
 }
 
-void UMonster_Epic01_Anim::PlayAttackFarMontage()
-{
-	Super::PlayAttackFarMontage();
-}
-
-void UMonster_Epic01_Anim::PlayAttackMagicMontage()
-{
-	Super::PlayAttackMagicMontage();
-}
 
 void UMonster_Epic01_Anim::AnimNotify_Attackhit()
 {
@@ -70,3 +52,7 @@ void UMonster_Epic01_Anim::AnimNotify_Death()
 	_death_Epic_MonsterDelegate.Broadcast();
 }
 
+void UMonster_Epic01_Anim::PlayAttackFarMontage()
+{
+	Super::PlayAttackFarMontage();
+}

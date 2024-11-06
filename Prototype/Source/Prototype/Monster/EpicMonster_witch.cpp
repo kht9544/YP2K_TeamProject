@@ -15,6 +15,9 @@
 
 #include "Monster/MagicDecal.h"
 
+#include "../Animation/Monster_Epic01_Anim.h"
+
+
 AEpicMonster_witch::AEpicMonster_witch()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -56,13 +59,22 @@ void AEpicMonster_witch::PostInitializeComponents()
 		_StatCom->SetEpicLevelInit(1);
 	}
 
-	auto _monster_N_AnimInstance = Cast<UMonster_N_AnimInstance>(GetMesh()->GetAnimInstance());
+	_monster_Epic_AnimInstance = Cast<UMonster_Epic01_Anim>(GetMesh()->GetAnimInstance());
+	if (_monster_Epic_AnimInstance->IsValidLowLevelFast())
+	{
+		_monster_Epic_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
+		_monster_Epic_AnimInstance->_attackDelegate.AddUObject(this, &AEpicMonster_witch::MeleeAttackhit);
+		_monster_Epic_AnimInstance->_death_Epic_MonsterDelegate.AddUObject(this, &AMonster::Disable);
+
+	}
+
+	/*auto _monster_N_AnimInstance = Cast<UMonster_N_AnimInstance>(GetMesh()->GetAnimInstance());
 	if (_monster_N_AnimInstance->IsValidLowLevelFast())
 	{
 		_monster_N_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
 		_monster_N_AnimInstance->_attackDelegate.AddUObject(this, &AEpicMonster_witch::MeleeAttackhit);
 		_monster_N_AnimInstance->_death_N_MonsterDelegate.AddUObject(this, &AMonster::Disable);
-	}
+	}*/
 }
 
 void AEpicMonster_witch::Tick(float DeltaTime)
@@ -117,6 +129,18 @@ void AEpicMonster_witch::MeleeAttackhit()
 
 void AEpicMonster_witch::Attack_AI()
 {
+
+	if (_isAttacking == false && _monster_Epic_AnimInstance != nullptr)
+	{
+		_monster_Epic_AnimInstance->PlayAttackMontage();
+		_isAttacking = true;
+
+		_curAttackIndex %= 2;
+		_curAttackIndex++;
+
+		_monster_Epic_AnimInstance->JumpToSection(_curAttackIndex);
+	}
+
 
 }
 

@@ -48,4 +48,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AMagicDecal> _tedecal;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	class UMonster_Epic01_Anim* _monster_Epic_AnimInstance;
+
 };
