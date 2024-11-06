@@ -35,6 +35,7 @@ AEpicMonster_witch::AEpicMonster_witch()
 		_tedecal = Wide.Class;
 	}
 
+	_exp = 70;
 
 	AIControllerClass = AAIController_Epic::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -195,7 +196,7 @@ void AEpicMonster_witch::testDecalSkill()
 			UE_LOG(LogTemp, Error, TEXT("Test Decal"));
 			
 			decal->Active(DecalPos);  
-			decal->SetLifeSpan(5.0f);
+			decal->SetLifeSpan(10.0f);
 		}
 	}
 }
