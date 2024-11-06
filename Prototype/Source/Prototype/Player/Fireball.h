@@ -23,24 +23,22 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    // Movement component for projectile movement
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-    class UProjectileMovementComponent* ProjectileMovement;
 
-    // Collision component
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-    class USphereComponent* CollisionComponent;
 
-    // Visual representation
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Visual")
-    class UStaticMeshComponent* MeshComponent;
+private:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement",meta=(AllowPrivateAccess = true))
+    class UProjectileMovementComponent* _moveCom;
 
-    // Damage value
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision",meta=(AllowPrivateAccess = true))
+    class USphereComponent*  _sphereCom;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Visual",meta=(AllowPrivateAccess = true))
+    class UStaticMeshComponent* _meshCom;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat",meta=(AllowPrivateAccess = true))
     float _damage = 50.0f;
 
-    // Function for handling collision
-    UFUNCTION()
-    void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+    	UFUNCTION()
+	void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 };
 

@@ -16,34 +16,36 @@ class PROTOTYPE_API AEpicMonster_witch : public AMonster
 {
 	GENERATED_BODY()
 	
+public:
+
 	AEpicMonster_witch();
+
+	void MagicShot();
+	void SumonedMonster();
+	void testDecalSkill();
+	void MeleeAttackhit();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
-
-public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	void MeleeAttackhit();
-
 	virtual void Attack_AI() override;
 
-	//test shoot
+
+
+private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AEpicProjectile> _projectileClass;
 
-	void MagicShot();
-
-	void SumonedMonster();
-
-private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sumonedmonster, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ANormalMonster> _SumonedMonster;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AMagicDecal> _tedecal;
 };

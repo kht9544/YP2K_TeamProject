@@ -48,6 +48,7 @@ public:
 	
 
 
+
 	// witch	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage, meta = (AllowPrivateAccess = "true"))
 	class AEpicMonster_witch* _Witch;

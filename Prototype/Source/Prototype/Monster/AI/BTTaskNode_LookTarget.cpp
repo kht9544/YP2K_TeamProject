@@ -47,7 +47,7 @@ void UBTTaskNode_LookTarget::TickTask(UBehaviorTreeComponent &OwnerComp, uint8 *
     }
 
     FRotator CurrentRotation = Boss->GetActorRotation();
-    float InterpSpeed = 5.0f;
+    float InterpSpeed = 3.0f;
 
     FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaSeconds, InterpSpeed);
     Boss->SetActorRotation(NewRotation);
