@@ -85,12 +85,12 @@ void ACreature::AttackHit()
 			if (hitResult.GetActor() && hitResult.GetActor()->IsValidLowLevel())
 			{
 				FDamageEvent DamageEvent;
-				//TODO: 데미지 변경
 				hitResult.GetActor()->TakeDamage(_StatCom->GetStr(), DamageEvent, GetController(), this);
 
 				_hitPoint = hitResult.ImpactPoint;
 				SoundManager->PlaySound(*GetHitSoundName(), _hitPoint);
 				EffectManager->Play(*GetPlayerAttackHitEffect(), _hitPoint);
+				break;
 			}
 		}
 	}

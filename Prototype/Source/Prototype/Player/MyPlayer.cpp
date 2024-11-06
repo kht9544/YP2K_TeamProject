@@ -532,7 +532,7 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 		if (_lockOnMonster)
 		{
 			DecalLocation = _lockOnMonster->GetActorLocation();
-			DecalLocation.Z -= _lockOnMonster->GetActorLocation().Z; // Z값을 조정
+			DecalLocation.Z -= _lockOnMonster->GetActorLocation().Z;
 		}
 		else
 		{
@@ -564,8 +564,6 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 			}
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("Decal Location : %f"), DecalLocation.Z);
-
 		_skillWidgetInstance->StartCooldown(1, 5.0f);
 
 		UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
@@ -591,6 +589,13 @@ void AMyPlayer::Skill3(const FInputActionValue &value)
 		{
 			SkillOnCooldown[2] = true;
 			_skillWidgetInstance->StartCooldown(2, 5.0f);
+			 if (_fireball != nullptr)
+            {
+                FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 150.0f; 
+                FRotator spawnRotation = GetActorRotation();
+
+                AFireball* Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
+            }
 		}
 	}
 }
@@ -607,17 +612,6 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 		{
 			SkillOnCooldown[3] = true;
 			_skillWidgetInstance->StartCooldown(3, 10.0f);
-			 if (_fireball != nullptr)
-            {
-                FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f; 
-                FRotator spawnRotation = GetControlRotation();
-
-                AFireball* Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
-                if (Fireball)
-                {
-					UE_LOG(LogTemp, Warning, TEXT("Spawn fireball"));
-                }
-            }
 		}
 	}
 }
