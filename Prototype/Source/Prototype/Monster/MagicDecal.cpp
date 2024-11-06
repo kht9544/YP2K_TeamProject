@@ -57,7 +57,6 @@ void AMagicDecal::ApplyDamageToOverlappingPlayers()
             {
                 FDamageEvent DamageEvent;
                 Player->TakeDamage(_damageAmount, DamageEvent, nullptr, this);
-                UE_LOG(LogTemp, Warning, TEXT("Applying %f damage to player: %s"), _damageAmount, *Player->GetName());
             }
         }
     }
