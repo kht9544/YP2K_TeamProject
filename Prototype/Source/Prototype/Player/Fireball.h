@@ -9,36 +9,45 @@
 UCLASS()
 class PROTOTYPE_API AFireball : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AFireball();
+    GENERATED_BODY()
+
+public:    
+    // Sets default values for this actor's properties
+    AFireball();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-public:
+public:    
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
+    void InitializeOrbit(float InRadius, float InAngle, int InTotalFireballCount);
 
+    // Overlap event function
+    UFUNCTION()
+    void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement",meta=(AllowPrivateAccess = true))
-    class UProjectileMovementComponent* _moveCom;
+    UPROPERTY(VisibleAnywhere, Category = "Components")
+    class USphereComponent* _sphereCom;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision",meta=(AllowPrivateAccess = true))
-    class USphereComponent*  _sphereCom;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Visual",meta=(AllowPrivateAccess = true))
+    UPROPERTY(VisibleAnywhere, Category = "Components")
     class UStaticMeshComponent* _meshCom;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat",meta=(AllowPrivateAccess = true))
-    float _damage = 50.0f;
+    UPROPERTY(VisibleAnywhere, Category = "Movement")
+    class UProjectileMovementComponent* _moveCom;
 
-    	UFUNCTION()
-	void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
+    class AMyPlayer* Player;
+
+    FVector StartLocation;
+    float OrbitRadius;
+    float OrbitAngle;
+    float OrbitSpeed;
+    int TotalFireballCount;
+
+    float _damage;
+
+    class AMonster* FindNearestMonster();
 };
-
