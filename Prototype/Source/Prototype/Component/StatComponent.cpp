@@ -219,10 +219,10 @@ void UStatComponent::SetInt(int32 newint)
 
 void UStatComponent::SetStatBoost(int32 rate)
 {
-    // 능력치 증가율 계산 (예: rate가 50이면 1.5배)
+
     float boostFactor = 1.0f + (rate / 100.0f);
 
-    // 기존 능력치를 저장해두기
+
     int32 originalStr = _str;
     int32 originalDex = _dex;
     int32 originalInt = _int;
@@ -235,9 +235,10 @@ void UStatComponent::SetStatBoost(int32 rate)
     _maxHp = FMath::Clamp(_maxHp * boostFactor, 0, 10000); 
     _maxMp = FMath::Clamp(_maxMp * boostFactor, 0, 10000);
 
-
     SetHp(_maxHp); 
     SetMp(_maxMp); 
+
+	UE_LOG(LogTemp, Warning, TEXT("Boost str: %d , _dex: %d, _int:%d, _maxHp :%d, _maxMp:%d"),_str,_dex,_int,_maxHp,_maxMp);
 
 	FTimerHandle StatBoostTimerHandle;
 
