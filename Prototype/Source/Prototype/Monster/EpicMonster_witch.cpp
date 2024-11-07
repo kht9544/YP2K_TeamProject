@@ -63,7 +63,7 @@ void AEpicMonster_witch::PostInitializeComponents()
 	if (_monster_Epic_AnimInstance->IsValidLowLevelFast())
 	{
 		_monster_Epic_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
-		_monster_Epic_AnimInstance->_attackDelegate.AddUObject(this, &AEpicMonster_witch::MeleeAttackhit);
+		_monster_Epic_AnimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
 		_monster_Epic_AnimInstance->_death_Epic_MonsterDelegate.AddUObject(this, &AMonster::Disable);
 
 	}
@@ -158,7 +158,7 @@ void AEpicMonster_witch::MagicShot()
 			if (projectile)
 			{
 				projectile->WitchMa(this);
-				projectile->SetDamage(70); // 데미지 추후 수정 
+				projectile->SetDamage(_StatCom->GetInt()); // 데미지 추후 수정 
 				projectile->FireInDirection(forward);
 				UE_LOG(LogTemp, Error, TEXT("MagicShot"));
 			}

@@ -91,8 +91,8 @@ AMyPlayer::AMyPlayer()
 	_MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
 	_MinimapSprite->SetupAttachment(RootComponent);
 	_MinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
-	_MinimapSprite->SetWorldScale3D(FVector(0.5f));
-	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	//_MinimapSprite->SetWorldScale3D(FVector(0.5f));
+	//_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
 	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> USM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Face_Pos.Free_Body_Face_Pos'"));
