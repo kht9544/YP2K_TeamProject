@@ -40,6 +40,9 @@ public:
 	virtual FString GetDeadSoundName() const;
 	virtual FString GetSkillSound01() const;
 	virtual FString GetSkillSound02() const;
+	virtual FString GetSkillSound03() const;
+	virtual FString GetSkillSound03Shout() const;
+
 	virtual FString GetBossMonsterAttack() const;
 	virtual FString GetSkillParticleEffect02() const;
 	virtual FString GetPlayerAttackHitEffect() const;

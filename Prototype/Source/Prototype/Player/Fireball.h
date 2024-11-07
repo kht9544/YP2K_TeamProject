@@ -29,6 +29,9 @@ public:
     UFUNCTION()
     void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+    virtual FString GetSkill_03_HitEffect() const;
+    virtual FString GetSkill_03_HitSound() const;
+
 private:
     UPROPERTY(VisibleAnywhere, Category = "Components")
     class USphereComponent* _sphereCom;

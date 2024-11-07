@@ -10,7 +10,8 @@
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
-
+#include "Base/MyGameInstance.h"
+#include "Base/Managers/EffectManager.h"
 
 // Sets default values
 AFireball::AFireball()
@@ -138,6 +139,18 @@ void AFireball::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, A
     if (monster)
     {
         monster->TakeDamage(_damage, FDamageEvent(), nullptr, this);
+        EffectManager->Play(*GetSkill_03_HitEffect(), monster->GetActorLocation());
+        SoundManager->PlaySound(*GetSkill_03_HitSound(), monster->GetActorLocation());
         Destroy();
     }
+}
+
+FString AFireball::GetSkill_03_HitEffect() const
+{
+    return "NS_Projectile_01_Hit";
+}
+
+FString AFireball::GetSkill_03_HitSound() const
+{
+    return "Skill03_Sound_Hit_Cue";
 }
