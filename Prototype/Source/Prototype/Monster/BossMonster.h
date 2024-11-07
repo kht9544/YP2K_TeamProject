@@ -28,6 +28,7 @@ public:
 
 	void Dash(FVector TargetLocation);
 	void DashEnd();
+	void StartDash();
 	void UpdateDash();
 	void StunEnd();
 	void DestroyObstacle();
@@ -63,6 +64,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
 
+	UPROPERTY()
+	class UDecalComponent* _dashDecal;
+
 	int32 ObstacleDestroyCount;
 
 	bool IsJumping = false;
@@ -73,8 +77,8 @@ private:
     float JumpDuration;
 
 	FVector DashEndLocation;
-	float DashDistance = 2000.0f;
-    float DashSpeed = 2000.0f; 
+	float DashDistance;
+    float DashSpeed; 
 	FVector DashDirection;
   
 };

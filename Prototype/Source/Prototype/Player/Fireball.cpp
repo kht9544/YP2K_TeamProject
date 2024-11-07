@@ -76,7 +76,7 @@ void AFireball::Tick(float DeltaTime)
         Player = nullptr;
         FVector Direction = (NearestMonster->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 
-        _moveCom->Velocity = Direction * 2000.0f; 
+        _moveCom->Velocity = Direction * 1500.0f; 
 
         OrbitSpeed = 0.0f;
         OrbitRadius = 0.0f;

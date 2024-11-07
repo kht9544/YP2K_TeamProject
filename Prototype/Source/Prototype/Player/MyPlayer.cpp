@@ -604,12 +604,9 @@ void AMyPlayer::Skill3(const FInputActionValue &value)
 					float Angle = (i * (360.0f / FireballCount)) * (PI / 180.0f);
 					float Radius = 500.0f;
 
-					FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 150.0f;
+					FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 50.0f;
 					spawnLocation.X += FMath::Cos(Angle) * Radius;
 					spawnLocation.Y += FMath::Sin(Angle) * Radius;
-					spawnLocation.Z = GetActorLocation().Z;
-
-					UE_LOG(LogTemp, Warning, TEXT("X:%f,Y:%f,Z:%f"), spawnLocation.X, spawnLocation.Y, spawnLocation.Z);
 					AFireball *Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
 
 					if (Fireball)

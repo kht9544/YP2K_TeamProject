@@ -24,7 +24,10 @@ EBTNodeResult::Type UBTTaskNode_LookTarget::ExecuteTask(UBehaviorTreeComponent &
     AActor *TargetActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject("Target"));
     if (TargetActor)
     {
-        TargetRotation = UKismetMathLibrary::FindLookAtRotation(Boss->GetActorLocation(), TargetActor->GetActorLocation());
+        FVector TargetLocation = TargetActor->GetActorLocation();
+        FVector Direction = TargetLocation - Boss->GetActorLocation();
+        Direction.Z = 0.0f; 
+        TargetRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
     }
 
     bIsRotating = true;
