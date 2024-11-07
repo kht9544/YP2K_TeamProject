@@ -51,10 +51,6 @@ void UStatComponent::Reset()
 
 void UStatComponent::SetLevelInit(int level)
 {
-	// StatCom에서 스탯들을 인식못해서 현재 0 으로 출력 
-	// 실행하고 중단점 잡고 데이터테이블 값은 몇으로 나오는지 실행해볼것
-	// 스탯데이터테이블도 다시 만들어보기
-
 	FMyStatData* Data = nullptr;
 
 	if (GAMEINSTANCE)
@@ -62,10 +58,16 @@ void UStatComponent::SetLevelInit(int level)
 		Data = GAMEINSTANCE->GetStatDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
+		_ogHp = _maxHp;
 		_maxMp = Data->MaxMP;
+		_ogMp = _maxMp;
 		_str = Data->STR;
+		_ogStr = _str;
 		_dex = Data->DEX;
+		_ogDex = _dex;
 		_int = Data->INT;
+		_ogInt = _int;
+
 		_nextExp = Data->EXP;
 		_curExp = 0;
 		SetHp(_maxHp);
@@ -89,18 +91,23 @@ void UStatComponent::SetLevelInit(int level)
 
 void UStatComponent::SetEpicLevelInit(int level)
 {
-	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	FMyStatData* Data = nullptr;
 
-	if (myGameInstance)
+	if (GAMEINSTANCE)
 	{
-		Data = myGameInstance->GetEpicDataByLevel(level);
+		Data = GAMEINSTANCE->GetEpicDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
+		_ogHp = _maxHp;
 		_maxMp = Data->MaxMP;
+		_ogMp = _maxMp;
 		_str = Data->STR;
+		_ogStr = _str;
 		_dex = Data->DEX;
+		_ogDex = _dex;
 		_int = Data->INT;
+		_ogInt = _int;
+
 		_nextExp = Data->EXP;
 		_curExp = 0;
 		SetHp(_maxHp);
@@ -113,18 +120,24 @@ void UStatComponent::SetEpicLevelInit(int level)
 
 void UStatComponent::SetBossLevelInit(int level)
 {
-	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	FMyStatData* Data = nullptr;
 
-	if (myGameInstance)
+	if (GAMEINSTANCE)
 	{
-		Data = myGameInstance->GetBossDataByLevel(level);
+		Data = GAMEINSTANCE->GetBossDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
+		_ogHp = _maxHp;
 		_curHp = _maxHp;
+		_maxMp = Data->MaxMP;
+		_ogMp = _maxMp;
 		_str = Data->STR;
+		_ogStr = _str;
 		_dex = Data->DEX;
+		_ogDex = _dex;
 		_int = Data->INT;
+		_ogInt = _int;
+
 		_nextExp = Data->EXP;
 		SetHp(_maxHp);
 		SetMp(_maxMp);
@@ -189,7 +202,7 @@ void UStatComponent::SetStr(int32 newstr)
 
 
 	_str = Data->STR;
-	_str = FMath::Clamp(newstr, 0, 100);
+	_str = FMath::Clamp(newstr, 0, 15);
 }
 
 void UStatComponent::SetDex(int32 newdex)
@@ -302,14 +315,30 @@ void UStatComponent::ModStat(StatType stat, int32 amount)
 	switch (stat)
 	{
 	case StatType::HP:
+		_modHp = amount;
+		_maxHp = _ogHp + _modHp;
 		break;
 	case StatType::MP:
+		_modMp = amount;
+		_maxMp = _ogMp + _modMp;
 		break;
 	case StatType::STR:
+		_modStr = amount;
+		_str = _ogStr + _modStr;
 		break;
 	case StatType::DEX:
+		_modDex = amount;
+		_dex = _ogDex + _modDex;
 		break;
 	case StatType::INT:
+		_modInt = amount;
+		_int = _ogInt + _modInt;
+		break;
+	case StatType::CurHP:
+		AddCurHp(amount);
+		break;
+	case StatType::CurMP:
+		AddCurMp(amount);
 		break;
 	default:
 		break;
