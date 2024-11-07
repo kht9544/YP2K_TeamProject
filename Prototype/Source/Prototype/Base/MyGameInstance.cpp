@@ -2,7 +2,7 @@
 
 
 #include "Base/MyGameInstance.h"
-
+#include "../Component/StatComponent.h"
 #include "Base/Managers/UIManager.h"
 #include "Base/Managers/SoundManager.h"
 
@@ -50,6 +50,38 @@ UMyGameInstance::UMyGameInstance()
 	if (EquipItemData.Succeeded())
 	{
 		_EquipItemTable = EquipItemData.Object;
+	}
+}
+
+void UMyGameInstance::SavePlayerStats(class UStatComponent* StatComponent)
+{
+	if (StatComponent)
+	{
+		_savedLevel = StatComponent->GetLevel();
+		_savedMaxHp = StatComponent->GetMaxHp();
+		_savedMaxMp = StatComponent->GetMaxMp();
+		_savedStr = StatComponent->GetStr();
+		_savedDex = StatComponent->GetDex();
+		_savedInt = StatComponent->GetInt();
+		_savedCurHp = StatComponent->GetCurHp();
+		_savedCurMp = StatComponent->GetCurMp();
+		_savedExp = StatComponent->GetExp();
+	}
+}
+
+void UMyGameInstance::LoadPlayerStats(class UStatComponent* StatComponent)
+{
+	if (StatComponent)
+	{
+		StatComponent->SetLevel(_savedLevel);
+		StatComponent->SetMaxHp(_savedMaxHp);
+		StatComponent->SetMaxMp(_savedMaxMp);
+		StatComponent->SetStr(_savedStr);
+		StatComponent->SetDex(_savedDex);
+		StatComponent->SetInt(_savedInt);
+		StatComponent->SetHp(_savedCurHp);
+		StatComponent->SetMp(_savedCurMp);
+		StatComponent->SetExp(_savedExp);
 	}
 }
 

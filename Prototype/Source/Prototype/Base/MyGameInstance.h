@@ -23,8 +23,8 @@ class PROTOTYPE_API UMyGameInstance : public UGameInstance
 	
 public:
 	UMyGameInstance();
-
-private:
+	void SavePlayerStats(class UStatComponent* StatComponent);
+	void LoadPlayerStats(class UStatComponent* StatComponent);
 
 public:
 	virtual void Init() override;
@@ -72,4 +72,23 @@ private:
 	ASoundManager* _soundManager;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AEffectManager* _effectManager;
+
+	UPROPERTY()
+	int32 _savedLevel;
+	UPROPERTY()
+	int32 _savedMaxHp;
+	UPROPERTY()
+	int32 _savedMaxMp;
+	UPROPERTY()
+	int32 _savedStr;
+	UPROPERTY()
+	int32 _savedDex;
+	UPROPERTY()
+	int32 _savedInt;
+	UPROPERTY()
+	int32 _savedCurHp;
+	UPROPERTY()
+	int32 _savedCurMp;
+	UPROPERTY()
+	int32 _savedExp;
 };

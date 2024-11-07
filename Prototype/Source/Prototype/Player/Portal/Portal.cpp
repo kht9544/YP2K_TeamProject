@@ -1,0 +1,51 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Portal.h"
+#include "Components/BoxComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "../../Base/MyGameInstance.h"
+#include "../MyPlayer.h"
+
+// Sets default values
+APortal::APortal()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = false;
+	_triggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
+	_niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
+	RootComponent = _triggerBox;
+
+    _niagaraCom->SetupAttachment(RootComponent);
+
+	_triggerBox->OnComponentBeginOverlap.AddDynamic(this,&APortal::OnOverlapBegin);
+
+}
+
+// Called when the game starts or when spawned
+void APortal::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+void APortal::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
+{
+
+	AMyPlayer* player = Cast<AMyPlayer>(OtherActor);
+    if (player)
+    {
+        UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+        if (GameInstance)
+        {
+           GameInstance->SavePlayerStats(player->_StatCom);
+        }
+        UE_LOG(LogTemp, Warning, TEXT("Move to %s"),*_mapName.ToString());
+        UGameplayStatics::OpenLevel(this,_mapName);
+    }
+}
+
+
