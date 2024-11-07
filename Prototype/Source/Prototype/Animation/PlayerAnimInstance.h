@@ -30,6 +30,7 @@ public:
 	// 스킬 애니메이션 재생함수
 	void PlaySkill01Montage();
 	void PlaySkill02Montage();
+	void PlaySkill03Montage();
 
 	AttackDelegate _attackDelegate;
 	DeathDelegate _deathDelegate_Knight;
@@ -45,6 +46,8 @@ private:
 	UAnimMontage* _skill01Montage;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skills", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* _skill02Montage;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skills", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* _skill03Montage;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player", Meta = (AllowPrivateAccess = true))

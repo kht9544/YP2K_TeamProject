@@ -609,6 +609,14 @@ void AMyPlayer::Skill3(const FInputActionValue &value)
 				SoundManager->PlaySound(*GetSkillSound03(), this->GetActorLocation());
 				SoundManager->PlaySound(*GetSkillSound03Shout(), this->GetActorLocation());
 
+				UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+				if (PlayerAnimInstance)
+				{
+					PlayerAnimInstance->PlaySkill03Montage();
+				}
+
+
+
 				int FireballCount = _StatCom->GetInt() / 10;
 				FRotator spawnRotation = GetActorRotation();
 
