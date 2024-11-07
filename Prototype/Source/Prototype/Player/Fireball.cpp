@@ -21,12 +21,9 @@ AFireball::AFireball()
     _sphereCom->InitSphereRadius(15.0f);
     _sphereCom->SetCollisionProfileName(TEXT("Projectile"));
     RootComponent = _sphereCom;
-
-    _meshCom = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-    _meshCom->SetupAttachment(RootComponent);
-
+       
     _niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NS_Projectile_01"));
-    _niagaraCom->SetupAttachment(_meshCom);
+    _niagaraCom->SetupAttachment(RootComponent);
 
     _moveCom = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
     _moveCom->UpdatedComponent = _sphereCom;

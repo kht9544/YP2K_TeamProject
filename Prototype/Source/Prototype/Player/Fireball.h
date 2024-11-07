@@ -33,9 +33,7 @@ private:
     UPROPERTY(VisibleAnywhere, Category = "Components")
     class USphereComponent* _sphereCom;
 
-    UPROPERTY(VisibleAnywhere, Category = "Components")
-    class UStaticMeshComponent* _meshCom;
-
+   
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     class UNiagaraComponent* _niagaraCom;
 
