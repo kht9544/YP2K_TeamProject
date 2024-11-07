@@ -419,6 +419,16 @@ FString AMyPlayer::GetPlayerAttackHitEffect() const
 	return "P_Greystone_Novaborn_Primary_Impact";
 }
 
+FString AMyPlayer::GetSkillSound03() const
+{
+	return "Skill03_Sound_Begin_Cue";
+}
+
+FString AMyPlayer::GetSkillSound03Shout() const
+{
+	return "Skill03_Shout";
+}
+
 void AMyPlayer::Move(const FInputActionValue &value)
 {
 	if (bIsGuarding)
@@ -596,6 +606,9 @@ void AMyPlayer::Skill3(const FInputActionValue &value)
 			_skillWidgetInstance->StartCooldown(2, 5.0f);
 			if (_fireball != nullptr)
 			{
+				SoundManager->PlaySound(*GetSkillSound03(), this->GetActorLocation());
+				SoundManager->PlaySound(*GetSkillSound03Shout(), this->GetActorLocation());
+
 				int FireballCount = _StatCom->GetInt() / 10;
 				FRotator spawnRotation = GetActorRotation();
 
