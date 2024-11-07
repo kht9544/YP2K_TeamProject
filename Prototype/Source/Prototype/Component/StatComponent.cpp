@@ -50,6 +50,8 @@ void UStatComponent::Reset()
 	_curHp = _maxHp;
 }
 
+
+
 void UStatComponent::SetLevelInit(int level)
 {
 	FMyStatData* Data = nullptr;
@@ -158,6 +160,14 @@ void UStatComponent::SetBossLevelInit(int level)
 //	return _actualDamage;
 //}
 
+void UStatComponent::SetLevel(int32 newLevel)
+{
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
+
+	_level = Data->level;
+	_level = FMath::Clamp(newLevel, 0, 100);
+}
 
 void UStatComponent::SetMaxHp(int32 newMaxHp)
 {
@@ -219,13 +229,20 @@ void UStatComponent::SetDex(int32 newdex)
 
 void UStatComponent::SetInt(int32 newint)
 {
-
 	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	FMyStatData* Data = nullptr;
 
 
 	_int = Data->INT;
 	_int = FMath::Clamp(newint, 0, 100);
+}
+
+void UStatComponent::SetExp(int32 newexp)
+{
+	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	FMyStatData* Data = nullptr;
+
+	_curExp = FMath::Clamp(newexp, 0, 100);
 }
 
 

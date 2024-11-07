@@ -98,12 +98,16 @@ public:
 	int32 GetInt()  { return _int; }
 	int32 GetBonusPoint() { return _bonusPoint; }
 
+	void SetLevel(int32 newLevel);
 	void SetMaxHp(int32 newMaxHp);
 	void SetMaxMp(int32 newMaxMp);
 	void SetBonusPoint(int32 newBp);
 	void SetStr(int32 newstr);
 	void SetDex(int32 newdex);
 	void SetInt(int32 newint);
+	void SetExp(int32 newexp);
+
+
 	void SetStatBoost(int32 rate);
 	void SetStun(bool stun){_stunned = stun;}
 	float HpRatio() { return _curHp / (float)_maxHp; }

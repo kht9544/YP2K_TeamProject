@@ -4,6 +4,7 @@
 #include "../Player/MyPlayer.h"
 #include "../Animation/Monster_Boss01_AnimInstance.h"
 #include "../Player/Creature.h"
+#include "../Player/Fireball.h"
 #include "../Player/MyDecal.h"
 #include "Components/DecalComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -242,17 +243,17 @@ void ABossMonster::Tick(float DeltaTime)
 		if (HitResult.bBlockingHit)
 		{
 			DashEnd();
-			AMyPlayer *Player = Cast<AMyPlayer>(HitResult.GetActor());
-			if (Player != nullptr)
+			AMyPlayer *player = Cast<AMyPlayer>(HitResult.GetActor());
+			if (player != nullptr)
 			{
 				if (_bossMonster01_AnimInstance)
 				{
 					_bossMonster01_AnimInstance->PlayUpAttackMontage();
 				}
-				FVector ThrowDirection = (Player->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+				FVector ThrowDirection = (player->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 				ThrowDirection.Z = 1.f;
 				FVector ThrowForce = ThrowDirection * 1000.0f;
-				Player->LaunchCharacter(ThrowForce, true, true);
+				player->LaunchCharacter(ThrowForce, true, true);
 			}
 		}
 		else if (FVector::DistSquared(NewLocation, DashEndLocation) <= KINDA_SMALL_NUMBER)

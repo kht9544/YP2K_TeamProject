@@ -5,7 +5,6 @@
 #include "MyPlayer.h"
 #include "../Monster/Monster.h"
 #include "Engine/DamageEvents.h"
-#include "Components/StaticMeshComponent.h"
 
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
