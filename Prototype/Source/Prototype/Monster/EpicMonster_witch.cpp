@@ -15,6 +15,9 @@
 
 #include "Monster/MagicDecal.h"
 
+#include "../Animation/Monster_Epic01_Anim.h"
+
+
 AEpicMonster_witch::AEpicMonster_witch()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -56,12 +59,13 @@ void AEpicMonster_witch::PostInitializeComponents()
 		_StatCom->SetEpicLevelInit(1);
 	}
 
-	auto _monster_N_AnimInstance = Cast<UMonster_N_AnimInstance>(GetMesh()->GetAnimInstance());
-	if (_monster_N_AnimInstance->IsValidLowLevelFast())
+	_monster_Epic_AnimInstance = Cast<UMonster_Epic01_Anim>(GetMesh()->GetAnimInstance());
+	if (_monster_Epic_AnimInstance->IsValidLowLevelFast())
 	{
-		_monster_N_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
-		_monster_N_AnimInstance->_attackDelegate.AddUObject(this, &AEpicMonster_witch::MeleeAttackhit);
-		_monster_N_AnimInstance->_death_N_MonsterDelegate.AddUObject(this, &AMonster::Disable);
+		_monster_Epic_AnimInstance->OnMontageEnded.AddDynamic(this, &ACreature::OnAttackEnded);
+		_monster_Epic_AnimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
+		_monster_Epic_AnimInstance->_death_Epic_MonsterDelegate.AddUObject(this, &AMonster::Disable);
+
 	}
 }
 
@@ -118,6 +122,33 @@ void AEpicMonster_witch::MeleeAttackhit()
 void AEpicMonster_witch::Attack_AI()
 {
 
+	if (_isAttacking == false && _monster_Epic_AnimInstance != nullptr)
+	{
+		_monster_Epic_AnimInstance->PlayAttackMontage();
+		_isAttacking = true;
+
+		_curAttackIndex %= 2;
+		_curAttackIndex++;
+
+		_monster_Epic_AnimInstance->JumpToSection(_curAttackIndex);
+	}
+
+	
+}
+
+FString AEpicMonster_witch::GetEpicAttackFarSound() const
+{
+	return "EpicMonsterAttack_Far_Cue";
+}
+
+FString AEpicMonster_witch::GetEpicAttackMagicDotSound() const
+{
+	return "EpicMonsterAttack_MagicDot_Cue";
+}
+
+FString AEpicMonster_witch::GetDeadSoundName() const
+{
+	return "Morigesh_Effort_Death";
 }
 
 
@@ -127,6 +158,9 @@ void AEpicMonster_witch::MagicShot()
 	
 		if (_projectileClass)
 		{
+			_monster_Epic_AnimInstance->PlayAttackFarMontage();
+			_curAttackIndex = 1;
+
 			FVector forward = GetActorForwardVector();
 			FName HandSocketName = TEXT("Magic_hand");
 		
@@ -139,10 +173,13 @@ void AEpicMonster_witch::MagicShot()
 			if (projectile)
 			{
 				projectile->WitchMa(this);
-				projectile->SetDamage(70); // 데미지 추후 수정 
+				projectile->SetDamage(_StatCom->GetInt()); // 데미지 추후 수정 
 				projectile->FireInDirection(forward);
 				UE_LOG(LogTemp, Error, TEXT("MagicShot"));
 			}
+			
+			
+			SoundManager->PlaySound(*GetEpicAttackFarSound(),projectile->GetActorLocation());
 		}
 
 }
@@ -151,6 +188,7 @@ void AEpicMonster_witch::SumonedMonster()
 {
 	if (_SumonedMonster != nullptr)
 	{
+
 		for (int i = 0; i <= 4; ++i)
 		{
 			FVector SpawLocation = GetActorLocation() + FMath::VRand() * 200.0f;
@@ -185,16 +223,19 @@ void AEpicMonster_witch::testDecalSkill()
 		playerPos.Z = 0.0f;
 		FVector DecalPos = playerPos + FVector(X, Y, 0.0f);
 
-
+		
 
 
 		AMagicDecal* decal = GetWorld()->SpawnActor<AMagicDecal>(_tedecal, fireLocation, FRotator::ZeroRotator);
 		
 		if (decal)
 		{
-
+			SoundManager->PlaySound(*GetEpicAttackMagicDotSound(), this->GetActorLocation());
 			UE_LOG(LogTemp, Error, TEXT("Test Decal"));
 			
+			_monster_Epic_AnimInstance->PlayAttackDotrMontage();
+			_curAttackIndex = 0;
+
 			decal->Active(DecalPos);  
 			decal->SetLifeSpan(10.0f);
 		}

@@ -4,7 +4,8 @@
 #include "../Player/MyPlayer.h"
 #include "../Animation/Monster_Boss01_AnimInstance.h"
 #include "../Player/Creature.h"
-#include "Engine/DecalActor.h"
+#include "../Player/MyDecal.h"
+#include "Components/DecalComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Base/MyGameInstance.h"
 #include "../Base/Managers/SoundManager.h"
@@ -24,13 +25,17 @@ ABossMonster::ABossMonster()
 		GetMesh()->SetSkeletalMesh(SM.Object);
 	}
 
-	static ConstructorHelpers::FClassFinder<ADecalActor> MD(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/DashDecal.DashDecal_C'"));
-	if (MD.Succeeded())
+	static ConstructorHelpers::FClassFinder<AMyDecal> DA(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/BasicDecal_BP.BasicDecal_BP_C'"));
+	if (DA.Succeeded())
 	{
-		_decal = MD.Class;
+		_landDecal = DA.Class;
 	}
 
 	ObstacleDestroyCount = 0;
+	DashDistance = 2000.f;
+	DashSpeed = 2000.f;
+	_dashDecal = nullptr;
+
 	_exp = 1;
 }
 
@@ -63,8 +68,6 @@ void ABossMonster::Attack_AI()
 	{
 		_isAttacking = true;
 		int32 RandomSectionIndex = FMath::RandRange(1, 3);
-		UE_LOG(LogTemp, Warning, TEXT("Selected RandomSectionIndex: %d"), RandomSectionIndex);
-
 		_bossMonster01_AnimInstance->PlayAttackMontage();
 		_bossMonster01_AnimInstance->JumpToSection(RandomSectionIndex);
 
@@ -163,6 +166,15 @@ void ABossMonster::JumpAttack(FVector TargetLocation)
 	LandingLocation.Z -= 98.0f;
 
 	LaunchCharacter(JumpVelocity, true, true);
+
+	if (_landDecal)
+	{
+		AMyDecal *Decal = GetWorld()->SpawnActor<AMyDecal>(_landDecal, LandingLocation, FRotator::ZeroRotator);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("nolanddecal"));
+	}
 }
 
 void ABossMonster::Landed(const FHitResult &Hit)
@@ -178,11 +190,24 @@ void ABossMonster::Dash(FVector TargetLocation)
 {
 	if (IsDashing || IsStun || IsJumping)
 		return;
-	IsDashing = true;
 
-	if (IsDashing == true)
+	if (!_dashDecal)
 	{
-		_bossMonster01_AnimInstance->PlayDashMontage();
+		_dashDecal = NewObject<UDecalComponent>(this);
+		_dashDecal->SetupAttachment(RootComponent);
+		_dashDecal->RegisterComponent();
+		_dashDecal->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+
+		UMaterialInterface *RedDecalMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Script/Engine.Material'/Game/Blueprint/VFX/ReddecalMateral.ReddecalMateral'"));
+		if (RedDecalMaterial)
+		{
+			_dashDecal->SetDecalMaterial(RedDecalMaterial);
+		}
+
+		float CharacterWidth = GetCapsuleComponent()->GetScaledCapsuleRadius();
+		float DecalScaleX = DashDistance / 200.0f;
+		float DecalScaleY = CharacterWidth / 200.0f;
+		_dashDecal->SetWorldScale3D(FVector(DecalScaleX, DecalScaleY, 0.01f));
 	}
 
 	FVector StartLocation = GetActorLocation();
@@ -192,32 +217,14 @@ void ABossMonster::Dash(FVector TargetLocation)
 	DashEndLocation = StartLocation + DashDirection * DashDistance;
 
 	FRotator LookAtRotation = DashDirection.Rotation();
-
-	if (_decal)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawn decal"));
-		FVector location = GetActorLocation();
-
-		FVector forwardVector = GetActorForwardVector();
-		float decalLengthOffset = 1300.0f;
-		location += forwardVector * decalLengthOffset;
-		location.Z = 0.0f;
-
-		ADecalActor* Decal = GetWorld()->SpawnActor<ADecalActor>(_decal, location, LookAtRotation);
-		if (Decal)
-		{
-			Decal->SetLifeSpan(1.0f);
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No decal"));
-	}
-
 	SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
 
-	FTimerHandle DashTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
+	FVector DecalLocation = StartLocation + DashDirection * (DashDistance / 2.0f);
+	DecalLocation.Z -= GetActorLocation().Z;
+	_dashDecal->SetWorldLocation(DecalLocation);
+
+	FTimerHandle DashDecalTimer;
+	GetWorld()->GetTimerManager().SetTimer(DashDecalTimer, this, &ABossMonster::StartDash, 1.0f, false);
 }
 
 void ABossMonster::Tick(float DeltaTime)
@@ -253,6 +260,25 @@ void ABossMonster::Tick(float DeltaTime)
 			DashEnd();
 		}
 	}
+}
+
+void ABossMonster::StartDash()
+{
+	IsDashing = true;
+
+	if (IsDashing == true)
+	{
+		_bossMonster01_AnimInstance->PlayDashMontage();
+	}
+
+	if (_dashDecal)
+	{
+		_dashDecal->DestroyComponent();
+		_dashDecal = nullptr;
+	}
+
+	FTimerHandle DashTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &ABossMonster::DashEnd, DashDistance / DashSpeed, false);
 }
 
 void ABossMonster::DashEnd()

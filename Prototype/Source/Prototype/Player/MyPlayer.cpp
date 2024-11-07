@@ -91,8 +91,8 @@ AMyPlayer::AMyPlayer()
 	_MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
 	_MinimapSprite->SetupAttachment(RootComponent);
 	_MinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
-	_MinimapSprite->SetWorldScale3D(FVector(0.5f));
-	_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	//_MinimapSprite->SetWorldScale3D(FVector(0.5f));
+	//_MinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
 	_MinimapSprite->bVisibleInSceneCaptureOnly = true;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> USM(TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Face_Pos.Free_Body_Face_Pos'"));
@@ -162,7 +162,7 @@ AMyPlayer::AMyPlayer()
 		_decal = MD.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<AFireball>FB(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Player/Fireball_BP.Fireball_BP_C'"));
+	static ConstructorHelpers::FClassFinder<AFireball> FB(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Player/FireBall_02_BP.FireBall_02_BP_C'"));
 	if (FB.Succeeded())
 	{
 		_fireball = FB.Class;
@@ -336,7 +336,7 @@ void AMyPlayer::UpdateCamera(float DeltaTime)
 {
 	if (_lockOnMonster)
 	{
-		if(_lockOnMonster->_StatCom->IsDead())
+		if (_lockOnMonster->_StatCom->IsDead())
 		{
 			_lockOnMonster = nullptr;
 			_fixedCamera = false;
@@ -350,7 +350,6 @@ void AMyPlayer::UpdateCamera(float DeltaTime)
 		const FRotator InterpRotation = UKismetMathLibrary::RInterpTo(GetController()->GetControlRotation(), LookAtRotation, DeltaTime, 10.f);
 		GetController()->SetControlRotation(FRotator(InterpRotation.Pitch, InterpRotation.Yaw, GetController()->GetControlRotation().Roll));
 	}
-
 }
 
 void AMyPlayer::EquipItem(AEquipItem *equipitem)
@@ -504,9 +503,17 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 			UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 			if (PlayerAnimInstance)
 			{
-				PlayerAnimInstance->PlaySkill01Montage(); // Skill1 Animation
+				PlayerAnimInstance->PlaySkill01Montage();
 			}
 			SoundManager->PlaySound(*GetSkillSound01(), _hitPoint);
+
+			if (_StatCom->GetInt() >= 40)
+			{
+				FVector TeleportLocation = GetActorLocation() + DashDirection * _dashSpeed * 1.0f;
+				SetActorLocation(TeleportLocation, true);
+
+				bIsDashing = false;
+			}
 		}
 	}
 }
@@ -526,7 +533,7 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = GetInstigator();
 
-		FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f); 
+		FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f);
 		FVector DecalLocation;
 
 		if (_lockOnMonster)
@@ -537,7 +544,7 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 		else
 		{
 			DecalLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;
-			DecalLocation.Z -= 98.0f; 
+			DecalLocation.Z -= 98.0f;
 		}
 
 		int MeteorCount = (_StatCom->GetInt()) / 10;
@@ -548,14 +555,14 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 			CenterMeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
 		}
 
-		for (int i = 0; i < MeteorCount - 1; i++) 
+		for (int i = 0; i < MeteorCount - 1; i++)
 		{
-			float Angle = (i * (360.0f / (MeteorCount - 1))) * (PI / 180.0f); 
+			float Angle = (i * (360.0f / (MeteorCount - 1))) * (PI / 180.0f);
 			float Radius = 500.0f;
 
 			FVector SpawnLocation = DecalLocation;
-			SpawnLocation.X += FMath::Cos(Angle) * Radius; 
-			SpawnLocation.Y += FMath::Sin(Angle) * Radius; 
+			SpawnLocation.X += FMath::Cos(Angle) * Radius;
+			SpawnLocation.Y += FMath::Sin(Angle) * Radius;
 
 			AMeteorDecal *MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
 			if (MeteorDecal)
@@ -569,13 +576,11 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
 		UPlayerAnimInstance *PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 		if (PlayerAnimInstance)
 		{
-			PlayerAnimInstance->PlaySkill02Montage(); 
+			PlayerAnimInstance->PlaySkill02Montage();
 		}
 		SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
 	}
 }
-
-
 
 void AMyPlayer::Skill3(const FInputActionValue &value)
 {
@@ -589,13 +594,27 @@ void AMyPlayer::Skill3(const FInputActionValue &value)
 		{
 			SkillOnCooldown[2] = true;
 			_skillWidgetInstance->StartCooldown(2, 5.0f);
-			 if (_fireball != nullptr)
-            {
-                FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 150.0f; 
-                FRotator spawnRotation = GetActorRotation();
+			if (_fireball != nullptr)
+			{
+				int FireballCount = _StatCom->GetInt() / 10;
+				FRotator spawnRotation = GetActorRotation();
 
-                AFireball* Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
-            }
+				for (int i = 0; i < FireballCount; i++)
+				{
+					float Angle = (i * (360.0f / FireballCount)) * (PI / 180.0f);
+					float Radius = 500.0f;
+
+					FVector spawnLocation = GetActorLocation() + GetActorForwardVector() * 50.0f;
+					spawnLocation.X += FMath::Cos(Angle) * Radius;
+					spawnLocation.Y += FMath::Sin(Angle) * Radius;
+					AFireball *Fireball = GetWorld()->SpawnActor<AFireball>(_fireball, spawnLocation, spawnRotation);
+
+					if (Fireball)
+					{
+						Fireball->InitializeOrbit(Radius, Angle, FireballCount);
+					}
+				}
+			}
 		}
 	}
 }
@@ -610,6 +629,8 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 			return;
 		else
 		{
+			_StatCom->SetStatBoost(_StatCom->GetInt());
+
 			SkillOnCooldown[3] = true;
 			_skillWidgetInstance->StartCooldown(3, 10.0f);
 		}
@@ -783,4 +804,3 @@ void AMyPlayer::StartScreenShake()
 		ElapsedTime = 0.0f;
 	}
 }
-

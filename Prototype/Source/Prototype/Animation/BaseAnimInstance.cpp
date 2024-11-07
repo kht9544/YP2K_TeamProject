@@ -76,7 +76,7 @@ void UBaseAnimInstance::PlayAttackFarMontage()
 	}
 }
 
-void UBaseAnimInstance::PlayAttackMagicMontage()
+void UBaseAnimInstance::PlayAttackDotrMontage()
 {
 	if (!Montage_IsPlaying(_attackMagicMontage))
 	{

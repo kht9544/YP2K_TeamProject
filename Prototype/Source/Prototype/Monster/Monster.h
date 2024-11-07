@@ -45,6 +45,12 @@ public:
 
 	//virtual void OnDeath() {};
 
+	//te
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
+	class UPaperSpriteComponent* _teMinimapSprite;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	int32 _exp;

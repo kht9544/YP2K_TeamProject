@@ -28,6 +28,7 @@ public:
 
 	void Dash(FVector TargetLocation);
 	void DashEnd();
+	void StartDash();
 	void UpdateDash();
 	void StunEnd();
 	void DestroyObstacle();
@@ -52,6 +53,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<class ADecalActor> _decal;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<class AMyDecal> _landDecal;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Obstacle", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ABossObstacle> _obstacle;
 
@@ -59,6 +63,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	class UMonster_Boss01_AnimInstance* _bossMonster01_AnimInstance;
+
+	UPROPERTY()
+	class UDecalComponent* _dashDecal;
 
 	int32 ObstacleDestroyCount;
 
@@ -70,8 +77,8 @@ private:
     float JumpDuration;
 
 	FVector DashEndLocation;
-	float DashDistance = 2000.0f;
-    float DashSpeed = 2000.0f; 
+	float DashDistance;
+    float DashSpeed; 
 	FVector DashDirection;
   
 };

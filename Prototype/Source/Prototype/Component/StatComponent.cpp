@@ -7,6 +7,7 @@
 #include "UI/InventoryWidget.h"
 #include "Player/MyPlayer.h"
 #include "Player/MyPlayerController.h"
+#include "TimerManager.h"
 
 // Sets default values for this component's properties
 UStatComponent::UStatComponent()
@@ -226,6 +227,48 @@ void UStatComponent::SetInt(int32 newint)
 	_int = Data->INT;
 	_int = FMath::Clamp(newint, 0, 100);
 }
+
+
+
+void UStatComponent::SetStatBoost(int32 rate)
+{
+
+    float boostFactor = 1.0f + (rate / 100.0f);
+
+
+    int32 originalStr = _str;
+    int32 originalDex = _dex;
+    int32 originalInt = _int;
+    int32 originalMaxHp = _maxHp;
+    int32 originalMaxMp = _maxMp;
+
+    _str = FMath::Clamp(_str * boostFactor, 0, 100); 
+    _dex = FMath::Clamp(_dex * boostFactor, 0, 100);
+    _int = FMath::Clamp(_int * boostFactor, 0, 100);
+    _maxHp = FMath::Clamp(_maxHp * boostFactor, 0, 10000); 
+    _maxMp = FMath::Clamp(_maxMp * boostFactor, 0, 10000);
+
+    SetHp(_maxHp); 
+    SetMp(_maxMp); 
+
+	UE_LOG(LogTemp, Warning, TEXT("Boost str: %d , _dex: %d, _int:%d, _maxHp :%d, _maxMp:%d"),_str,_dex,_int,_maxHp,_maxMp);
+
+	FTimerHandle StatBoostTimerHandle;
+
+    GetWorld()->GetTimerManager().SetTimer(StatBoostTimerHandle, [this, originalStr, originalDex, originalInt, originalMaxHp, originalMaxMp]()
+    {
+		UE_LOG(LogTemp, Warning, TEXT("End Boost"));
+        _str = originalStr;
+        _dex = originalDex;
+        _int = originalInt;
+        _maxHp = originalMaxHp;
+        _maxMp = originalMaxMp;
+
+        SetHp(_maxHp);
+        SetMp(_maxMp); 
+    }, 5.0f, false); 
+}
+
 
 void UStatComponent::SetHp(int32 hp)
 {

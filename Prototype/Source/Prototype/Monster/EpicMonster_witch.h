@@ -25,6 +25,12 @@ public:
 	void testDecalSkill();
 	void MeleeAttackhit();
 
+	virtual void Attack_AI() override;
+
+	virtual FString GetEpicAttackFarSound() const override;
+	virtual FString GetEpicAttackMagicDotSound() const override;
+	virtual FString GetDeadSoundName() const override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,7 +41,6 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	virtual void Attack_AI() override;
 
 
 
@@ -48,4 +53,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AMagicDecal> _tedecal;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	class UMonster_Epic01_Anim* _monster_Epic_AnimInstance;
+
 };
