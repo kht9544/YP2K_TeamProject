@@ -7,6 +7,11 @@
 #include "Engine/DamageEvents.h"
 #include "Components/StaticMeshComponent.h"
 
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
+
 // Sets default values
 AFireball::AFireball()
 {
@@ -19,6 +24,9 @@ AFireball::AFireball()
 
     _meshCom = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     _meshCom->SetupAttachment(RootComponent);
+
+    _niagaraCom = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NS_Projectile_01"));
+    _niagaraCom->SetupAttachment(_meshCom);
 
     _moveCom = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
     _moveCom->UpdatedComponent = _sphereCom;

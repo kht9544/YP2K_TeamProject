@@ -36,6 +36,10 @@ private:
     UPROPERTY(VisibleAnywhere, Category = "Components")
     class UStaticMeshComponent* _meshCom;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    class UNiagaraComponent* _niagaraCom;
+
+
     UPROPERTY(VisibleAnywhere, Category = "Movement")
     class UProjectileMovementComponent* _moveCom;
 

@@ -162,7 +162,7 @@ AMyPlayer::AMyPlayer()
 		_decal = MD.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<AFireball> FB(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Player/Fireball_BP.Fireball_BP_C'"));
+	static ConstructorHelpers::FClassFinder<AFireball> FB(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Player/FireBall_02_BP.FireBall_02_BP_C'"));
 	if (FB.Succeeded())
 	{
 		_fireball = FB.Class;
