@@ -136,6 +136,21 @@ void AEpicMonster_witch::Attack_AI()
 	
 }
 
+FString AEpicMonster_witch::GetEpicAttackFarSound() const
+{
+	return "EpicMonsterAttack_Far_Cue";
+}
+
+FString AEpicMonster_witch::GetEpicAttackMagicDotSound() const
+{
+	return "EpicMonsterAttack_MagicDot_Cue";
+}
+
+FString AEpicMonster_witch::GetDeadSoundName() const
+{
+	return "Morigesh_Effort_Death";
+}
+
 
 
 void AEpicMonster_witch::MagicShot()
@@ -162,6 +177,9 @@ void AEpicMonster_witch::MagicShot()
 				projectile->FireInDirection(forward);
 				UE_LOG(LogTemp, Error, TEXT("MagicShot"));
 			}
+			
+			
+			SoundManager->PlaySound(*GetEpicAttackFarSound(),projectile->GetActorLocation());
 		}
 
 }
@@ -212,7 +230,7 @@ void AEpicMonster_witch::testDecalSkill()
 		
 		if (decal)
 		{
-
+			SoundManager->PlaySound(*GetEpicAttackMagicDotSound(), this->GetActorLocation());
 			UE_LOG(LogTemp, Error, TEXT("Test Decal"));
 			
 			_monster_Epic_AnimInstance->PlayAttackDotrMontage();
