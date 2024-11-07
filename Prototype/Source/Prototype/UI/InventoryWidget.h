@@ -43,6 +43,7 @@ public:
 	void UpdateStat();
 	void UpdateOriginStat(int32 statType, int32 amount);
 	void UpdateModStat(int32 statType, int32 amount);
+	void RefreshModStat();
 
 private:
 	void SetTargetItem(int32 slotIndex);
