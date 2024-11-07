@@ -104,6 +104,7 @@ void UInventoryWidget::UpdateEquip()
 
 void UInventoryWidget::ShowItem()
 {
+	RefreshModStat();
 	if (_targetItem == nullptr)
 	{
 		ItemTexture->SetBrushFromTexture(T_DEFAULT);
@@ -115,6 +116,7 @@ void UInventoryWidget::ShowItem()
 		if (Cast<AEquipItem>(_targetItem))
 		{
 			UseBtnText->SetText(FText::FromString(TEXT("Equip")));
+			UpdateModStat((int32)_targetItem->GetModStat(), _targetItem->GetValue());
 		}
 		else
 		{
@@ -148,6 +150,7 @@ void UInventoryWidget::UseItem()
 	{
 		ItemEquip.Broadcast(_targetIndex);
 		CheckCanEquip();
+		UpdateStat();
 	}
 	if (Cast<AConsumeItem>(_targetItem))
 	{
@@ -200,11 +203,11 @@ void UInventoryWidget::CheckCanEquip()
 
 void UInventoryWidget::UpdateStat()
 {
-	_originStat[0]->SetText(_modStat[0]->GetText());
-	_originStat[1]->SetText(_modStat[1]->GetText());
-	_originStat[2]->SetText(_modStat[2]->GetText());
-	_originStat[3]->SetText(_modStat[3]->GetText());
-	_originStat[4]->SetText(_modStat[4]->GetText());
+	for (int i = 0; i < 5; i++)
+	{
+		_originStat[i]->SetText(_modStat[i]->GetText());
+		_modStat[i]->SetColorAndOpacity(FSlateColor(FColor(255, 255, 255)));
+	}
 }
 
 void UInventoryWidget::UpdateOriginStat(int32 statType, int32 amount)
@@ -214,7 +217,25 @@ void UInventoryWidget::UpdateOriginStat(int32 statType, int32 amount)
 
 void UInventoryWidget::UpdateModStat(int32 statType, int32 amount)
 {
-	_modStat[statType]->SetText(FText::FromString(FString::FromInt(amount)));
+	FString originStat = _originStat[statType]->GetText().ToString();
+	int modStat = amount + FCString::Atoi(*originStat);
+
+	_modStat[statType]->SetText(FText::FromString(FString::FromInt(modStat)));
+	
+	if (modStat > FCString::Atoi(*originStat))
+		_modStat[statType]->SetColorAndOpacity(FSlateColor(FColor(0, 200, 0)));
+	if (modStat == FCString::Atoi(*originStat))
+		_modStat[statType]->SetColorAndOpacity(FSlateColor(FColor(255, 255, 255)));
+	if (modStat < FCString::Atoi(*originStat))
+		_modStat[statType]->SetColorAndOpacity(FSlateColor(FColor(150, 0, 0)));
+}
+
+void UInventoryWidget::RefreshModStat()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		UpdateModStat(i, 0);
+	}
 }
 
 void UInventoryWidget::SetTargetItem(int32 slotIndex)

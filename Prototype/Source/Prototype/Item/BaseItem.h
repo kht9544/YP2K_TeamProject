@@ -29,7 +29,8 @@ struct FItemData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ItemType _Type;
 
-	//TODO : Add ModStatType in ItemTable, EquipTable
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	StatType _ModTarget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString _Description;
@@ -82,6 +83,7 @@ public:
 	//Item Data Getter
 	FString GetName() { return _Name; }
 	ItemType GetType() { return _Type; }
+	StatType GetModStat() { return _ModStatType; }
 	FString GetDesc() { return _Description; }
 	int32 GetPrice() { return _Price; }
 	int32 GetValue() { return _Value; }
