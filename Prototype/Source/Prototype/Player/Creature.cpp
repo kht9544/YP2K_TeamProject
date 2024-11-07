@@ -154,6 +154,16 @@ FString ACreature::GetPlayerAttackHitEffect() const
 	return "default_AttackHit_Effect";
 }
 
+FString ACreature::GetEpicAttackFarSound() const
+{
+	return "default_Sound";
+}
+
+FString ACreature::GetEpicAttackMagicDotSound() const
+{
+	return "default_Sound";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;

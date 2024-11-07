@@ -27,6 +27,10 @@ public:
 
 	virtual void Attack_AI() override;
 
+	virtual FString GetEpicAttackFarSound() const override;
+	virtual FString GetEpicAttackMagicDotSound() const override;
+	virtual FString GetDeadSoundName() const override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
