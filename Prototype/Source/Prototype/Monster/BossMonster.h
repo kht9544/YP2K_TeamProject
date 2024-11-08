@@ -34,6 +34,7 @@ public:
 	void DestroyObstacle();
 
 
+
 	//void SpawnObstacles();
 	
 	//void CheckGimmickResult();

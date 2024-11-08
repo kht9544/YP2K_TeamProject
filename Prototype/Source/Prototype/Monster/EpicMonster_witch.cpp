@@ -38,6 +38,8 @@ AEpicMonster_witch::AEpicMonster_witch()
 		_tedecal = Wide.Class;
 	}
 
+
+
 	_exp = 70;
 
 	AIControllerClass = AAIController_Epic::StaticClass();
