@@ -13,12 +13,5 @@ void AHP_Postion::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_specipic = ItemSpecipic::HP_Postion;
-
 	SetItemWithCode(1);
-}
-
-void AHP_Postion::UseItem()
-{
-	Super::UseItem();
 }

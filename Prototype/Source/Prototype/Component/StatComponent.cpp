@@ -375,23 +375,23 @@ void UStatComponent::ModStat(StatType stat, int32 amount)
 	switch (stat)
 	{
 	case StatType::HP:
-		_modHp = amount;
+		_modHp += amount;
 		_maxHp = _ogHp + _modHp;
 		break;
 	case StatType::MP:
-		_modMp = amount;
+		_modMp += amount;
 		_maxMp = _ogMp + _modMp;
 		break;
 	case StatType::STR:
-		_modStr = amount;
+		_modStr += amount;
 		_str = _ogStr + _modStr;
 		break;
 	case StatType::DEX:
-		_modDex = amount;
+		_modDex += amount;
 		_dex = _ogDex + _modDex;
 		break;
 	case StatType::INT:
-		_modInt = amount;
+		_modInt += amount;
 		_int = _ogInt + _modInt;
 		break;
 	case StatType::CurHP:

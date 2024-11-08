@@ -95,3 +95,8 @@ void AEquipItem::UseItem()
         _player->GetStatComponent()->ModStat(_ModStatType, _Value);
     }
 }
+
+void AEquipItem::UnEquip()
+{
+    _player->GetStatComponent()->ModStat(_ModStatType, -_Value);
+}
