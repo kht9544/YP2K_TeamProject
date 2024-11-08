@@ -26,6 +26,9 @@ public:
 	void SavePlayerStats(class UStatComponent* StatComponent);
 	void LoadPlayerStats(class UStatComponent* StatComponent);
 
+	bool GetFirst(){return _firstIn;}
+	void SetFirst(bool first){_firstIn = first;}
+
 public:
 	virtual void Init() override;
 	
@@ -91,4 +94,6 @@ private:
 	int32 _savedCurMp;
 	UPROPERTY()
 	int32 _savedExp;
+	UPROPERTY()
+	bool _firstIn = true;;
 };

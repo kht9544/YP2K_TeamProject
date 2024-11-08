@@ -38,9 +38,6 @@ void ACreature::Tick(float DeltaTime)
 void ACreature::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
-	_StatCom->SetLevelInit(1);
-
 }
 
 void ACreature::Init()

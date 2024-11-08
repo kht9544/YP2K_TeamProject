@@ -39,7 +39,7 @@ void AMonster::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
-
+	_StatCom->SetLevelInit(1);
 }
 
 void AMonster::Disable()

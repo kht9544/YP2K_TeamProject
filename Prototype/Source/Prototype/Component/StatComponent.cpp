@@ -213,7 +213,7 @@ void UStatComponent::SetStr(int32 newstr)
 
 
 	_str = Data->STR;
-	_str = FMath::Clamp(newstr, 0, 15);
+	_str = FMath::Clamp(newstr, 0, 100);
 }
 
 void UStatComponent::SetDex(int32 newdex)
