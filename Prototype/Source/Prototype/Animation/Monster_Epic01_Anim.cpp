@@ -57,7 +57,7 @@ void UMonster_Epic01_Anim::AnimNotify_Attackhit()
 
 void UMonster_Epic01_Anim::AnimNotify_Death()
 {
-	UE_LOG(LogTemp, Error, TEXT("Deat"));
+	UE_LOG(LogTemp, Error, TEXT("Death"));
 	_death_Epic_MonsterDelegate.Broadcast();
 }
 

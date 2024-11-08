@@ -207,7 +207,7 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 
 		if (_StatCom->IsDead())
 		{
-			SoundManager->PlaySound(*GetDeadSoundName(), _hitPoint);
+			SoundManager->PlaySound(*GetDeadSoundName(), this->GetActorLocation());
 			
 			SetActorEnableCollision(false);
 			auto controller = GetController();
