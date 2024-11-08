@@ -31,6 +31,9 @@ public:
 	virtual FString GetEpicAttackMagicDotSound() const override;
 	virtual FString GetDeadSoundName() const override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
+	class UPaperSpriteComponent* _EpicMinimapSprite;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

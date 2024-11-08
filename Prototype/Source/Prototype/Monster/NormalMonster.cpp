@@ -22,6 +22,13 @@ ANormalMonster::ANormalMonster()
 		GetMesh()->SetSkeletalMesh(PS.Object);
 	}
 
+	_NoMalMinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("NormalMinimapSprite"));
+	_NoMalMinimapSprite->SetupAttachment(RootComponent);
+	_NoMalMinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
+	_NoMalMinimapSprite->SetWorldScale3D(FVector(0.5f));
+	_NoMalMinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	_NoMalMinimapSprite->bVisibleInSceneCaptureOnly = true;
+
 	_exp = 50;
 	_launchLength = 1000.0f;
 	_upVector = {0.0f,0.0f,200.f};

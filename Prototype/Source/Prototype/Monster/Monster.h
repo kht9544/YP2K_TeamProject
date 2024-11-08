@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Player/Creature.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "PaperSpriteComponent.h"
 #include "Monster.generated.h"
 
 /**
@@ -45,11 +47,8 @@ public:
 
 	//virtual void OnDeath() {};
 
-	//te
 
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
-	class UPaperSpriteComponent* _teMinimapSprite;
 
 protected:
 	UPROPERTY(VisibleAnywhere)

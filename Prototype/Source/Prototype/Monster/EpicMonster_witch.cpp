@@ -40,6 +40,14 @@ AEpicMonster_witch::AEpicMonster_witch()
 
 	_exp = 70;
 
+	_EpicMinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("EpicMinimapSprite"));
+	_EpicMinimapSprite->SetupAttachment(RootComponent);
+	_EpicMinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
+	_EpicMinimapSprite->SetWorldScale3D(FVector(0.5f));
+	_EpicMinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	_EpicMinimapSprite->bVisibleInSceneCaptureOnly = true;
+
+
 	AIControllerClass = AAIController_Epic::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }

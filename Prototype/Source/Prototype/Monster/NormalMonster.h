@@ -21,6 +21,11 @@ public:
 	virtual FString GetGuardOff() const override;
 	virtual FString GetDeadSoundName() const override;
 
+	//te
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
+	class UPaperSpriteComponent* _NoMalMinimapSprite;
 
 protected:
 	// Called when the game starts or when spawned

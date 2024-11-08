@@ -32,6 +32,14 @@ ABossMonster::ABossMonster()
 		_landDecal = DA.Class;
 	}
 
+	_BossMinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("testMinimapSprite"));
+	_BossMinimapSprite->SetupAttachment(RootComponent);
+	_BossMinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
+	_BossMinimapSprite->SetWorldScale3D(FVector(0.5f));
+	_BossMinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	_BossMinimapSprite->bVisibleInSceneCaptureOnly = true;
+
+
 	ObstacleDestroyCount = 0;
 	DashDistance = 2000.f;
 	DashSpeed = 2000.f;

@@ -32,7 +32,10 @@ public:
 	void UpdateDash();
 	void StunEnd();
 	void DestroyObstacle();
+	
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
+	class UPaperSpriteComponent* _BossMinimapSprite;
 
 	//void SpawnObstacles();
 	
