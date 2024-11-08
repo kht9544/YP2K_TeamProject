@@ -21,11 +21,12 @@ AMonster::AMonster()
 	_capsuleComponent = GetCapsuleComponent();
     _capsuleComponent->OnComponentHit.AddDynamic(this, &AMonster::OnHit);
 
-	_MonsterMapIcon = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MonsterMapIcon"));
-	_MonsterMapIcon->SetupAttachment(RootComponent);
-	_MonsterMapIcon->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
-	_MonsterMapIcon->SetWorldScale3D(FVector(0.5f));
-	_MonsterMapIcon->bVisibleInSceneCaptureOnly = true;
+	_teMinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("teMinimapSprite"));
+	_teMinimapSprite->SetupAttachment(RootComponent);
+	_teMinimapSprite->SetWorldRotation(FRotator::MakeFromEuler(FVector(90.f, 0.f, -90.f)));
+	_teMinimapSprite->SetWorldScale3D(FVector(0.5f));
+	_teMinimapSprite->SetWorldLocation(FVector(0.f, 0.f, 300.f));
+	_teMinimapSprite->bVisibleInSceneCaptureOnly = true;
 
 }
 
