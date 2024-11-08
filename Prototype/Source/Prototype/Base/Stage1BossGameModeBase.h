@@ -13,5 +13,12 @@ UCLASS()
 class PROTOTYPE_API AStage1BossGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	AStage1BossGameModeBase();
+
+	virtual void BeginPlay() override;
+
+	virtual void PostInitializeComponents() override;
 	
 };

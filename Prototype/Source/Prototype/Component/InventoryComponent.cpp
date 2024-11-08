@@ -30,8 +30,15 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
-	UIManager->GetInventoryUI()->ItemEquip.AddUObject(this, &UInventoryComponent::EquipItem);
+	if (UIManager && UIManager->GetInventoryUI())
+	{
+		UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
+		UIManager->GetInventoryUI()->ItemEquip.AddUObject(this, &UInventoryComponent::EquipItem);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UIManager or Inventory UI is null in UInventoryComponent::BeginPlay"));
+	}
 
 	_ItemSlots.Init(nullptr, _itemSlotMax);
 	_EquipSlots.Add(TEXT("Helmet"));

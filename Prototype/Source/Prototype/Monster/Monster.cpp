@@ -39,7 +39,7 @@ void AMonster::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
-
+	_StatCom->SetLevelInit(1);
 }
 
 void AMonster::Disable()
@@ -68,7 +68,7 @@ float AMonster::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent,
 			GetController()->UnPossess();
 		player->_StatCom->AddExp(GetExp());
 
-
+		 
 	}
 	return 0.0f;
 }

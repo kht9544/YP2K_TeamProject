@@ -219,7 +219,7 @@ void AMyPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	_StatCom->SetLevelInit(1);
+	//_StatCom->SetLevelInit(1);
 
 	if (_Widget)
 	{

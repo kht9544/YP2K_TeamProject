@@ -32,7 +32,7 @@ AFireball::AFireball()
     _moveCom->ProjectileGravityScale = 0.0f;
 
     InitialLifeSpan = 5.0f; 
-    OrbitRadius = 150.0f;  
+    OrbitRadius = 100.0f;  
     OrbitSpeed = 2.0f;    
     _damage = 50.f;
 }
@@ -72,6 +72,7 @@ void AFireball::Tick(float DeltaTime)
     FVector NewLocation = GetActorLocation();
     NewLocation.X = Player->GetActorLocation().X + FMath::Cos(OrbitAngle) * OrbitRadius / 2;
     NewLocation.Y = Player->GetActorLocation().Y + FMath::Sin(OrbitAngle) * OrbitRadius / 2;
+    NewLocation.Z = Player->GetActorLocation().Z;
 
     SetActorLocation(NewLocation);
 
@@ -91,7 +92,7 @@ void AFireball::Tick(float DeltaTime)
 AMonster* AFireball::FindNearestMonster()
 {
 
-    float SearchRadius = OrbitRadius + 300.0f;
+    float SearchRadius = OrbitRadius + 150.0f;
     FVector FireballLocation = GetActorLocation();
 
     TArray<FHitResult> HitResults;
