@@ -49,7 +49,7 @@ public:
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
-	class UPaperSpriteComponent* _teMinimapSprite;
+	class UPaperSpriteComponent* _MonsterMapIcon;
 
 protected:
 	UPROPERTY(VisibleAnywhere)
