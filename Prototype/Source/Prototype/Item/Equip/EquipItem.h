@@ -41,6 +41,7 @@ public:
     virtual void EquipPlayer();
 
     virtual void UseItem() override;
+    void UnEquip();
 
 protected:
 

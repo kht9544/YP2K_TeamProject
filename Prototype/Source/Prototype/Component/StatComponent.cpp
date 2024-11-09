@@ -150,15 +150,7 @@ void UStatComponent::SetBossLevelInit(int level)
 	}
 }
 
-//int UStatComponent::attckDamage(int32 Attpower, int32 str, int32 dex, int32 _int)
-//{
-//	// (기본 공격력 + (힘 * 힘 계수) + (민첩성 * 민첩성 계수) + 아이템 공격력) * 버프 효과
-//	_attpower = 10;
-//
-//	_actualDamage = (_attpower * (str * 0.4) + (dex * 0.2) + (_int * 0.1));
-//	
-//	return _actualDamage;
-//}
+
 
 void UStatComponent::SetLevel(int32 newLevel)
 {
@@ -375,23 +367,23 @@ void UStatComponent::ModStat(StatType stat, int32 amount)
 	switch (stat)
 	{
 	case StatType::HP:
-		_modHp = amount;
+		_modHp += amount;
 		_maxHp = _ogHp + _modHp;
 		break;
 	case StatType::MP:
-		_modMp = amount;
+		_modMp += amount;
 		_maxMp = _ogMp + _modMp;
 		break;
 	case StatType::STR:
-		_modStr = amount;
+		_modStr += amount;
 		_str = _ogStr + _modStr;
 		break;
 	case StatType::DEX:
-		_modDex = amount;
+		_modDex += amount;
 		_dex = _ogDex + _modDex;
 		break;
 	case StatType::INT:
-		_modInt = amount;
+		_modInt += amount;
 		_int = _ogInt + _modInt;
 		break;
 	case StatType::CurHP:

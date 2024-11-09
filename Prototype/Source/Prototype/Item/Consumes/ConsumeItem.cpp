@@ -9,3 +9,9 @@ AConsumeItem::AConsumeItem()
 {
 	_trigger->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }
+
+void AConsumeItem::UseItem()
+{
+	if (_player)
+		_player->GetStatComponent()->ModStat(_ModStatType, _Value);
+}

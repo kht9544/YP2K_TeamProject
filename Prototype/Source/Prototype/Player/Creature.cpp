@@ -171,6 +171,16 @@ FString ACreature::GetEpicAttackMagicDotSound() const
 	return "default_Sound";
 }
 
+FString ACreature::GetPlayerSkillEffect04_Start() const
+{
+	return "default_Start";
+}
+
+FString ACreature::GetPlayerSkillEffect04_Durring() const
+{
+	return "default_Durring";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;
@@ -204,7 +214,7 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 
 		if (_StatCom->IsDead())
 		{
-			SoundManager->PlaySound(*GetDeadSoundName(), _hitPoint);
+			SoundManager->PlaySound(*GetDeadSoundName(), this->GetActorLocation());
 			
 			SetActorEnableCollision(false);
 			auto controller = GetController();

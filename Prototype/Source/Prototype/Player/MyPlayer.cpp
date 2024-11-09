@@ -429,6 +429,16 @@ FString AMyPlayer::GetSkillSound03Shout() const
 	return "Skill03_Shout";
 }
 
+FString AMyPlayer::GetPlayerSkillEffect04_Start() const
+{
+	return "P_Greystone_HToKill_Resurrect";
+}
+
+FString AMyPlayer::GetPlayerSkillEffect04_Durring() const
+{
+	return "NS_Priest_Sphere";
+}
+
 void AMyPlayer::Move(const FInputActionValue &value)
 {
 	if (bIsGuarding)
@@ -654,6 +664,10 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 
 			SkillOnCooldown[3] = true;
 			_skillWidgetInstance->StartCooldown(3, 10.0f);
+
+			EffectManager->Play(*GetPlayerSkillEffect04_Start(), GetActorLocation());
+
+			EffectManager->Play(*GetPlayerSkillEffect04_Durring(), GetActorLocation());
 		}
 	}
 }

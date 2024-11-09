@@ -32,6 +32,8 @@ ABossMonster::ABossMonster()
 		_landDecal = DA.Class;
 	}
 
+
+
 	ObstacleDestroyCount = 0;
 	DashDistance = 2000.f;
 	DashSpeed = 2000.f;

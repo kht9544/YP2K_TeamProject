@@ -29,6 +29,11 @@ AEffectManager::AEffectManager()
 	//Plaer : Skill 3 FireBall Niagara
 	CreateNiagaraClass(TEXT("NS_Projectile_01"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_FireBall_BP.NS_FireBall_BP_C'"));
 	CreateNiagaraClass(TEXT("NS_Projectile_01_Hit"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_FireBallHit_BP.NS_FireBallHit_BP_C'"));
+
+	//Player : Skill 4 
+	CreateNiagaraClass(TEXT("P_Greystone_HToKill_Resurrect"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_Skill04_Start.P_Skill04_Start_C'"));
+	CreateNiagaraClass(TEXT("NS_Priest_Sphere"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_Skill04_During.NS_Skill04_During_C'"));
+
 }
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)

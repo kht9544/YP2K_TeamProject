@@ -15,7 +15,7 @@
 
 #include "Monster/MagicDecal.h"
 
-#include "../Animation/Monster_Epic01_Anim.h"
+#include "Animation/Monster_Epic01_Anim.h"
 
 
 AEpicMonster_witch::AEpicMonster_witch()
@@ -37,6 +37,8 @@ AEpicMonster_witch::AEpicMonster_witch()
 	{
 		_tedecal = Wide.Class;
 	}
+
+
 
 	_exp = 70;
 
@@ -148,7 +150,7 @@ FString AEpicMonster_witch::GetEpicAttackMagicDotSound() const
 
 FString AEpicMonster_witch::GetDeadSoundName() const
 {
-	return "Morigesh_Effort_Death";
+	return "Morigesh_Effort_Death_Cue";
 }
 
 

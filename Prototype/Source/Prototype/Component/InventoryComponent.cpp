@@ -189,12 +189,15 @@ void UInventoryComponent::TryEquip(FString part, int32 slot)
 		return;
 
 	if (_EquipSlots[part] != nullptr)
+	{
+		_EquipSlots[part]->UnEquip();
 		_ItemSlots[slot] = _EquipSlots[part];
+	}
 	else
 		_ItemSlots[slot] = nullptr;
 
 	_EquipSlots[part] = equipment;
-	_EquipSlots[part]->EquipPlayer();
+	_EquipSlots[part]->UseItem();
 }
 
 void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem *item)
