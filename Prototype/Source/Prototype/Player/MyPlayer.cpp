@@ -439,6 +439,8 @@ FString AMyPlayer::GetPlayerSkillEffect04_Durring() const
 	return "NS_Priest_Sphere";
 }
 
+
+
 void AMyPlayer::Move(const FInputActionValue &value)
 {
 	if (bIsGuarding)
@@ -666,8 +668,11 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 			_skillWidgetInstance->StartCooldown(3, 10.0f);
 
 			EffectManager->Play(*GetPlayerSkillEffect04_Start(), GetActorLocation());
+				
 
-			EffectManager->Play(*GetPlayerSkillEffect04_Durring(), GetActorLocation());
+			EffectManager->PlayOnSkeletalMesh(*GetPlayerSkillEffect04_Durring(), _lowerBodyMesh, "root");
+
+
 		}
 	}
 }

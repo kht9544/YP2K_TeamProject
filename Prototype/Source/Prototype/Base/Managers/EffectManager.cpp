@@ -85,6 +85,25 @@ void AEffectManager::Play(FString name, FVector location, FRotator rotator)
 
 }
 
+void AEffectManager::PlayOnSkeletalMesh(FString name, USkeletalMeshComponent* mesh, FName socketName)
+{
+	if (!_effectTable.Contains(name))
+		return;
+
+	auto findEffect = _effectTable[name].FindByPredicate(
+		[](AParticleEffect* effect)-> bool
+		{
+			return !effect->IsPlaying();
+		});
+
+	if (findEffect)
+		(*findEffect)->PlayOnSkeletalMesh(mesh, socketName);
+
+
+
+
+}
+
 
 void AEffectManager::BeginPlay()
 {

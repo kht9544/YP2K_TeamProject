@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraComponent.h"
+#include "NiagaraSystem.h"
+
 #include "ParticleEffect.generated.h"
 
 UCLASS()
@@ -26,6 +29,9 @@ public:
 	void Play(FVector location, FRotator rotator);
 	bool IsPlaying();
 
+	// 스켈레톤 붙여보기 시도.
+	void PlayOnSkeletalMesh(USkeletalMeshComponent* mesh, FName socketName);
+	
 private:
 	
 	UFUNCTION()

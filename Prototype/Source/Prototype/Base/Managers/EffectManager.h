@@ -24,8 +24,12 @@ public:
 	void CreateNiagaraClass(FString name, FString path);
 	void CreateEffect();
 	void Play(FString name, FVector location, FRotator rotator = FRotator::ZeroRotator);
+	void PlayOnSkeletalMesh(FString name, USkeletalMeshComponent* mesh, FName socketName);
+
 
 	virtual void Tick(float DeltaTime) override;
+
+	
 
 
 protected:

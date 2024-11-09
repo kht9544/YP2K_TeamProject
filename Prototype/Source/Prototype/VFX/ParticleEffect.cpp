@@ -70,6 +70,27 @@ bool AParticleEffect::IsPlaying()
 	// return _niagaraCom->IsActive();
 }
 
+void AParticleEffect::PlayOnSkeletalMesh(USkeletalMeshComponent* mesh, FName socketName)
+{
+	if (!_niagaraCom && !_particleCom)
+		return;
+
+	// 파티클 효과를 스켈레탈 메쉬의 소켓에 부착
+	if (_niagaraCom)
+	{
+		_niagaraCom->AttachToComponent(mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, socketName);
+		_niagaraCom->ActivateSystem();
+	}
+
+	if (_particleCom)
+	{
+		_particleCom->AttachToComponent(mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, socketName);
+		_particleCom->ActivateSystem();
+	}
+
+}
+
+
 void AParticleEffect::End(UNiagaraComponent* niagaraComponent)
 {
 	if (niagaraComponent)
