@@ -31,6 +31,9 @@ public:
 
 public:
 	virtual void Init() override;
+
+	UFUNCTION()
+	void InitializeManagers();
 	
 	class AUIManager* GetUIManager() { return _UIManager; }
 
@@ -41,6 +44,7 @@ public:
 	FItemData* GetConsumeItemData(int code);
 	FItemData* GetEquipItemData(int code);
 
+	AUIManager* GetUIManager() {return _UIManager;}
 	ASoundManager* GetSoundManager() { return _soundManager; }
 	AEffectManager* GetEffectManager() { return _effectManager; }
 

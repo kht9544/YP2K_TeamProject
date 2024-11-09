@@ -25,6 +25,10 @@ void AStage1BossGameModeBase::BeginPlay()
 			if (StatComponent)
 			{
 				GameInstance->LoadPlayerStats(StatComponent);	
+
+				_UIManager = GameInstance->GetUIManager();
+                _soundManager = GameInstance->GetSoundManager();
+                _effectManager = GameInstance->GetEffectManager();
 			}
 		}
 		
