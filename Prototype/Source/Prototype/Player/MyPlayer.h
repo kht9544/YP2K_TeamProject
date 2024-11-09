@@ -77,6 +77,9 @@ public:
 	virtual FString GetPlayerAttackHitEffect() const override;
 	virtual FString GetSkillSound03() const override;
 	virtual FString GetSkillSound03Shout() const override;
+	virtual FString GetPlayerSkillEffect04_Start() const override;
+	virtual FString GetPlayerSkillEffect04_Durring() const override;
+
 
 private:
 	void Move(const FInputActionValue &value);
@@ -233,6 +236,5 @@ public:
 
 
 
-
-
+	
 };

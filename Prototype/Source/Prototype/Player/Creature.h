@@ -48,6 +48,8 @@ public:
 	virtual FString GetPlayerAttackHitEffect() const;
 	virtual FString GetEpicAttackFarSound() const;
 	virtual FString GetEpicAttackMagicDotSound() const;
+	virtual FString GetPlayerSkillEffect04_Start() const;
+	virtual FString GetPlayerSkillEffect04_Durring() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
