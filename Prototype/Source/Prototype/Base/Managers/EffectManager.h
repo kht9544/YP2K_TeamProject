@@ -10,7 +10,10 @@
 
 
 
+
 class AParticleEffect;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEffectFinishedDelegate, FString, EffectName);
 
 UCLASS()
 class PROTOTYPE_API AEffectManager : public AActor
@@ -26,10 +29,13 @@ public:
 	void Play(FString name, FVector location, FRotator rotator = FRotator::ZeroRotator);
 	void PlayOnSkeletalMesh(FString name, USkeletalMeshComponent* mesh, FName socketName);
 
+	// 세가지 추가해본것.
+	FEffectFinishedDelegate OnEffectFinished;
+	void NotifyEffectFinished(FString EffectName);
+	void EndEffect(FString EffectName);
 
 	virtual void Tick(float DeltaTime) override;
 
-	
 
 
 protected:

@@ -146,6 +146,16 @@ FString ACreature::GetSkillSound03Shout() const
 	return "default_Skill03_Shout";
 }
 
+FString ACreature::GetSkillSound04Start() const
+{
+	return  "default_Skill04_Start";
+}
+
+FString ACreature::GetSkillSound04Durring() const
+{
+	return  "default_Skill04_Durring";
+}
+
 FString ACreature::GetBossMonsterAttack() const
 {
 	return "default_BossMonsterAttack";

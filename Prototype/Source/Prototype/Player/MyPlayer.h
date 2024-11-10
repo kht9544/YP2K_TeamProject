@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Creature.h"
 #include "../Item/Equip/EquipItem.h"
+#include "../Base/Managers/EffectManager.h"
 #include "NiagaraSystem.h"
 #include "MyPlayer.generated.h"
 
@@ -79,7 +80,12 @@ public:
 	virtual FString GetSkillSound03Shout() const override;
 	virtual FString GetPlayerSkillEffect04_Start() const override;
 	virtual FString GetPlayerSkillEffect04_Durring() const override;
-
+	virtual FString GetSkillSound04Start() const override;
+	virtual FString GetSkillSound04Durring() const override;
+	
+	UFUNCTION()
+	void OnSkillEffectFinished(FString EffectName);
+	bool _isSkill4Active = false;
 
 
 private:
@@ -234,7 +240,6 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Skills")
 	TSubclassOf<class AFireball> _fireball;
-
 
 
 	

@@ -6,6 +6,8 @@
 #include "Components/SceneComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASoundManager::ASoundManager()
@@ -29,8 +31,8 @@ ASoundManager::ASoundManager()
 	CreateSound("Skill03_Sound_Begin_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/SkillSound_03_Begin_BP.SkillSound_03_Begin_BP_C'");
 	CreateSound("Skill03_Sound_Hit_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/SkillSound_03_Hit_BP.SkillSound_03_Hit_BP_C'");
 	CreateSound("Skill03_Shout","/Script/Engine.Blueprint'/Game/Blueprint/Sound/SkillSound_03_Shout_BP.SkillSound_03_Shout_BP_C'");
-
-
+	CreateSound("Skill04_Sound_Start", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/SkillSound_04_Begin_BP.SkillSound_04_Begin_BP_C'");
+	CreateSound("Skill04_Sound_02_during", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/SkillSound_04_Durring_BP.SkillSound_04_Durring_BP_C'");
 
 	// NormalMonster Sound
 	CreateSound("NormalMonster_AttackSound", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_N_AttackSound_BP.Monster_N_AttackSound_BP_C'");
@@ -45,6 +47,8 @@ ASoundManager::ASoundManager()
 	CreateSound("EpicMonsterAttack_Far_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Epic_AttackFireBall.Monster_Epic_AttackFireBall_C'");
 	CreateSound("EpicMonsterAttack_MagicDot_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Epic_AttackMagicDot.Monster_Epic_AttackMagicDot_C'");
 	CreateSound("Morigesh_Effort_Death_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Epic_Death.Monster_Epic_Death_C'");
+
+
 
 }
 
@@ -72,6 +76,25 @@ void ASoundManager::PlaySound(FString name, FVector location)
 		(*findSound)->Play(location);
 
 }
+
+void ASoundManager::StopSound(FString name)
+{
+
+	if (_soundEffectTable.Contains(name))
+	{
+		// 재생 중인 사운드를 찾아 중지하고 제거
+		for (ASoundEffect* SoundEffect : _soundEffectTable[name])
+		{
+			if (SoundEffect && SoundEffect->IsPlaying())
+			{
+				SoundEffect->Stop();
+				break;
+			}
+		}
+	}
+}
+
+
 
 
 void ASoundManager::CreateSound(FString name, FString path)

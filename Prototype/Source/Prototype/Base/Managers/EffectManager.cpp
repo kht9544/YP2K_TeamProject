@@ -100,8 +100,16 @@ void AEffectManager::PlayOnSkeletalMesh(FString name, USkeletalMeshComponent* me
 		(*findEffect)->PlayOnSkeletalMesh(mesh, socketName);
 
 
+}
 
+void AEffectManager::NotifyEffectFinished(FString EffectName)
+{
+	OnEffectFinished.Broadcast(EffectName);
+}
 
+void AEffectManager::EndEffect(FString EffectName)
+{
+	NotifyEffectFinished(EffectName);
 }
 
 
@@ -110,6 +118,8 @@ void AEffectManager::BeginPlay()
 	Super::BeginPlay();
 	
 	CreateEffect();
+
+
 }
 
 
@@ -118,5 +128,4 @@ void AEffectManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
 

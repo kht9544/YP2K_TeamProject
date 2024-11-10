@@ -42,6 +42,8 @@ public:
 	virtual FString GetSkillSound02() const;
 	virtual FString GetSkillSound03() const;
 	virtual FString GetSkillSound03Shout() const;
+	virtual FString GetSkillSound04Start() const;
+	virtual FString GetSkillSound04Durring() const;
 
 	virtual FString GetBossMonsterAttack() const;
 	virtual FString GetSkillParticleEffect02() const;
