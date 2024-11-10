@@ -28,6 +28,14 @@ public:
 
 	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
 	virtual void InitializeComponent() override;
+
+	TArray<ABaseItem*> GetItemSlots(){return _ItemSlots;}
+	TArray<int32> GetEmptySlots(){return _EmptySlots;}
+	TMap<FString, class AEquipItem*> GetEquipSlots(){return _EquipSlots;}
+
+	void SetItemSlots(TArray<ABaseItem*> item ){_ItemSlots = item;}
+	void SetEmptySlots(TArray<int32> empty ){_EmptySlots = empty;}
+	void SetEquipSlots(TMap<FString, class AEquipItem*> equip){_EquipSlots = equip;}
 	
 	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);

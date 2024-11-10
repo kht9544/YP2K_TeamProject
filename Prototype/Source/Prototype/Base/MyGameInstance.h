@@ -26,6 +26,15 @@ public:
 	void SavePlayerStats(class UStatComponent* StatComponent);
 	void LoadPlayerStats(class UStatComponent* StatComponent);
 
+	UPROPERTY()
+	TArray<class ABaseItem*> SavedItemSlots;
+
+	UPROPERTY()
+    TMap<FString,class AEquipItem*> SavedEquipSlots;
+
+	void SaveInventoryData(class UInventoryComponent* InventoryComponent);
+    void LoadInventoryData(class UInventoryComponent* InventoryComponent);
+
 	bool GetFirst(){return _firstIn;}
 	void SetFirst(bool first){_firstIn = first;}
 
@@ -44,7 +53,6 @@ public:
 	FItemData* GetConsumeItemData(int code);
 	FItemData* GetEquipItemData(int code);
 
-	AUIManager* GetUIManager() {return _UIManager;}
 	ASoundManager* GetSoundManager() { return _soundManager; }
 	AEffectManager* GetEffectManager() { return _effectManager; }
 
@@ -99,5 +107,8 @@ private:
 	UPROPERTY()
 	int32 _savedExp;
 	UPROPERTY()
-	bool _firstIn = true;;
+	bool _firstIn = true;
+
+	
+
 };

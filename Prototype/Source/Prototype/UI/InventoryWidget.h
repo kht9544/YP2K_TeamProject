@@ -44,6 +44,7 @@ public:
 	void UpdateOriginStat(int32 statType, int32 amount);
 	void UpdateModStat(int32 statType, int32 amount);
 	void RefreshModStat();
+	void Update();
 
 private:
 	void SetTargetItem(int32 slotIndex);

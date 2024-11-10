@@ -45,6 +45,7 @@ public:
 
 	UTexture2D* GetDefaultTexture() { return _defaultTexture; }
 
+
 	PAUSE_GAME pauseGame;
 	RESUM_GAME resumGame;
 private:

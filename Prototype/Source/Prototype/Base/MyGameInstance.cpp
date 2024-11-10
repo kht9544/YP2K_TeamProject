@@ -2,6 +2,8 @@
 
 #include "Base/MyGameInstance.h"
 #include "../Component/StatComponent.h"
+#include "../UI/InventoryWidget.h"
+#include "../Component/InventoryComponent.h"
 #include "Base/Managers/UIManager.h"
 #include "Base/Managers/SoundManager.h"
 
@@ -76,6 +78,27 @@ void UMyGameInstance::LoadPlayerStats(class UStatComponent *StatComponent)
 	}
 }
 
+void UMyGameInstance::SaveInventoryData(class UInventoryComponent* InventoryComponent)
+{
+	if (InventoryComponent)
+	{
+ 		SavedItemSlots = InventoryComponent->GetItemSlots();
+    	SavedEquipSlots = InventoryComponent->GetEquipSlots();
+	}
+   
+}
+
+
+void UMyGameInstance::LoadInventoryData(class UInventoryComponent* InventoryComponent)
+{
+	if (InventoryComponent) 
+	{
+		InventoryComponent->SetItemSlots(SavedItemSlots);
+    	InventoryComponent->SetEquipSlots(SavedEquipSlots);
+	}
+}
+
+
 void UMyGameInstance::Init()
 {
 	Super::Init();
@@ -84,6 +107,12 @@ void UMyGameInstance::Init()
 	auto statData = GetStatDataByLevel(1);
 	auto EpicData = GetEpicDataByLevel(1);
 
+	InitializeManagers();
+
+}
+
+void UMyGameInstance::InitializeManagers()
+{
 	FActorSpawnParameters params;
 	params.Name = TEXT("UIManager");
 	_UIManager = GetWorld()->SpawnActor<AUIManager>(FVector::ZeroVector, FRotator::ZeroRotator, params);
@@ -95,14 +124,6 @@ void UMyGameInstance::Init()
 	FActorSpawnParameters effectParams;
 	effectParams.Name = TEXT("EffectManager");
 	_effectManager = GetWorld()->SpawnActor<AEffectManager>(FVector::ZeroVector, FRotator::ZeroRotator, effectParams);
-
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMyGameInstance::InitializeManagers, 0.1f, false);
-}
-
-void UMyGameInstance::InitializeManagers()
-{
-
 }
 
 FMyStatData *UMyGameInstance::GetStatDataByLevel(int level)

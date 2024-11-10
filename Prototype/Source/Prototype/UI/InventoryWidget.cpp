@@ -238,6 +238,7 @@ void UInventoryWidget::RefreshModStat()
 	}
 }
 
+
 void UInventoryWidget::SetTargetItem(int32 slotIndex)
 {
 	if (Button_[slotIndex] == nullptr)
