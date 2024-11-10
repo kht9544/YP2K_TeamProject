@@ -83,10 +83,6 @@ public:
 	virtual FString GetSkillSound04Start() const override;
 	virtual FString GetSkillSound04Durring() const override;
 	
-	UFUNCTION()
-	void OnSkillEffectFinished(FString EffectName);
-	bool _isSkill4Active = false;
-
 
 private:
 	void Move(const FInputActionValue &value);

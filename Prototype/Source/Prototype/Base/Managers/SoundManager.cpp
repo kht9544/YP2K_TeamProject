@@ -77,22 +77,7 @@ void ASoundManager::PlaySound(FString name, FVector location)
 
 }
 
-void ASoundManager::StopSound(FString name)
-{
 
-	if (_soundEffectTable.Contains(name))
-	{
-		// 재생 중인 사운드를 찾아 중지하고 제거
-		for (ASoundEffect* SoundEffect : _soundEffectTable[name])
-		{
-			if (SoundEffect && SoundEffect->IsPlaying())
-			{
-				SoundEffect->Stop();
-				break;
-			}
-		}
-	}
-}
 
 
 

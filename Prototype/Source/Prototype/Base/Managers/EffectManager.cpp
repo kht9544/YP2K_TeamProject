@@ -102,15 +102,8 @@ void AEffectManager::PlayOnSkeletalMesh(FString name, USkeletalMeshComponent* me
 
 }
 
-void AEffectManager::NotifyEffectFinished(FString EffectName)
-{
-	OnEffectFinished.Broadcast(EffectName);
-}
 
-void AEffectManager::EndEffect(FString EffectName)
-{
-	NotifyEffectFinished(EffectName);
-}
+
 
 
 void AEffectManager::BeginPlay()

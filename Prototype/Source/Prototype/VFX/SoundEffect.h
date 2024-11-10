@@ -28,6 +28,7 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class USoundBase* _soundCom;
+	
 	UPROPERTY(VisibleAnywhere)
-	UAudioComponent* _audioComponent;
+	 UAudioComponent* _audioComponent;
 };

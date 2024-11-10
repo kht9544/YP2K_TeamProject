@@ -216,12 +216,6 @@ void AMyPlayer::BeginPlay()
 	}
 	SkillOnCooldown.Init(false, 4);
 
-
-	if (EffectManager)
-	{
-		EffectManager->OnEffectFinished.AddDynamic(this, &AMyPlayer::OnSkillEffectFinished);
-	}
-
 }
 
 void AMyPlayer::PostInitializeComponents()
@@ -458,20 +452,7 @@ FString AMyPlayer::GetSkillSound04Durring() const
 	return "Skill04_Sound_02_during";
 }
 
-void AMyPlayer::OnSkillEffectFinished(FString EffectName)
-{
-	if (_isSkill4Active && EffectName == GetPlayerSkillEffect04_Durring())
-	{
-		// Skill4의 파티클 효과가 끝났으면 사운드 멈추기
-		SoundManager->StopSound(*GetSkillSound04Durring());
 
-		// 스킬4가 종료되었음을 알리고 활성화 상태를 false로 설정
-		_isSkill4Active = false;
-
-		// 추가적인 종료 처리 (디버깅용)
-		UE_LOG(LogTemp, Warning, TEXT("Skill 4 effect finished."));
-	}
-}
 
 
 void AMyPlayer::Move(const FInputActionValue &value)
@@ -709,7 +690,7 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 			//SoundManager->StopSound(*GetSkillSound04Durring());
 
 
-			_isSkill4Active = true;
+		
 		}
 	}
 }

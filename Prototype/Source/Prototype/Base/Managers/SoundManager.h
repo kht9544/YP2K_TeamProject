@@ -26,7 +26,6 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	void PlaySound(FString name, FVector location);
-	void StopSound(FString name);
 
 private:
 
