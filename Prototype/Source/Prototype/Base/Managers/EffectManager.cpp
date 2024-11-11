@@ -37,6 +37,9 @@ AEffectManager::AEffectManager()
 	//Player : Level Up
 	CreateNiagaraClass(TEXT("P_Status_LevelUp"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_LevelUp_BP.P_LevelUp_BP_C'"));
 
+	// EpicMonster : Skeleton Spawn
+	CreateNiagaraClass(TEXT("P_Morigesh_Ultimate_Reveal"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_Epic_Skeleton.P_Epic_Skeleton_C'"));
+
 }
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)

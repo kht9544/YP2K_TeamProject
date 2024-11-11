@@ -53,7 +53,7 @@ public:
 	virtual FString GetPlayerSkillEffect04_Start() const;
 	virtual FString GetPlayerSkillEffect04_Durring() const;
 	virtual FString GetUIBaseSound() const;
-
+	virtual FString GetEpicSkeletonEffect() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);

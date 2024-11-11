@@ -196,6 +196,11 @@ FString ACreature::GetUIBaseSound() const
 	return "default_Sound";
 }
 
+FString ACreature::GetEpicSkeletonEffect() const
+{
+	return "default_Effect";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;
