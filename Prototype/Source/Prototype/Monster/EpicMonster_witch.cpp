@@ -158,6 +158,11 @@ FString AEpicMonster_witch::GetEpicSkeletonEffect() const
 	return "P_Morigesh_Ultimate_Reveal";
 }
 
+FString AEpicMonster_witch::GetEpicSpawnSound() const
+{
+	return "SpawnSound_Cue";
+}
+
 
 
 void AEpicMonster_witch::MagicShot()
@@ -210,6 +215,7 @@ void AEpicMonster_witch::SumonedMonster()
 				{
 					FName SocketName = FName("head");
 					EffectManager->PlayOnSkeletalMesh(*GetEpicSkeletonEffect(), MeshComponent, SocketName);
+					SoundManager->PlaySound(*GetEpicSpawnSound(), GetActorLocation());
 				}
 				Noram->SpawnDefaultController();
 			}

@@ -54,6 +54,7 @@ public:
 	virtual FString GetPlayerSkillEffect04_Durring() const;
 	virtual FString GetUIBaseSound() const;
 	virtual FString GetEpicSkeletonEffect() const;
+	virtual FString GetEpicSpawnSound() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);

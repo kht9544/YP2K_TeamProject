@@ -201,6 +201,11 @@ FString ACreature::GetEpicSkeletonEffect() const
 	return "default_Effect";
 }
 
+FString ACreature::GetEpicSpawnSound() const
+{
+	return "default_Spawn";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;

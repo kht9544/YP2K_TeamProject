@@ -31,6 +31,7 @@ public:
 	virtual FString GetEpicAttackMagicDotSound() const override;
 	virtual FString GetDeadSoundName() const override;
 	virtual FString GetEpicSkeletonEffect() const override;
+	virtual FString GetEpicSpawnSound() const override;
 
 protected:
 	// Called when the game starts or when spawned
