@@ -191,6 +191,11 @@ FString ACreature::GetPlayerSkillEffect04_Durring() const
 	return "default_Durring";
 }
 
+FString ACreature::GetUIBaseSound() const
+{
+	return "default_Sound";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;

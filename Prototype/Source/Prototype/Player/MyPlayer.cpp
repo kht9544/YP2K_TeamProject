@@ -452,6 +452,11 @@ FString AMyPlayer::GetSkillSound04Durring() const
 	return "Skill04_Sound_02_during";
 }
 
+FString AMyPlayer::GetUIBaseSound() const
+{
+	return "BaseUISound_02_Cue";
+}
+
 
 
 
@@ -793,6 +798,8 @@ void AMyPlayer::StatUIOpen(const FInputActionValue &value)
 
 	UE_LOG(LogTemp, Error, TEXT("StatUI Errow"));
 
+	SoundManager->PlaySound(*GetUIBaseSound(), GetActorLocation());
+
 	if (isPressed && _statWidget != nullptr)
 	{
 		if (_statWidget->IsVisible())
@@ -812,6 +819,8 @@ void AMyPlayer::InvenUIOpen(const FInputActionValue &value)
 	bool isPressed = value.Get<bool>();
 
 	auto invenUI = UIManager->GetInventoryUI();
+
+	SoundManager->PlaySound(*GetUIBaseSound(), GetActorLocation());
 
 	if (isPressed && invenUI != nullptr)
 	{
