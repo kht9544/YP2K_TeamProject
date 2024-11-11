@@ -41,11 +41,12 @@ void APortal::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
         UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
         if (GameInstance)
         {
-            GameInstance->SaveInventoryData(player->_inventoryComponent);
             GameInstance->SavePlayerStats(player->_StatCom);
+            GameInstance->SaveInventoryData(player->_inventoryComponent->GetItemSlots(),player->_inventoryComponent->GetEquipSlots());
+        
+            UE_LOG(LogTemp, Warning, TEXT("Move to %s"),*_mapName.ToString());
+            UGameplayStatics::OpenLevel(this,_mapName);
         }
-        UE_LOG(LogTemp, Warning, TEXT("Move to %s"),*_mapName.ToString());
-        UGameplayStatics::OpenLevel(this,_mapName);
     }
 }
 

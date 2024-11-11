@@ -8,6 +8,7 @@
 #include "Managers/SoundManager.h"
 #include "Component/StatComponent.h"
 #include "../Item/BaseItem.h"
+#include "Item/Equip/EquipItem.h"
 #include "MyGameInstance.generated.h"
 
 #define GAMEINSTANCE Cast<UMyGameInstance>(GetWorld()->GetGameInstance())
@@ -27,16 +28,20 @@ public:
 	void LoadPlayerStats(class UStatComponent* StatComponent);
 
 	UPROPERTY()
-	TArray<class ABaseItem*> SavedItemSlots;
+	TArray<ABaseItem*> SavedItemSlots;
 
 	UPROPERTY()
-    TMap<FString,class AEquipItem*> SavedEquipSlots;
+    TMap<FString,AEquipItem*> SavedEquipSlots;
 
-	void SaveInventoryData(class UInventoryComponent* InventoryComponent);
-    void LoadInventoryData(class UInventoryComponent* InventoryComponent);
+	void SaveInventoryData(const TArray<ABaseItem*>& ItemSlots, const TMap<FString, AEquipItem*>& EquipSlots);
+	void LoadInventoryData(TArray<ABaseItem*>& ItemSlots, TMap<FString, AEquipItem*>& EquipSlots);
+
 
 	bool GetFirst(){return _firstIn;}
 	void SetFirst(bool first){_firstIn = first;}
+
+	bool GetFirst2(){return _firstIn2;}
+	void SetFirst2(bool first){_firstIn2 = first;}
 
 public:
 	virtual void Init() override;
@@ -55,15 +60,6 @@ public:
 
 	ASoundManager* GetSoundManager() { return _soundManager; }
 	AEffectManager* GetEffectManager() { return _effectManager; }
-
-	UPROPERTY(BlueprintReadWrite, Category = "Stat")
-	int32 _playerLevel;
-
-	UFUNCTION(BlueprintCallable, Category = "Stat")
-	void SavePlayerStatus(int32 Level);
-
-	UFUNCTION(BlueprintCallable, Category = "Stat")
-	void LoadPlayerStatus(int32& Level);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -108,6 +104,9 @@ private:
 	int32 _savedExp;
 	UPROPERTY()
 	bool _firstIn = true;
+
+	UPROPERTY()
+	bool _firstIn2 = true;
 
 	
 

@@ -58,7 +58,7 @@ void ASoundManager::BeginPlay()
 
 void ASoundManager::Destroy()
 {
-	 for (auto soundEffectPair : _soundEffectTable)
+	for (auto soundEffectPair : _soundEffectTable)
     {
         for (auto soundEffect : soundEffectPair.Value)
         {

@@ -3,6 +3,8 @@
 #include "Base/MyGameInstance.h"
 #include "../Component/StatComponent.h"
 #include "../UI/InventoryWidget.h"
+#include "../Item/BaseItem.h"
+#include "../Item/Equip/EquipItem.h"
 #include "../Component/InventoryComponent.h"
 #include "Base/Managers/UIManager.h"
 #include "Base/Managers/SoundManager.h"
@@ -46,6 +48,18 @@ UMyGameInstance::UMyGameInstance()
 	}
 }
 
+void UMyGameInstance::SaveInventoryData(const TArray<ABaseItem*>& ItemSlots, const TMap<FString, AEquipItem*>& EquipSlots)
+{
+	SavedItemSlots = ItemSlots;
+	SavedEquipSlots = EquipSlots;
+}
+
+void UMyGameInstance::LoadInventoryData(TArray<ABaseItem*>& ItemSlots, TMap<FString, AEquipItem*>& EquipSlots)
+{
+	ItemSlots = SavedItemSlots;
+	EquipSlots = SavedEquipSlots;
+}
+
 void UMyGameInstance::SavePlayerStats(class UStatComponent *StatComponent)
 {
 	if (StatComponent)
@@ -78,37 +92,15 @@ void UMyGameInstance::LoadPlayerStats(class UStatComponent *StatComponent)
 	}
 }
 
-void UMyGameInstance::SaveInventoryData(class UInventoryComponent* InventoryComponent)
-{
-	if (InventoryComponent)
-	{
- 		SavedItemSlots = InventoryComponent->GetItemSlots();
-    	SavedEquipSlots = InventoryComponent->GetEquipSlots();
-	}
-   
-}
-
-
-void UMyGameInstance::LoadInventoryData(class UInventoryComponent* InventoryComponent)
-{
-	if (InventoryComponent) 
-	{
-		InventoryComponent->SetItemSlots(SavedItemSlots);
-    	InventoryComponent->SetEquipSlots(SavedEquipSlots);
-	}
-}
-
 
 void UMyGameInstance::Init()
 {
 	Super::Init();
 
-	//LoadPlayerStatus(_playerLevel);
 	auto statData = GetStatDataByLevel(1);
 	auto EpicData = GetEpicDataByLevel(1);
 
 	InitializeManagers();
-
 }
 
 void UMyGameInstance::InitializeManagers()
@@ -154,14 +146,4 @@ FItemData *UMyGameInstance::GetEquipItemData(int code)
 {
 	auto EquipData = _EquipItemTable->FindRow<FItemData>(*FString::FromInt(code), TEXT(""));
 	return EquipData;
-}
-
-void UMyGameInstance::SavePlayerStatus(int32 Level)
-{
-	_playerLevel = Level;
-}
-
-void UMyGameInstance::LoadPlayerStatus(int32 &Level)
-{
-	Level = _playerLevel;
 }

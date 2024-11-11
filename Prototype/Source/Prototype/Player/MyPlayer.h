@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Creature.h"
 #include "../Item/Equip/EquipItem.h"
+#include "../Component/InventoryComponent.h" 
 #include "NiagaraSystem.h"
 #include "MyPlayer.generated.h"
 

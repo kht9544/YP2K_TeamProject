@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Component/InventoryComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 
 #include "Base/MyGameInstance.h"
 #include "Base/Managers/UIManager.h"
@@ -30,6 +32,7 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UE_LOG(LogTemp, Warning, TEXT("first in"));
 	if (UIManager && UIManager->GetInventoryUI())
 	{
 		UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
@@ -40,14 +43,36 @@ void UInventoryComponent::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("UIManager or Inventory UI is null in UInventoryComponent::BeginPlay"));
 	}
 
-	_ItemSlots.Init(nullptr, _itemSlotMax);
-	_EquipSlots.Add(TEXT("Helmet"));
-	_EquipSlots.Add(TEXT("UpperArmor"));
-	_EquipSlots.Add(TEXT("ShoulderArmor"));
-	_EquipSlots.Add(TEXT("LowerArmor"));
-	_EquipSlots.Add(TEXT("Sword"));
-	_EquipSlots.Add(TEXT("Shield"));
+
+
+	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance)
+	{
+		GameInstance->LoadInventoryData(_ItemSlots, _EquipSlots);
+		UE_LOG(LogTemp,Warning,TEXT("_ItemSlotsize = %d"),_ItemSlots.Num());
+		UE_LOG(LogTemp,Warning,TEXT("_EquipSlotsize = %d"),_EquipSlots.Num());
+
+        if (_ItemSlots.Num() == 0)
+        {
+			UE_LOG(LogTemp,Warning,TEXT("_ItemSlotnum = 0"));
+            _ItemSlots.Init(nullptr, _itemSlotMax);
+        }
+
+        if (_EquipSlots.Num() == 0)
+        {
+			UE_LOG(LogTemp,Warning,TEXT("_ItemSlotnum = 0"));
+            _EquipSlots.Add(TEXT("Helmet"));
+            _EquipSlots.Add(TEXT("UpperArmor"));
+            _EquipSlots.Add(TEXT("ShoulderArmor"));
+            _EquipSlots.Add(TEXT("LowerArmor"));
+            _EquipSlots.Add(TEXT("Sword"));
+            _EquipSlots.Add(TEXT("Shield"));
+        }
+
+        UpdateUI();
+	}
 }
+
 
 // Called every frame
 void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
@@ -70,7 +95,6 @@ void UInventoryComponent::SlotFullCheck()
 	_isSlotFull = true;
 }
 
-
 void UInventoryComponent::AddItem(int32 slot, ABaseItem *item)
 {
 	if (item == nullptr)
@@ -82,7 +106,7 @@ void UInventoryComponent::AddItem(int32 slot, ABaseItem *item)
 	// Fill into EmptySlot First
 	if (!_EmptySlots.IsEmpty())
 	{
-		//TODO : Filling Already filled slot
+		// TODO : Filling Already filled slot
 		int32 emptyslot;
 		_EmptySlots.HeapPop(emptyslot, true);
 		if (_ItemSlots[emptyslot] == nullptr)
@@ -212,4 +236,24 @@ void UInventoryComponent::UIupdate_Pop(int32 slot)
 
 void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem *item)
 {
+}
+
+void UInventoryComponent::UpdateUI()
+{
+	for (int32 i = 0; i < _itemSlotMax; i++)
+	{
+		if (_ItemSlots.IsValidIndex(i) && _ItemSlots[i] != nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("itemslot : %d"), i);
+			UIupdate_Add(i, _ItemSlots[i]);
+		}
+	}
+
+	for (int32 emptySlot : _EmptySlots)
+	{
+		if (_ItemSlots.IsValidIndex(emptySlot))
+		{
+			UIupdate_Pop(emptySlot);
+		}
+	}
 }
