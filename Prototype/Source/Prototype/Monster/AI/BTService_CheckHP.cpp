@@ -32,8 +32,6 @@ void UBTService_CheckHP::TickNode(UBehaviorTreeComponent &OwnerComp, uint8 *Node
 
     UStatComponent *stat = boss->_StatCom;
     float HealthPercentage = stat->HpRatio();
-
-    UE_LOG(LogTemp, Warning, TEXT("Boss : HP %f"), HealthPercentage);
     
     OwnerComp.GetBlackboardComponent()->SetValueAsFloat("HpPersent", HealthPercentage);
 

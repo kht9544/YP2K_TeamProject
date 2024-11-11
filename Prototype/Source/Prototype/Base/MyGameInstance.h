@@ -8,6 +8,7 @@
 #include "Managers/SoundManager.h"
 #include "Component/StatComponent.h"
 #include "../Item/BaseItem.h"
+#include "Item/Equip/EquipItem.h"
 #include "MyGameInstance.generated.h"
 
 #define GAMEINSTANCE Cast<UMyGameInstance>(GetWorld()->GetGameInstance())
@@ -26,11 +27,20 @@ public:
 	void SavePlayerStats(class UStatComponent* StatComponent);
 	void LoadPlayerStats(class UStatComponent* StatComponent);
 
+    UPROPERTY(BlueprintReadWrite)
+    TArray<ABaseItem*> SavedInventoryItems;
+    
+    UPROPERTY(BlueprintReadWrite)
+    TMap<FString, AEquipItem*> SavedEquipItems;
+
 	bool GetFirst(){return _firstIn;}
 	void SetFirst(bool first){_firstIn = first;}
 
 public:
 	virtual void Init() override;
+
+	UFUNCTION()
+	void InitializeManagers();
 	
 	class AUIManager* GetUIManager() { return _UIManager; }
 
@@ -43,15 +53,6 @@ public:
 
 	ASoundManager* GetSoundManager() { return _soundManager; }
 	AEffectManager* GetEffectManager() { return _effectManager; }
-
-	UPROPERTY(BlueprintReadWrite, Category = "Stat")
-	int32 _playerLevel;
-
-	UFUNCTION(BlueprintCallable, Category = "Stat")
-	void SavePlayerStatus(int32 Level);
-
-	UFUNCTION(BlueprintCallable, Category = "Stat")
-	void LoadPlayerStatus(int32& Level);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -95,5 +96,8 @@ private:
 	UPROPERTY()
 	int32 _savedExp;
 	UPROPERTY()
-	bool _firstIn = true;;
+	int32 _savedBonus;
+	UPROPERTY()
+	bool _firstIn = true;
+
 };

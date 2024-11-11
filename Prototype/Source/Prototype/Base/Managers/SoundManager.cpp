@@ -56,7 +56,21 @@ void ASoundManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Destroy();
 	CreateSoundEffect();
+}
+
+void ASoundManager::Destroy()
+{
+	for (auto soundEffectPair : _soundEffectTable)
+    {
+        for (auto soundEffect : soundEffectPair.Value)
+        {
+            soundEffect->Destroy();
+        }
+    }
+
+    _soundEffectTable.Empty();
 }
 
 void ASoundManager::PlaySound(FString name, FVector location)
