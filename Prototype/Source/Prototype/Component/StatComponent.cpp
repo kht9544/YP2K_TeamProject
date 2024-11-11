@@ -9,6 +9,14 @@
 #include "Player/MyPlayerController.h"
 #include "TimerManager.h"
 
+#include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "../Base/Managers/SoundManager.h"
+#include "../Base/Managers/EffectManager.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
 // Sets default values for this component's properties
 UStatComponent::UStatComponent()
 {
@@ -148,6 +156,11 @@ void UStatComponent::SetBossLevelInit(int level)
 		_PILevelDelegate.Broadcast(_level);
 
 	}
+}
+
+FString UStatComponent::GetSwingSoundName() const
+{
+	return "P_Status_LevelUp";
 }
 
 
@@ -356,6 +369,13 @@ void UStatComponent::AddExp(int32 amount)
 		_PILevelDelegate.Broadcast(_level);
 
 		_bonusPoint += 6;
+
+		
+		UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if (GameInstance && GameInstance->GetEffectManager())
+		{
+			GameInstance->GetEffectManager()->Play(*GetSwingSoundName(), GetOwner()->GetActorLocation(), FRotator::ZeroRotator);
+		}
 
 	}
 	float ratio = EXpRatio();
