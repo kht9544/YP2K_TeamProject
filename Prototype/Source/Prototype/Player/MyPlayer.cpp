@@ -686,9 +686,9 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 				
 
 			EffectManager->PlayOnSkeletalMesh(*GetPlayerSkillEffect04_Durring(), _lowerBodyMesh, "root");
-			SoundManager->PlaySound(*GetSkillSound04Durring(), GetActorLocation());
+			//SoundManager->PlaySound(*GetSkillSound04Durring(), GetActorLocation());
 			//SoundManager->StopSound(*GetSkillSound04Durring());
-
+			SoundManager->PlaySoundWithDuration(*GetSkillSound04Durring(), GetActorLocation(), 17.9f);
 
 		
 		}

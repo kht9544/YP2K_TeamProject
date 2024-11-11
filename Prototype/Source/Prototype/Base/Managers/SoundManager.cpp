@@ -77,6 +77,35 @@ void ASoundManager::PlaySound(FString name, FVector location)
 
 }
 
+void ASoundManager::PlaySoundWithDuration(FString name, FVector location, float duration)
+{
+
+	if (!_soundEffectTable.Contains(name))
+		return;
+
+	auto findSound = _soundEffectTable[name].FindByPredicate(
+		[](ASoundEffect* soundEffect)-> bool
+		{
+			return !soundEffect->IsPlaying();  // 현재 재생 중이 아닌 소리만 찾기
+		});
+
+	if (findSound)
+	{
+		ASoundEffect* soundEffect = *findSound;
+		soundEffect->Play(location);
+
+		// 소리가 재생된 후, 지정된 duration 시간이 지나면 soundEffect의 Stop 함수를 호출하도록 타이머 설정
+		GetWorld()->GetTimerManager().SetTimer(
+			SoundDurationTimerHandle,
+			FTimerDelegate::CreateLambda([soundEffect]() {
+				soundEffect->Stop();
+				}),
+			duration,
+			false
+		);
+	}
+}
+
 
 
 
