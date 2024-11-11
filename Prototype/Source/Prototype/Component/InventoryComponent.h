@@ -28,16 +28,27 @@ public:
 
 	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
 	virtual void InitializeComponent() override;
+
+	TArray<ABaseItem*> GetItemSlots(){return _ItemSlots;}
+	TArray<int32> GetEmptySlots(){return _EmptySlots;}
+	TMap<FString, class AEquipItem*> GetEquipSlots(){return _EquipSlots;}
+
+	void SetItemSlots(TArray<ABaseItem*> item ){_ItemSlots = item;}
+	void SetEmptySlots(TArray<int32> empty ){_EmptySlots = empty;}
+	void SetEquipSlots(TMap<FString, class AEquipItem*> equip){_EquipSlots = equip;}
 	
 	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);
 	void EquipItem(int32 slot);
 	void TryEquip(FString part, int32 slot);
 
-private:
 	void UIupdate_Add(int32 slot, ABaseItem* item);
 	void UIupdate_Pop(int32 slot);
 	void UIupdate_equip(int32 slot, ABaseItem* item);
+
+	void UpdateUI();
+
+private:
 	//Trigger
 	bool _isSlotFull = false;
 	int32 _itemSlotMax = 12;

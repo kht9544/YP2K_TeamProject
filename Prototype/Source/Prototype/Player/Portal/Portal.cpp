@@ -41,10 +41,11 @@ void APortal::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
         UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
         if (GameInstance)
         {
-           GameInstance->SavePlayerStats(player->_StatCom);
+            GameInstance->SavePlayerStats(player->_StatCom);
+        
+            UE_LOG(LogTemp, Warning, TEXT("Move to %s"),*_mapName.ToString());
+            UGameplayStatics::OpenLevel(this,_mapName);
         }
-        UE_LOG(LogTemp, Warning, TEXT("Move to %s"),*_mapName.ToString());
-        UGameplayStatics::OpenLevel(this,_mapName);
     }
 }
 
