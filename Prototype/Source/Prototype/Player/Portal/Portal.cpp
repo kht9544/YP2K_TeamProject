@@ -42,7 +42,6 @@ void APortal::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
         if (GameInstance)
         {
             GameInstance->SavePlayerStats(player->_StatCom);
-            GameInstance->SaveInventoryData(player->_inventoryComponent->GetItemSlots(),player->_inventoryComponent->GetEquipSlots());
         
             UE_LOG(LogTemp, Warning, TEXT("Move to %s"),*_mapName.ToString());
             UGameplayStatics::OpenLevel(this,_mapName);

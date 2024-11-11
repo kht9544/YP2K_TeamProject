@@ -27,21 +27,8 @@ public:
 	void SavePlayerStats(class UStatComponent* StatComponent);
 	void LoadPlayerStats(class UStatComponent* StatComponent);
 
-	UPROPERTY()
-	TArray<ABaseItem*> SavedItemSlots;
-
-	UPROPERTY()
-    TMap<FString,AEquipItem*> SavedEquipSlots;
-
-	void SaveInventoryData(const TArray<ABaseItem*>& ItemSlots, const TMap<FString, AEquipItem*>& EquipSlots);
-	void LoadInventoryData(TArray<ABaseItem*>& ItemSlots, TMap<FString, AEquipItem*>& EquipSlots);
-
-
 	bool GetFirst(){return _firstIn;}
 	void SetFirst(bool first){_firstIn = first;}
-
-	bool GetFirst2(){return _firstIn2;}
-	void SetFirst2(bool first){_firstIn2 = first;}
 
 public:
 	virtual void Init() override;
@@ -104,10 +91,5 @@ private:
 	int32 _savedExp;
 	UPROPERTY()
 	bool _firstIn = true;
-
-	UPROPERTY()
-	bool _firstIn2 = true;
-
-	
 
 };

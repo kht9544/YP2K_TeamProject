@@ -3,7 +3,6 @@
 #include "Component/InventoryComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-
 #include "Base/MyGameInstance.h"
 #include "Base/Managers/UIManager.h"
 #include "UI/InventoryWidget.h"
@@ -43,36 +42,17 @@ void UInventoryComponent::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("UIManager or Inventory UI is null in UInventoryComponent::BeginPlay"));
 	}
 
+	_ItemSlots.Init(nullptr, _itemSlotMax);
 
+	_EquipSlots.Add(TEXT("Helmet"));
+	_EquipSlots.Add(TEXT("UpperArmor"));
+	_EquipSlots.Add(TEXT("ShoulderArmor"));
+	_EquipSlots.Add(TEXT("LowerArmor"));
+	_EquipSlots.Add(TEXT("Sword"));
+	_EquipSlots.Add(TEXT("Shield"));
 
-	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (GameInstance)
-	{
-		GameInstance->LoadInventoryData(_ItemSlots, _EquipSlots);
-		UE_LOG(LogTemp,Warning,TEXT("_ItemSlotsize = %d"),_ItemSlots.Num());
-		UE_LOG(LogTemp,Warning,TEXT("_EquipSlotsize = %d"),_EquipSlots.Num());
-
-        if (_ItemSlots.Num() == 0)
-        {
-			UE_LOG(LogTemp,Warning,TEXT("_ItemSlotnum = 0"));
-            _ItemSlots.Init(nullptr, _itemSlotMax);
-        }
-
-        if (_EquipSlots.Num() == 0)
-        {
-			UE_LOG(LogTemp,Warning,TEXT("_ItemSlotnum = 0"));
-            _EquipSlots.Add(TEXT("Helmet"));
-            _EquipSlots.Add(TEXT("UpperArmor"));
-            _EquipSlots.Add(TEXT("ShoulderArmor"));
-            _EquipSlots.Add(TEXT("LowerArmor"));
-            _EquipSlots.Add(TEXT("Sword"));
-            _EquipSlots.Add(TEXT("Shield"));
-        }
-
-        UpdateUI();
-	}
+	UpdateUI();
 }
-
 
 // Called every frame
 void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)

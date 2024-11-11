@@ -48,18 +48,6 @@ UMyGameInstance::UMyGameInstance()
 	}
 }
 
-void UMyGameInstance::SaveInventoryData(const TArray<ABaseItem*>& ItemSlots, const TMap<FString, AEquipItem*>& EquipSlots)
-{
-	SavedItemSlots = ItemSlots;
-	SavedEquipSlots = EquipSlots;
-}
-
-void UMyGameInstance::LoadInventoryData(TArray<ABaseItem*>& ItemSlots, TMap<FString, AEquipItem*>& EquipSlots)
-{
-	ItemSlots = SavedItemSlots;
-	EquipSlots = SavedEquipSlots;
-}
-
 void UMyGameInstance::SavePlayerStats(class UStatComponent *StatComponent)
 {
 	if (StatComponent)
