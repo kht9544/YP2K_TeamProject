@@ -27,6 +27,12 @@ public:
 	void SavePlayerStats(class UStatComponent* StatComponent);
 	void LoadPlayerStats(class UStatComponent* StatComponent);
 
+    UPROPERTY(BlueprintReadWrite)
+    TArray<ABaseItem*> SavedInventoryItems;
+    
+    UPROPERTY(BlueprintReadWrite)
+    TMap<FString, AEquipItem*> SavedEquipItems;
+
 	bool GetFirst(){return _firstIn;}
 	void SetFirst(bool first){_firstIn = first;}
 
@@ -89,6 +95,8 @@ private:
 	int32 _savedCurMp;
 	UPROPERTY()
 	int32 _savedExp;
+	UPROPERTY()
+	int32 _savedBonus;
 	UPROPERTY()
 	bool _firstIn = true;
 

@@ -7,6 +7,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "../../Component/InventoryComponent.h"
 #include "../../Base/MyGameInstance.h"
 #include "../MyPlayer.h"
 
@@ -42,8 +43,7 @@ void APortal::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
         if (GameInstance)
         {
             GameInstance->SavePlayerStats(player->_StatCom);
-        
-            UE_LOG(LogTemp, Warning, TEXT("Move to %s"),*_mapName.ToString());
+            player->_inventoryComponent->SaveInventoryState(GameInstance);
             UGameplayStatics::OpenLevel(this,_mapName);
         }
     }

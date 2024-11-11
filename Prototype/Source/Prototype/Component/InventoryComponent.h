@@ -29,13 +29,18 @@ public:
 	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
 	virtual void InitializeComponent() override;
 
-	TArray<ABaseItem*> GetItemSlots(){return _ItemSlots;}
-	TArray<int32> GetEmptySlots(){return _EmptySlots;}
-	TMap<FString, class AEquipItem*> GetEquipSlots(){return _EquipSlots;}
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	TArray<ABaseItem*> _ItemSlots;
 
-	void SetItemSlots(TArray<ABaseItem*> item ){_ItemSlots = item;}
-	void SetEmptySlots(TArray<int32> empty ){_EmptySlots = empty;}
-	void SetEquipSlots(TMap<FString, class AEquipItem*> equip){_EquipSlots = equip;}
+	TArray<int32> _EmptySlots;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	TMap<FString, class AEquipItem*> _EquipSlots;
+
+	void SaveInventoryState(class UMyGameInstance* GameInstance);
+	void LoadInventoryState(class UMyGameInstance* GameInstance);
+
+	
 	
 	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);
@@ -45,6 +50,8 @@ public:
 	void UIupdate_Add(int32 slot, ABaseItem* item);
 	void UIupdate_Pop(int32 slot);
 	void UIupdate_equip(int32 slot, ABaseItem* item);
+
+
 
 	void UpdateUI();
 
@@ -57,11 +64,5 @@ private:
 	void SlotFullCheck();
 
 	//Property
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	TArray<ABaseItem*> _ItemSlots;
-
-	TArray<int32> _EmptySlots;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	TMap<FString, class AEquipItem*> _EquipSlots;
+	
 };

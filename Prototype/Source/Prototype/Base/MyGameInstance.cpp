@@ -61,6 +61,7 @@ void UMyGameInstance::SavePlayerStats(class UStatComponent *StatComponent)
 		_savedCurHp = StatComponent->GetCurHp();
 		_savedCurMp = StatComponent->GetCurMp();
 		_savedExp = StatComponent->GetExp();
+		_savedBonus = StatComponent->GetBonusPoint();
 	}
 }
 
@@ -77,6 +78,7 @@ void UMyGameInstance::LoadPlayerStats(class UStatComponent *StatComponent)
 		StatComponent->SetHp(_savedCurHp);
 		StatComponent->SetMp(_savedCurMp);
 		StatComponent->SetExp(_savedExp);
+		StatComponent->SetBonusPoint(_savedBonus);
 	}
 }
 

@@ -30,8 +30,6 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("first in"));
 	if (UIManager && UIManager->GetInventoryUI())
 	{
 		UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
@@ -50,6 +48,12 @@ void UInventoryComponent::BeginPlay()
 	_EquipSlots.Add(TEXT("LowerArmor"));
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
+
+	UMyGameInstance *GameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		LoadInventoryState(GameInstance);
+	}
 
 	UpdateUI();
 }
@@ -124,6 +128,32 @@ void UInventoryComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
 	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
+}
+
+void UInventoryComponent::SaveInventoryState(class UMyGameInstance *GameInstance)
+{
+	if (GameInstance)
+	{
+		GameInstance->SavedInventoryItems = _ItemSlots;
+		GameInstance->SavedEquipItems = _EquipSlots;
+	}
+}
+
+void UInventoryComponent::LoadInventoryState(class UMyGameInstance *GameInstance)
+{
+	if (GameInstance)
+	{
+		TArray<ABaseItem *> SavedItemSlots = GameInstance->SavedInventoryItems;
+		if (SavedItemSlots.Num() == _itemSlotMax)
+		{
+			_ItemSlots = SavedItemSlots;
+		}
+
+
+		TMap<FString, AEquipItem *> SavedEquipSlots = GameInstance->SavedEquipItems;
+		_EquipSlots = SavedEquipSlots;
+
+	}
 }
 
 void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)
