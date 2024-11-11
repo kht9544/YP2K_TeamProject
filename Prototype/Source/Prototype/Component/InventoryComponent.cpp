@@ -49,11 +49,6 @@ void UInventoryComponent::BeginPlay()
 	_EquipSlots.Add(TEXT("Sword"));
 	_EquipSlots.Add(TEXT("Shield"));
 
-	UMyGameInstance *GameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
-	if (GameInstance)
-	{
-		LoadInventoryState(GameInstance);
-	}
 
 	UpdateUI();
 }
