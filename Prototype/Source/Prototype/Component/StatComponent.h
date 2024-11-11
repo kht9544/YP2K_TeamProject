@@ -140,8 +140,8 @@ public:
 	//int attckDamage(int32 Attpower, int32 str,int32 dex,int32 _int);
 
 
-	virtual FString GetSwingSoundName() const;
-	
+	virtual FString GetLevelUpName() const;
+	virtual FString GetLevelUpSound() const;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))

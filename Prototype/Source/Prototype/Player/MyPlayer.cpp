@@ -457,6 +457,11 @@ FString AMyPlayer::GetUIBaseSound() const
 	return "BaseUISound_02_Cue";
 }
 
+FString AMyPlayer::GetLevelUpSound() const
+{
+	return "LevelupSound_Cue";
+}
+
 
 
 

@@ -83,6 +83,7 @@ public:
 	virtual FString GetSkillSound04Start() const override;
 	virtual FString GetSkillSound04Durring() const override;
 	virtual FString GetUIBaseSound() const override;
+	virtual FString GetLevelUpSound() const override;
 
 private:
 	void Move(const FInputActionValue &value);

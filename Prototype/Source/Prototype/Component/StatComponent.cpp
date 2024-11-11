@@ -158,9 +158,14 @@ void UStatComponent::SetBossLevelInit(int level)
 	}
 }
 
-FString UStatComponent::GetSwingSoundName() const
+FString UStatComponent::GetLevelUpName() const
 {
 	return "P_Status_LevelUp";
+}
+
+FString UStatComponent::GetLevelUpSound() const
+{
+	return "LevelupSound_Cue";
 }
 
 
@@ -374,9 +379,10 @@ void UStatComponent::AddExp(int32 amount)
 		UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		if (GameInstance && GameInstance->GetEffectManager())
 		{
-			GameInstance->GetEffectManager()->Play(*GetSwingSoundName(), GetOwner()->GetActorLocation(), FRotator::ZeroRotator);
+			GameInstance->GetEffectManager()->Play(*GetLevelUpName(), GetOwner()->GetActorLocation(), FRotator::ZeroRotator);
+			
+			GameInstance->GetSoundManager()->PlaySound(*GetLevelUpSound(), GetOwner()->GetActorLocation());
 		}
-
 	}
 	float ratio = EXpRatio();
 	_PlEXPDelegate.Broadcast(ratio);

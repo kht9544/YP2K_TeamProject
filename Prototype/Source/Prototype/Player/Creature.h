@@ -55,6 +55,7 @@ public:
 	virtual FString GetUIBaseSound() const;
 	virtual FString GetEpicSkeletonEffect() const;
 	virtual FString GetEpicSpawnSound() const;
+	virtual FString GetLevelUpSound() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);

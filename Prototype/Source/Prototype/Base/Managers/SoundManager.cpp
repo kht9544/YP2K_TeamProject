@@ -52,6 +52,8 @@ ASoundManager::ASoundManager()
 
 	//UI Base Sound
 	CreateSound("BaseUISound_02_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/BaseUISound_02_BP.BaseUISound_02_BP_C'");
+	//Level Up Sound
+	CreateSound("LevelupSound_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/LevelupSound_BP.LevelupSound_BP_C'");
 }
 
 void ASoundManager::BeginPlay()

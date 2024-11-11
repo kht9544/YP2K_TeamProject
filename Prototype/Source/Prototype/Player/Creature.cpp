@@ -206,6 +206,11 @@ FString ACreature::GetEpicSpawnSound() const
 	return "default_Spawn";
 }
 
+FString ACreature::GetLevelUpSound() const
+{
+	return "default_LevelUpSound";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;
