@@ -10,7 +10,7 @@ UENUM()
 enum class UI_LIST
 {
 	Inventory,
-
+	Status,
 };
 
 DECLARE_MULTICAST_DELEGATE(PAUSE_GAME);
@@ -59,6 +59,9 @@ private:
 
 	UPROPERTY()
 	UInventoryWidget* _inventoryUI;
+
+	UPROPERTY()
+	UInventoryWidget* _statusUI;
 
 	UPROPERTY()
 	UTexture2D* _defaultTexture;
