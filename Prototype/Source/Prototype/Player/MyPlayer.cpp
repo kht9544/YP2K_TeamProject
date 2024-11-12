@@ -882,6 +882,11 @@ void AMyPlayer::SavePlayerState()
 {
 	UMyPlayerSaveGame* SaveGameInstance = Cast<UMyPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UMyPlayerSaveGame::StaticClass()));
 
+	if (GetMesh() && GetMesh()->GetSkeletalMeshAsset())
+	{
+		SaveGameInstance->BodyMeshName = GetMesh()->GetSkeletalMeshAsset()->GetPathName();
+	}
+
 	if (_lowerBodyMesh && _lowerBodyMesh->GetSkeletalMeshAsset())
 	{
 		SaveGameInstance->LowerBodyMeshName = _lowerBodyMesh->GetSkeletalMeshAsset()->GetPathName();
@@ -907,6 +912,10 @@ void AMyPlayer::LoadPlayerState()
 	UMyPlayerSaveGame* LoadGameInstance = Cast<UMyPlayerSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveSlot"), 0));
 	if (LoadGameInstance)
 	{
+		if (!LoadGameInstance->BodyMeshName.IsEmpty())
+		{
+			GetMesh()->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->BodyMeshName));
+		}
 		if (!LoadGameInstance->LowerBodyMeshName.IsEmpty())
 		{
 			_lowerBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->LowerBodyMeshName));
