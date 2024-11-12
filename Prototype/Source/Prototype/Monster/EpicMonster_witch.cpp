@@ -40,7 +40,7 @@ AEpicMonster_witch::AEpicMonster_witch()
 
 
 
-	_exp = 70;
+	_exp = 170;
 
 	AIControllerClass = AAIController_Epic::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
