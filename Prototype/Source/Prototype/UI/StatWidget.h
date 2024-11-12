@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "StatWidget.generated.h"
+#include "../Component/StatComponent.h"
 
 /**
  * 
@@ -16,6 +17,44 @@ class PROTOTYPE_API UStatWidget : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
+
+	UFUNCTION(BlueprintCallable)
+	void StatUpdate(StatType type, int amount);
+
+	UFUNCTION(BlueprintCallable)
+	void PlLevelUpdate(int32 Level);
+	UFUNCTION(BlueprintCallable)
+	void HPUpdate(int32 HP);
+	UFUNCTION(BlueprintCallable)
+	void MPUpdate(int32 MP);
+	UFUNCTION(BlueprintCallable)
+	void STRUpdate(int32 STR);
+	UFUNCTION(BlueprintCallable)
+	void DEXUpdate(int32 DEX);
+	UFUNCTION(BlueprintCallable)
+	void INTUpdate(int32 INT);
+	UFUNCTION(BlueprintCallable)
+	void BonusPointUpdate(int32 BonusPoint);
+
+	void UpdateStatDisplay();
+	
+	UFUNCTION()
+	void HPDownClick();
+	UFUNCTION()
+	void HPUpClick();
+
+	void MPDownClick();
+	UFUNCTION()
+	void MpUpClick();
+	void STRDownClick();
+	UFUNCTION()
+	void STRUpClick();
+	void DEXDownClick();
+	UFUNCTION()
+	void DEXUpClick();
+	void INTDownClick();
+	UFUNCTION()
+	void INTUpClick();
 
 	//te
 	UPROPERTY(meta = (BindWidget))
@@ -65,43 +104,6 @@ public:
 	class UTextBlock* PlLevel;
 
 	class UTextBlock* PlName;
-
-	UFUNCTION(BlueprintCallable)
-	void PlLevelUpdate(int32 Level);
-	UFUNCTION(BlueprintCallable)
-	void HPUpdate(int32 HP);
-	UFUNCTION(BlueprintCallable)
-	void MPUpdate(int32 MP);
-	UFUNCTION(BlueprintCallable)
-	void STRUpdate(int32 STR);
-	UFUNCTION(BlueprintCallable)
-	void DEXUpdate(int32 DEX);
-	UFUNCTION(BlueprintCallable)
-	void INTUpdate(int32 INT);
-	UFUNCTION(BlueprintCallable)
-	void BonusPointUpdate(int32 BonusPoint);
-
-	void UpdateStatDisplay();
-	
-	UFUNCTION()
-	void HPDownClick();
-	UFUNCTION()
-	void HPUpClick();
-
-	void MPDownClick();
-	UFUNCTION()
-	void MpUpClick();
-	void STRDownClick();
-	UFUNCTION()
-	void STRUpClick();
-	void DEXDownClick();
-	UFUNCTION()
-	void DEXUpClick();
-	void INTDownClick();
-	UFUNCTION()
-	void INTUpClick();
-
-
 
 
 };

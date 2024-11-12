@@ -4,8 +4,10 @@
 #include "UI/StatWidget.h"
 
 
-//cheol
-#include "Component/StatComponent.h"
+#include "Base/MyGameInstance.h"
+#include "Base/Managers/UIManager.h"
+#include "UI/InventoryWidget.h"
+
 #include "Components/UniformGridPanel.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
@@ -61,6 +63,31 @@ void UStatWidget::NativeConstruct()
 	}
 }
 
+void UStatWidget::StatUpdate(StatType type, int amount)
+{
+	switch (type)
+	{
+	case StatType::HP:
+		// 여기서 각 함수내용들 넣어서 처리
+		//  UI 변수 함수 간편화
+		break;
+	case StatType::MP:
+		break;
+	case StatType::STR:
+		break;
+	case StatType::DEX:
+		break;
+	case StatType::INT:
+		break;
+	case StatType::CurHP:
+		break;
+	case StatType::CurMP:
+		break;
+	default:
+		break;
+	}
+}
+
 void UStatWidget::PlLevelUpdate(int32 Level)
 {
 	if (PlLevel)
@@ -74,6 +101,7 @@ void UStatWidget::HPUpdate(int32 HP)
 	if (HPNum)
 	{
 		HPNum->SetText(FText::AsNumber(HP));
+		
 	}
 }
 
