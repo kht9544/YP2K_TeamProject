@@ -21,6 +21,9 @@ public:
 	TMap<FString, FString> EquipSlotNames;
 
 	UPROPERTY(VisibleAnywhere, Category="Mesh")
+	FString BodyMeshName;
+
+	UPROPERTY(VisibleAnywhere, Category="Mesh")
 	FString LowerBodyMeshName;
 
 	UPROPERTY(VisibleAnywhere, Category="Mesh")
