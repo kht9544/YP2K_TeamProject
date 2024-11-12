@@ -61,6 +61,26 @@ void UStatWidget::NativeConstruct()
 	{
 		HPDown->OnClicked.AddDynamic(this, &UStatWidget::HPDownClick);
 	}
+	
+	if (MPDown)
+	{
+		MPDown->OnClicked.AddDynamic(this, &UStatWidget::MPDownClick);
+	}
+
+	if (STRDown)
+	{
+		STRDown->OnClicked.AddDynamic(this, &UStatWidget::STRDownClick);
+	}
+
+	if (DEXDown)
+	{
+		DEXDown->OnClicked.AddDynamic(this, &UStatWidget::DEXDownClick);
+	}
+
+	if (INTDown)
+	{
+		INTDown->OnClicked.AddDynamic(this, &UStatWidget::INTDownClick);
+	}
 }
 
 void UStatWidget::StatUpdate(StatType type, int amount)
@@ -181,13 +201,13 @@ void UStatWidget::HPDownClick()
 
 	if (player && player->_StatCom)
 	{
-		int32 currentHp = player->_StatCom->GetMaxHp();
-		int32 baseHp = player->_StatCom->GetBaseStat(StatType::HP);  // 기준 HP 가져오기
+		int32 StatHp = player->_StatCom->GetMaxHp();
+		int32 baseHp = player->_StatCom->GetBaseStat(StatType::HP); 
 		int32 bonusPoints = player->_StatCom->GetBonusPoint();
 
-		if (currentHp > baseHp) 
+		if (StatHp > baseHp)
 		{
-			player->_StatCom->SetMaxHp(currentHp - 100);
+			player->_StatCom->SetMaxHp(StatHp - 100);
 			player->_StatCom->SetBonusPoint(bonusPoints + 1);
 		}
 		UpdateStatDisplay();
@@ -202,18 +222,37 @@ void UStatWidget::HPUpClick()
 
 	if (player && player->_StatCom)
 	{
-		int32 plMaxHp = player->_StatCom->GetMaxHp();
+		int32 StatHp = player->_StatCom->GetMaxHp();
 		int32 BonusPoints = player->_StatCom->GetBonusPoint();
 
 		if (BonusPoints > 0)
 		{
-			player->_StatCom->SetMaxHp(plMaxHp + 100);
+			player->_StatCom->SetMaxHp(StatHp + 100);
 			player->_StatCom->SetBonusPoint(BonusPoints - 1);
 
 		}
 		UpdateStatDisplay();
 
 
+	}
+}
+
+void UStatWidget::MPDownClick()
+{
+	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+
+	if (player && player->_StatCom)
+	{
+		int32 StatMp = player->_StatCom->GetMaxMp();
+		int32 baseHp = player->_StatCom->GetBaseStat(StatType::MP);
+		int32 bonusPoints = player->_StatCom->GetBonusPoint();
+
+		if (StatMp > baseHp)
+		{
+			player->_StatCom->SetMaxMp(StatMp - 10);
+			player->_StatCom->SetBonusPoint(bonusPoints + 1);
+		}
+		UpdateStatDisplay();
 	}
 }
 
@@ -223,17 +262,36 @@ void UStatWidget::MpUpClick()
 
 	if (player && player->_StatCom)
 	{
-		int32 plMaxMp = player->_StatCom->GetMaxMp();
+		int32 StatMp = player->_StatCom->GetMaxMp();
 		int32 BonusPoints = player->_StatCom->GetBonusPoint();
 
 		if (BonusPoints > 0)
 		{
-			player->_StatCom->SetMaxMp(plMaxMp + 10);
+			player->_StatCom->SetMaxMp(StatMp + 10);
 			player->_StatCom->SetBonusPoint(BonusPoints - 1);
 		}
 		UpdateStatDisplay();
 
 
+	}
+}
+
+void UStatWidget::STRDownClick()
+{
+	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+
+	if (player && player->_StatCom)
+	{
+		int32 StatStr = player->_StatCom->GetStr();
+		int32 baseHp = player->_StatCom->GetBaseStat(StatType::STR);
+		int32 bonusPoints = player->_StatCom->GetBonusPoint();
+
+		if (StatStr > baseHp)
+		{
+			player->_StatCom->SetStr(StatStr - 1);
+			player->_StatCom->SetBonusPoint(bonusPoints + 1);
+		}
+		UpdateStatDisplay();
 	}
 }
 
@@ -241,29 +299,43 @@ void UStatWidget::MpUpClick()
 void UStatWidget::STRUpClick()
 {
 	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
-	UE_LOG(LogTemp, Error, TEXT("click Errow"));
 
 	if (player && player->_StatCom)
 	{
-		int32 plStr = player->_StatCom->GetStr();
+		int32 StatStr = player->_StatCom->GetStr();
 		int32 BonusPoints = player->_StatCom->GetBonusPoint();
 
 		if (BonusPoints > 0)
 		{
-			player->_StatCom->SetStr(plStr + 1);
+			player->_StatCom->SetStr(StatStr + 1);
 			player->_StatCom->SetBonusPoint(BonusPoints - 1);
 		}
-		// 클릭마다 ui 업데이트
 		UpdateStatDisplay();
-		//UpdateStatDisplay();
-		UE_LOG(LogTemp, Error, TEXT("test Errow"));
+	}
+}
+
+void UStatWidget::DEXDownClick()
+{
+	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+
+	if (player && player->_StatCom)
+	{
+		int32 StatDex = player->_StatCom->GetDex();
+		int32 baseHp = player->_StatCom->GetBaseStat(StatType::DEX);
+		int32 bonusPoints = player->_StatCom->GetBonusPoint();
+
+		if (StatDex > baseHp)
+		{
+			player->_StatCom->SetDex(StatDex - 1);
+			player->_StatCom->SetBonusPoint(bonusPoints + 1);
+		}
+		UpdateStatDisplay();
 	}
 }
 
 void UStatWidget::DEXUpClick()
 {
 	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
-	UE_LOG(LogTemp, Error, TEXT("click Errow"));
 
 	if (player && player->_StatCom)
 	{
@@ -275,17 +347,32 @@ void UStatWidget::DEXUpClick()
 			player->_StatCom->SetDex(StatDex + 1);
 			player->_StatCom->SetBonusPoint(StatBonusPoints - 1);
 		}
-		// 클릭마다 ui 업데이트
 		UpdateStatDisplay();
-		//UpdateStatDisplay();
-		UE_LOG(LogTemp, Error, TEXT("test Errow"));
+	}
+}
+
+void UStatWidget::INTDownClick()
+{
+	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+
+	if (player && player->_StatCom)
+	{
+		int32 StatInt = player->_StatCom->GetInt();
+		int32 baseHp = player->_StatCom->GetBaseStat(StatType::INT);
+		int32 bonusPoints = player->_StatCom->GetBonusPoint();
+
+		if (StatInt > baseHp)
+		{
+			player->_StatCom->SetInt(StatInt - 1);
+			player->_StatCom->SetBonusPoint(bonusPoints + 1);
+		}
+		UpdateStatDisplay();
 	}
 }
 
 void UStatWidget::INTUpClick()
 {
 	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
-	UE_LOG(LogTemp, Error, TEXT("click Errow"));
 
 	if (player && player->_StatCom)
 	{
@@ -297,9 +384,6 @@ void UStatWidget::INTUpClick()
 			player->_StatCom->SetInt(StatInt + 1);
 			player->_StatCom->SetBonusPoint(StatBonusPoints - 1);
 		}
-		// 클릭마다 ui 업데이트
 		UpdateStatDisplay();
-		//UpdateStatDisplay();
-		UE_LOG(LogTemp, Error, TEXT("test Errow"));
 	}
 }

@@ -69,15 +69,10 @@ void UStatComponent::SetLevelInit(int level)
 		Data = GAMEINSTANCE->GetStatDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
-		//_ogHp = _maxHp;
 		_maxMp = Data->MaxMP;
-		//_ogMp = _maxMp;
 		_str = Data->STR;
-		//_ogStr = _str;
 		_dex = Data->DEX;
-		//_ogDex = _dex;
 		_int = Data->INT;
-		//_ogInt = _int;
 
 		_nextExp = Data->EXP;
 		_curExp = 0;
@@ -261,10 +256,7 @@ void UStatComponent::SetMaxMp(int32 newMaxMp)
 
 void UStatComponent::SetBonusPoint(int32 newBp)
 {
-	//TArray<FMyStatData*> AllRows;
-	//StatDataTable->GetAllRows(TEXT(""), AllRows);
 
-	//	const FMyStatData& Data = *AllRows[_level - 1];
 	auto myGameInstance = Cast<UMyGameInstance>(GetWorld()->GetGameInstance());
 	FMyStatData* Data = nullptr;
 
