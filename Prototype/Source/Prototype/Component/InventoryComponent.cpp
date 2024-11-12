@@ -125,31 +125,6 @@ void UInventoryComponent::InitializeComponent()
 	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
 }
 
-void UInventoryComponent::SaveInventoryState(class UMyGameInstance *GameInstance)
-{
-	if (GameInstance)
-	{
-		GameInstance->SavedInventoryItems = _ItemSlots;
-		GameInstance->SavedEquipItems = _EquipSlots;
-	}
-}
-
-void UInventoryComponent::LoadInventoryState(class UMyGameInstance *GameInstance)
-{
-	if (GameInstance)
-	{
-		TArray<ABaseItem *> SavedItemSlots = GameInstance->SavedInventoryItems;
-		if (SavedItemSlots.Num() == _itemSlotMax)
-		{
-			_ItemSlots = SavedItemSlots;
-		}
-
-
-		TMap<FString, AEquipItem *> SavedEquipSlots = GameInstance->SavedEquipItems;
-		_EquipSlots = SavedEquipSlots;
-
-	}
-}
 
 void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)
 {

@@ -1,6 +1,7 @@
 #include "MyPlayer.h"
 
 #include "Base/MyGameInstance.h"
+#include "Base/MyPlayerSaveGame.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -874,5 +875,53 @@ void AMyPlayer::StartScreenShake()
 		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, MaxShakeStrength * 2.0f);
 		GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
 		ElapsedTime = 0.0f;
+	}
+}
+
+void AMyPlayer::SavePlayerState()
+{
+	UMyPlayerSaveGame* SaveGameInstance = Cast<UMyPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UMyPlayerSaveGame::StaticClass()));
+
+	if (_lowerBodyMesh && _lowerBodyMesh->GetSkeletalMeshAsset())
+	{
+		SaveGameInstance->LowerBodyMeshName = _lowerBodyMesh->GetSkeletalMeshAsset()->GetPathName();
+	}
+	if (_shoulderBodyMesh && _shoulderBodyMesh->GetSkeletalMeshAsset())
+	{
+		SaveGameInstance->ShoulderBodyMeshName = _shoulderBodyMesh->GetSkeletalMeshAsset()->GetPathName();
+	}
+	if (_swordBodyMesh && _swordBodyMesh->GetSkeletalMeshAsset())
+	{
+		SaveGameInstance->SwordBodyMeshName = _swordBodyMesh->GetSkeletalMeshAsset()->GetPathName();
+	}
+	if (_shieldBodyMesh && _shieldBodyMesh->GetSkeletalMeshAsset())
+	{
+		SaveGameInstance->ShieldBodyMeshName = _shieldBodyMesh->GetSkeletalMeshAsset()->GetPathName();
+	}
+
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("PlayerSaveSlot"), 0);
+}
+
+void AMyPlayer::LoadPlayerState()
+{
+	UMyPlayerSaveGame* LoadGameInstance = Cast<UMyPlayerSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveSlot"), 0));
+	if (LoadGameInstance)
+	{
+		if (!LoadGameInstance->LowerBodyMeshName.IsEmpty())
+		{
+			_lowerBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->LowerBodyMeshName));
+		}
+		if (!LoadGameInstance->ShoulderBodyMeshName.IsEmpty())
+		{
+			_shoulderBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->ShoulderBodyMeshName));
+		}
+		if (!LoadGameInstance->SwordBodyMeshName.IsEmpty())
+		{
+			_swordBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->SwordBodyMeshName));
+		}
+		if (!LoadGameInstance->ShieldBodyMeshName.IsEmpty())
+		{
+			_shieldBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->ShieldBodyMeshName));
+		}
 	}
 }

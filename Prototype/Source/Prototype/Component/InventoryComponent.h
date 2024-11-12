@@ -37,8 +37,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	TMap<FString, class AEquipItem*> _EquipSlots;
 
-	void SaveInventoryState(class UMyGameInstance* GameInstance);
-	void LoadInventoryState(class UMyGameInstance* GameInstance);
 
 	
 	
