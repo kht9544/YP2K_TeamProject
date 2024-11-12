@@ -85,6 +85,9 @@ public:
 	virtual FString GetUIBaseSound() const override;
 	virtual FString GetLevelUpSound() const override;
 
+	void SavePlayerState();
+	void LoadPlayerState();
+
 private:
 	void Move(const FInputActionValue &value);
 	void Look(const FInputActionValue &value);
@@ -117,7 +120,8 @@ private:
 
 	void PerformDash(float DeltaTime);
 	void StartScreenShake();
-	void CastMeteor();
+
+
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -168,14 +172,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class USkillWidget_test *_skillWidgetInstance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	class UInventoryComponent* _inventoryComponent;
+
 
 	//  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Parkour, meta = (AllowPrivateAccess = "true"))
 	//  class UParkourComponent_Test* _parkourComp;
 
 	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	// class USkeletalMeshComponent* _upperBodyMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	class UInventoryComponent* _inventoryComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class USkeletalMeshComponent* _lowerBodyMesh;
