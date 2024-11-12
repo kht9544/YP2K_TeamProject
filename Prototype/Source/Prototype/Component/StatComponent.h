@@ -139,6 +139,9 @@ public:
 	
 	//int attckDamage(int32 Attpower, int32 str,int32 dex,int32 _int);
 
+	int32 GetBaseStat(StatType statType) const; // 기준 스탯 값 가져오기
+	void DecreaseStat(StatType stat, int32 amount); // 스탯 감소 (기준 값 이하로는 감소하지 않음)
+
 
 	virtual FString GetLevelUpName() const;
 	virtual FString GetLevelUpSound() const;

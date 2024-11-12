@@ -69,15 +69,15 @@ void UStatComponent::SetLevelInit(int level)
 		Data = GAMEINSTANCE->GetStatDataByLevel(level);
 		_level = level;
 		_maxHp = Data->MaxHP;
-		_ogHp = _maxHp;
+		//_ogHp = _maxHp;
 		_maxMp = Data->MaxMP;
-		_ogMp = _maxMp;
+		//_ogMp = _maxMp;
 		_str = Data->STR;
-		_ogStr = _str;
+		//_ogStr = _str;
 		_dex = Data->DEX;
-		_ogDex = _dex;
+		//_ogDex = _dex;
 		_int = Data->INT;
-		_ogInt = _int;
+		//_ogInt = _int;
 
 		_nextExp = Data->EXP;
 		_curExp = 0;
@@ -85,6 +85,15 @@ void UStatComponent::SetLevelInit(int level)
 		SetMp(_maxMp);
 		_bonusPoint = Data->BonusPoint;
 		_PILevelDelegate.Broadcast(_level);
+
+		if (_level == 1)
+		{
+			_ogHp = _maxHp;
+			_ogMp = _maxMp;
+			_ogStr = _str;
+			_ogDex = _dex;
+			_ogInt = _int;
+		}
 
 		if (Cast<AMyPlayer>(GetOwner()))
 		{
@@ -155,6 +164,54 @@ void UStatComponent::SetBossLevelInit(int level)
 		_bonusPoint = Data->BonusPoint;
 		_PILevelDelegate.Broadcast(_level);
 
+	}
+}
+
+int32 UStatComponent::GetBaseStat(StatType statType) const
+{
+	switch (statType)
+	{
+	case StatType::HP:
+		return _ogHp;
+	case StatType::MP:
+		return _ogMp;
+	case StatType::STR:
+		return _ogStr;
+	case StatType::DEX:
+		return _ogDex;
+	case StatType::INT:
+		return _ogInt;
+	default:
+		return 0;
+	}
+}
+
+void UStatComponent::DecreaseStat(StatType stat, int32 amount)
+{
+	switch (stat)
+	{
+	case StatType::HP:
+		if (_maxHp - amount >= _ogHp)
+			_maxHp -= amount;
+		break;
+	case StatType::MP:
+		if (_maxMp - amount >= _ogMp)
+			_maxMp -= amount;
+		break;
+	case StatType::STR:
+		if (_str - amount >= _ogStr)
+			_str -= amount;
+		break;
+	case StatType::DEX:
+		if (_dex - amount >= _ogDex)
+			_dex -= amount;
+		break;
+	case StatType::INT:
+		if (_int - amount >= _ogInt)
+			_int -= amount;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -373,9 +430,14 @@ void UStatComponent::AddExp(int32 amount)
 		_nextExp = 100 + (_level * 50); 
 		_PILevelDelegate.Broadcast(_level);
 
+		_ogHp = _maxHp;
+		_ogMp = _maxMp;
+		_ogStr = _str;
+		_ogDex = _dex;
+		_ogInt = _int;
+
 		_bonusPoint += 6;
 
-		
 		UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		if (GameInstance && GameInstance->GetEffectManager())
 		{
