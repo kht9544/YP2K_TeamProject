@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "StatWidget.generated.h"
 #include "../Component/StatComponent.h"
+#include "StatWidget.generated.h"
 
 /**
  * 
@@ -42,16 +42,19 @@ public:
 	void HPDownClick();
 	UFUNCTION()
 	void HPUpClick();
-
+	UFUNCTION()
 	void MPDownClick();
 	UFUNCTION()
 	void MpUpClick();
+	UFUNCTION()
 	void STRDownClick();
 	UFUNCTION()
 	void STRUpClick();
+	UFUNCTION()
 	void DEXDownClick();
 	UFUNCTION()
 	void DEXUpClick();
+	UFUNCTION()
 	void INTDownClick();
 	UFUNCTION()
 	void INTUpClick();
