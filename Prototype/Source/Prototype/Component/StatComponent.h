@@ -106,7 +106,8 @@ public:
 	void SetDex(int32 newdex);
 	void SetInt(int32 newint);
 	void SetExp(int32 newexp);
-
+	
+	void AddStat(StatType type, int32 amount = 1);
 
 	void SetStatBoost(int32 rate);
 	void SetStun(bool stun){_stunned = stun;}
@@ -149,6 +150,17 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, meta = (AllowPrivateAccess = true))
 	int32 _level;
+
+	TArray<TMap<FString, int32>> _stats;
+	/// _stats ::
+	/// [HP][now] [HP][level_og] [HP][statUI] [HP][armor]
+	/// [MP][now] [MP][level_og] [MP][statUI] [MP][armor]
+	/// [INT][now] [INT][level_og] [INT][statUI] [INT][armor]
+	/// ...	
+	/// level_og => update initialize, when level up
+	/// statUI	 => update when statUI update
+	/// armor	 => update when exchange armor
+	/// now		 => level_og + statUI + armor
 
 	///////////////////////////////////////
 

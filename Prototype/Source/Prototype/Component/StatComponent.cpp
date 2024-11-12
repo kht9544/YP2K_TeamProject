@@ -304,6 +304,30 @@ void UStatComponent::SetExp(int32 newexp)
 	_curExp = FMath::Clamp(newexp, 0, 100);
 }
 
+void UStatComponent::AddStat(StatType type, int32 amount)
+{
+	switch (type)
+	{
+	case StatType::HP:
+		//TODO : statUI += amount
+		break;
+	case StatType::MP:
+		break;
+	case StatType::STR:
+		break;
+	case StatType::DEX:
+		break;
+	case StatType::INT:
+		break;
+	case StatType::CurHP:
+		break;
+	case StatType::CurMP:
+		break;
+	default:
+		break;
+	}
+}
+
 
 
 void UStatComponent::SetStatBoost(int32 rate)
