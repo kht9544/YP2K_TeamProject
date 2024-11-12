@@ -52,6 +52,10 @@ public:
 	virtual FString GetEpicAttackMagicDotSound() const;
 	virtual FString GetPlayerSkillEffect04_Start() const;
 	virtual FString GetPlayerSkillEffect04_Durring() const;
+	virtual FString GetUIBaseSound() const;
+	virtual FString GetEpicSkeletonEffect() const;
+	virtual FString GetEpicSpawnSound() const;
+	virtual FString GetLevelUpSound() const;
 
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);

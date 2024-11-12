@@ -452,6 +452,16 @@ FString AMyPlayer::GetSkillSound04Durring() const
 	return "Skill04_Sound_02_during";
 }
 
+FString AMyPlayer::GetUIBaseSound() const
+{
+	return "BaseUISound_02_Cue";
+}
+
+FString AMyPlayer::GetLevelUpSound() const
+{
+	return "LevelupSound_Cue";
+}
+
 
 
 
@@ -686,9 +696,9 @@ void AMyPlayer::Skill4(const FInputActionValue &value)
 				
 
 			EffectManager->PlayOnSkeletalMesh(*GetPlayerSkillEffect04_Durring(), _lowerBodyMesh, "root");
-			SoundManager->PlaySound(*GetSkillSound04Durring(), GetActorLocation());
+			//SoundManager->PlaySound(*GetSkillSound04Durring(), GetActorLocation());
 			//SoundManager->StopSound(*GetSkillSound04Durring());
-
+			SoundManager->PlaySoundWithDuration(*GetSkillSound04Durring(), GetActorLocation(), 17.9f);
 
 		
 		}
@@ -793,6 +803,8 @@ void AMyPlayer::StatUIOpen(const FInputActionValue &value)
 
 	UE_LOG(LogTemp, Error, TEXT("StatUI Errow"));
 
+	SoundManager->PlaySound(*GetUIBaseSound(), GetActorLocation());
+
 	if (isPressed && _statWidget != nullptr)
 	{
 		if (_statWidget->IsVisible())
@@ -812,6 +824,8 @@ void AMyPlayer::InvenUIOpen(const FInputActionValue &value)
 	bool isPressed = value.Get<bool>();
 
 	auto invenUI = UIManager->GetInventoryUI();
+
+	SoundManager->PlaySound(*GetUIBaseSound(), GetActorLocation());
 
 	if (isPressed && invenUI != nullptr)
 	{

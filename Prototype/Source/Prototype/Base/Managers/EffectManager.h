@@ -28,8 +28,8 @@ public:
 	void CreateEffect();
 	void Play(FString name, FVector location, FRotator rotator = FRotator::ZeroRotator);
 	void PlayOnSkeletalMesh(FString name, USkeletalMeshComponent* mesh, FName socketName);
-
-
+	// levelup
+	void PlayEffect(UParticleSystem* Particle, FVector Location);
 
 
 

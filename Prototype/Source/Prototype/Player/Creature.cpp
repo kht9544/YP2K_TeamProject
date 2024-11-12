@@ -191,6 +191,26 @@ FString ACreature::GetPlayerSkillEffect04_Durring() const
 	return "default_Durring";
 }
 
+FString ACreature::GetUIBaseSound() const
+{
+	return "default_Sound";
+}
+
+FString ACreature::GetEpicSkeletonEffect() const
+{
+	return "default_Effect";
+}
+
+FString ACreature::GetEpicSpawnSound() const
+{
+	return "default_Spawn";
+}
+
+FString ACreature::GetLevelUpSound() const
+{
+	return "default_LevelUpSound";
+}
+
 void ACreature::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttacking = false;

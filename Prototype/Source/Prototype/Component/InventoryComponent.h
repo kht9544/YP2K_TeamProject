@@ -28,16 +28,34 @@ public:
 
 	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
 	virtual void InitializeComponent() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	TArray<ABaseItem*> _ItemSlots;
+
+	TArray<int32> _EmptySlots;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	TMap<FString, class AEquipItem*> _EquipSlots;
+
+	void SaveInventoryState(class UMyGameInstance* GameInstance);
+	void LoadInventoryState(class UMyGameInstance* GameInstance);
+
+	
 	
 	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);
 	void EquipItem(int32 slot);
 	void TryEquip(FString part, int32 slot);
 
-private:
 	void UIupdate_Add(int32 slot, ABaseItem* item);
 	void UIupdate_Pop(int32 slot);
 	void UIupdate_equip(int32 slot, ABaseItem* item);
+
+
+
+	void UpdateUI();
+
+private:
 	//Trigger
 	bool _isSlotFull = false;
 	int32 _itemSlotMax = 12;
@@ -46,11 +64,5 @@ private:
 	void SlotFullCheck();
 
 	//Property
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	TArray<ABaseItem*> _ItemSlots;
-
-	TArray<int32> _EmptySlots;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	TMap<FString, class AEquipItem*> _EquipSlots;
+	
 };

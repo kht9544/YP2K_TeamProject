@@ -3,6 +3,7 @@
 
 #include "Base/Stage1BossGameModeBase.h"
 #include "../Component/StatComponent.h"
+#include "../Component/InventoryComponent.h"
 #include "MyGameInstance.h"
 #include "../Player/MyPlayer.h"
 #include "Kismet/GameplayStatics.h"
@@ -21,11 +22,19 @@ void AStage1BossGameModeBase::BeginPlay()
 		UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
 		if(GameInstance)
 		{
+			GameInstance->InitializeManagers();
 			UStatComponent* StatComponent = player->FindComponentByClass<UStatComponent>();
 			if (StatComponent)
 			{
 				GameInstance->LoadPlayerStats(StatComponent);	
 			}
+			// UInventoryComponent* InvenComponent = player->FindComponentByClass<UInventoryComponent>();
+			// if (InvenComponent)
+			// {
+			// 	UE_LOG(LogTemp,Warning,TEXT("stage1 inven"));
+			// 	GameInstance->LoadInventoryData(InvenComponent);	
+			// }
+		
 		}
 		
 	}

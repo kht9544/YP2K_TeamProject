@@ -153,6 +153,16 @@ FString AEpicMonster_witch::GetDeadSoundName() const
 	return "Morigesh_Effort_Death_Cue";
 }
 
+FString AEpicMonster_witch::GetEpicSkeletonEffect() const
+{
+	return "P_Morigesh_Ultimate_Reveal";
+}
+
+FString AEpicMonster_witch::GetEpicSpawnSound() const
+{
+	return "SpawnSound_Cue";
+}
+
 
 
 void AEpicMonster_witch::MagicShot()
@@ -197,9 +207,16 @@ void AEpicMonster_witch::SumonedMonster()
 			FRotator SpawRotation = FRotator::ZeroRotator;
 
 			ANormalMonster* Noram = GetWorld()->SpawnActor<ANormalMonster>(_SumonedMonster, SpawLocation, SpawRotation);
-			
+
 			if (Noram)
 			{
+				USkeletalMeshComponent* MeshComponent = Noram->GetMesh();  
+				if (MeshComponent)
+				{
+					FName SocketName = FName("head");
+					EffectManager->PlayOnSkeletalMesh(*GetEpicSkeletonEffect(), MeshComponent, SocketName);
+					SoundManager->PlaySound(*GetEpicSpawnSound(), GetActorLocation());
+				}
 				Noram->SpawnDefaultController();
 			}
 

@@ -47,16 +47,34 @@ ASoundManager::ASoundManager()
 	CreateSound("EpicMonsterAttack_Far_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Epic_AttackFireBall.Monster_Epic_AttackFireBall_C'");
 	CreateSound("EpicMonsterAttack_MagicDot_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Epic_AttackMagicDot.Monster_Epic_AttackMagicDot_C'");
 	CreateSound("Morigesh_Effort_Death_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/Monster_Epic_Death.Monster_Epic_Death_C'");
+	CreateSound("SpawnSound_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/SpawnSound_BP.SpawnSound_BP_C'");
 
 
-
+	//UI Base Sound
+	CreateSound("BaseUISound_02_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/BaseUISound_02_BP.BaseUISound_02_BP_C'");
+	//Level Up Sound
+	CreateSound("LevelupSound_Cue", "/Script/Engine.Blueprint'/Game/Blueprint/Sound/LevelupSound_BP.LevelupSound_BP_C'");
 }
 
 void ASoundManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Destroy();
 	CreateSoundEffect();
+}
+
+void ASoundManager::Destroy()
+{
+	for (auto soundEffectPair : _soundEffectTable)
+    {
+        for (auto soundEffect : soundEffectPair.Value)
+        {
+            soundEffect->Destroy();
+        }
+    }
+
+    _soundEffectTable.Empty();
 }
 
 void ASoundManager::PlaySound(FString name, FVector location)
@@ -75,6 +93,35 @@ void ASoundManager::PlaySound(FString name, FVector location)
 	if (findSound)
 		(*findSound)->Play(location);
 
+}
+
+void ASoundManager::PlaySoundWithDuration(FString name, FVector location, float duration)
+{
+
+	if (!_soundEffectTable.Contains(name))
+		return;
+
+	auto findSound = _soundEffectTable[name].FindByPredicate(
+		[](ASoundEffect* soundEffect)-> bool
+		{
+			return !soundEffect->IsPlaying();  // 현재 재생 중이 아닌 소리만 찾기
+		});
+
+	if (findSound)
+	{
+		ASoundEffect* soundEffect = *findSound;
+		soundEffect->Play(location);
+
+		// 소리가 재생된 후, 지정된 duration 시간이 지나면 soundEffect의 Stop 함수를 호출하도록 타이머 설정
+		GetWorld()->GetTimerManager().SetTimer(
+			SoundDurationTimerHandle,
+			FTimerDelegate::CreateLambda([soundEffect]() {
+				soundEffect->Stop();
+				}),
+			duration,
+			false
+		);
+	}
 }
 
 

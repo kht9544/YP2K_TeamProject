@@ -54,6 +54,11 @@ void UStatWidget::NativeConstruct()
 	{
 		INTUp->OnClicked.AddDynamic(this, &UStatWidget::INTUpClick);
 	}
+
+	if (HPDown)
+	{
+		HPDown->OnClicked.AddDynamic(this, &UStatWidget::HPDownClick);
+	}
 }
 
 void UStatWidget::PlLevelUpdate(int32 Level)
@@ -148,9 +153,16 @@ void UStatWidget::HPDownClick()
 
 	if (player && player->_StatCom)
 	{
-		int32 plMaxHp = player->_StatCom->GetMaxHp();
-		int32 BonusPoints = player->_StatCom->GetBonusPoint();
-	
+		int32 currentHp = player->_StatCom->GetMaxHp();
+		int32 baseHp = player->_StatCom->GetBaseStat(StatType::HP);  // 기준 HP 가져오기
+		int32 bonusPoints = player->_StatCom->GetBonusPoint();
+
+		if (currentHp > baseHp) 
+		{
+			player->_StatCom->SetMaxHp(currentHp - 100);
+			player->_StatCom->SetBonusPoint(bonusPoints + 1);
+		}
+		UpdateStatDisplay();
 	}
 }
 

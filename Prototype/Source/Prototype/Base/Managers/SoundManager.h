@@ -21,14 +21,16 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	void Destroy();
 	void CreateSound(FString name, FString path);				// Sound종류
 
 public:	
 	virtual void Tick(float DeltaTime) override;
 	void PlaySound(FString name, FVector location);
 
+	void PlaySoundWithDuration(FString name, FVector location, float duration);
 private:
-
+	FTimerHandle SoundDurationTimerHandle;
 
 
 	UPROPERTY()

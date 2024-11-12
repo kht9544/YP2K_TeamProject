@@ -34,6 +34,12 @@ AEffectManager::AEffectManager()
 	CreateNiagaraClass(TEXT("P_Greystone_HToKill_Resurrect"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_Skill04_Start.P_Skill04_Start_C'"));
 	CreateNiagaraClass(TEXT("NS_Priest_Sphere"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_Skill04_During.NS_Skill04_During_C'"));
 
+	//Player : Level Up
+	CreateNiagaraClass(TEXT("P_Status_LevelUp"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_LevelUp_BP.P_LevelUp_BP_C'"));
+
+	// EpicMonster : Skeleton Spawn
+	CreateNiagaraClass(TEXT("P_Morigesh_Ultimate_Reveal"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_Epic_Skeleton.P_Epic_Skeleton_C'"));
+
 }
 
 void AEffectManager::CreateNiagaraClass(FString name, FString path)
@@ -100,6 +106,14 @@ void AEffectManager::PlayOnSkeletalMesh(FString name, USkeletalMeshComponent* me
 		(*findEffect)->PlayOnSkeletalMesh(mesh, socketName);
 
 
+}
+
+void AEffectManager::PlayEffect(UParticleSystem* Particle, FVector Location)
+{
+	if (Particle)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, Location);
+	}
 }
 
 

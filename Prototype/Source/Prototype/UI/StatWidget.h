@@ -83,9 +83,11 @@ public:
 
 	void UpdateStatDisplay();
 	
+	UFUNCTION()
 	void HPDownClick();
 	UFUNCTION()
 	void HPUpClick();
+
 	void MPDownClick();
 	UFUNCTION()
 	void MpUpClick();
