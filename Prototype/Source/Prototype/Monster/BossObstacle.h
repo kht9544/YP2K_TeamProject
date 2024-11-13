@@ -26,6 +26,8 @@ public:
 	UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
+	virtual FString GetObstacleBreakEffect() const;
+	virtual FString GetObstacleBreakSound() const;
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision", meta = (AllowPrivateAccess = "true"))
     class UBoxComponent* CollisionBox;

@@ -435,7 +435,7 @@ FString AMyPlayer::GetSkillSound03Shout() const
 
 FString AMyPlayer::GetPlayerSkillEffect04_Start() const
 {
-	return "P_Greystone_HToKill_Resurrect";
+	return "NS_Skill04_Start";
 }
 
 FString AMyPlayer::GetPlayerSkillEffect04_Durring() const

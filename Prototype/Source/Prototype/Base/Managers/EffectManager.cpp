@@ -31,7 +31,7 @@ AEffectManager::AEffectManager()
 	CreateNiagaraClass(TEXT("NS_Projectile_01_Hit"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_FireBallHit_BP.NS_FireBallHit_BP_C'"));
 
 	//Player : Skill 4 
-	CreateNiagaraClass(TEXT("P_Greystone_HToKill_Resurrect"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_Skill04_Start.P_Skill04_Start_C'"));
+	CreateNiagaraClass(TEXT("NS_Skill04_Start"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_Skill04_Start_BP.NS_Skill04_Start_BP_C'"));
 	CreateNiagaraClass(TEXT("NS_Priest_Sphere"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_Skill04_During.NS_Skill04_During_C'"));
 
 	//Player : Level Up
@@ -39,6 +39,9 @@ AEffectManager::AEffectManager()
 
 	// EpicMonster : Skeleton Spawn
 	CreateNiagaraClass(TEXT("P_Morigesh_Ultimate_Reveal"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Particle/P_Epic_Skeleton.P_Epic_Skeleton_C'"));
+
+	// BossMonster : Obstacle Break
+	CreateNiagaraClass(TEXT("NS_LightningSlash"), TEXT("/Script/Engine.Blueprint'/Game/Blueprint/VFX/Niagara/NS_Obstacle_Break_BP.NS_Obstacle_Break_BP_C'"));
 
 }
 

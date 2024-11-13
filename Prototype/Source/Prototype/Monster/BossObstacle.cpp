@@ -5,8 +5,10 @@
 #include "BossMonster.h"
 #include "Components/BoxComponent.h"
 #include "../Base/Managers/EffectManager.h"
+#include "../Base//Managers/SoundManager.h"
 #include "EngineUtils.h"  
 #include "Components/StaticMeshComponent.h"
+#include "Base/MyGameInstance.h"
 
 // Sets default values
 ABossObstacle::ABossObstacle()
@@ -53,8 +55,21 @@ void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		// }
 		boss->DestroyObstacle();
 		boss->_StatCom->SetStun(true);
+
+		EffectManager->Play(*GetObstacleBreakEffect(), ObstacleMesh->GetComponentLocation());
+		SoundManager->PlaySound(*GetObstacleBreakSound(), ObstacleMesh->GetComponentLocation());
 		Destroy();
 	}
 	
+}
+
+FString ABossObstacle::GetObstacleBreakEffect() const
+{
+	return "NS_LightningSlash";
+}
+
+FString ABossObstacle::GetObstacleBreakSound() const
+{
+	return "ObstacleBroken_Cue";
 }
 
