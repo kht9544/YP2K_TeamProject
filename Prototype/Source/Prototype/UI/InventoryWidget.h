@@ -133,4 +133,5 @@ private:
 	
 	UPROPERTY(meta = (BindWidget))
 	TArray<class UTextBlock*> _modStat;
+
 };
