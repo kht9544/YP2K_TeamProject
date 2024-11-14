@@ -23,7 +23,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void Active(FVector location);
-	void DeActiveEvent(FVector location);
+	virtual void DeActiveEvent(FVector location);
 
 	void SetLoop(bool loop) { _bLoop = loop; }
 	void SetTime (float time) {_delayTime = time;}

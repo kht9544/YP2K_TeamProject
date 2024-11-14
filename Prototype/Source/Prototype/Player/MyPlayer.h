@@ -105,6 +105,18 @@ private:
 	void StatUIOpen(const FInputActionValue &value);
 	void InvenUIOpen(const FInputActionValue &value);
 
+
+	//TODO : FIX
+	void UpdateDecalLocation();
+    void ConfirmSkillLocation();
+	FVector TargetSkillLocation;
+    bool bIsSkillReadyToCast;
+	UPROPERTY()
+	TSubclassOf<class ADecalActor> SkillDecalActor;
+	class ADecalActor* SpawnedDecalActor = nullptr;
+    FTimerHandle TimerHandle_UpdateDecal;
+
+
 	// void CheckForClimbableWall();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
 	TArray<bool> SkillOnCooldown;
@@ -117,6 +129,8 @@ private:
 	FVector DashDirection;
 	float DashTimeElapsed;
 	float DashDuration;
+
+	
 
 	void PerformDash(float DeltaTime);
 	void StartScreenShake();
@@ -196,7 +210,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AMyDecal> _decal;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UStatWidget *_statWidget;

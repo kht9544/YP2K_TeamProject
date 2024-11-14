@@ -70,12 +70,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
 	UStatComponent* _StatCom;
 
-protected:
 	FTimerHandle TimerHandle_Destroy;
+
 	UFUNCTION()
 	void DelayedDestroy();
 
-
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	bool _isAttacking = false;
 

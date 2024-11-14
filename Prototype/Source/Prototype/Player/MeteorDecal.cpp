@@ -2,7 +2,10 @@
 
 #include "MeteorDecal.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/DecalComponent.h"
+#include "Monster/Monster.h"
 #include "NiagaraComponent.h"
+#include "Engine/DamageEvents.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -93,6 +96,25 @@ void AMeteorDecal::OnMeteorImpact()
         );
     }
 
+    TArray<AActor*> IgnoredActors;
+    float DamageAmount = 500.0f;
+    FVector DecalSize = GetDecal()->DecalSize;
+    float Size = DecalSize.Y;
+    float DamageRadius = _areaRadius * Size;
+    UE_LOG(LogTemp, Warning, TEXT("Meteor Radius :%f"),_areaRadius);
+
+    UGameplayStatics::ApplyRadialDamage(
+        GetWorld(),
+        DamageAmount,
+        GetActorLocation(),
+        DamageRadius,
+        UDamageType::StaticClass(),
+        IgnoredActors,
+        this,
+        GetInstigatorController(),
+        true
+    );
+
     // 데칼 폭발 처리
     DeActiveEvent(GetActorLocation());
 }
@@ -101,4 +123,10 @@ void AMeteorDecal::UpdateMeteorPosition(float DeltaTime)
 {
     FVector currentLocation = FMath::Lerp(_startLocation, _endLocation, _elapsedTime / _fallDuration);
     _niagaraCom->SetWorldLocation(currentLocation);
+}
+
+void AMeteorDecal::DeActiveEvent(FVector location)
+{
+
+
 }
