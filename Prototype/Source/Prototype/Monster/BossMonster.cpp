@@ -7,6 +7,7 @@
 #include "../Player/Fireball.h"
 #include "../Player/MyDecal.h"
 #include "Components/DecalComponent.h"
+#include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Base/MyGameInstance.h"
 #include "../Base/Managers/SoundManager.h"
@@ -127,7 +128,8 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 		auto controller = GetController();
 		if (controller)
 			GetController()->UnPossess();
-		Destroy();
+			
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_Destroy, this, &ACreature::DelayedDestroy, 2.0f, false);
 	}
 
 	return 0.0f;
@@ -244,14 +246,16 @@ void ABossMonster::Tick(float DeltaTime)
 
 		if (HitResult.bBlockingHit)
 		{
-			DashEnd();
 			AMyPlayer *player = Cast<AMyPlayer>(HitResult.GetActor());
 			if (player != nullptr)
 			{
+				DashEnd();
 				if (_bossMonster01_AnimInstance)
 				{
 					_bossMonster01_AnimInstance->PlayUpAttackMontage();
 				}
+				
+				player->TakeDamage(_StatCom->GetStr(), FDamageEvent(), GetController(), this);
 				FVector ThrowDirection = (player->GetActorLocation() - GetActorLocation()).GetSafeNormal();
 				ThrowDirection.Z = 1.f;
 				FVector ThrowForce = ThrowDirection * 1000.0f;

@@ -38,6 +38,8 @@ protected:
 
 	void UpdateMeteorPosition(float DeltaTime);
 
+    virtual void DeActiveEvent(FVector location) override;
+
 
 	// TODO: 이펙트
 	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Meteor", meta = (AllowPrivateAccess = "true"))
