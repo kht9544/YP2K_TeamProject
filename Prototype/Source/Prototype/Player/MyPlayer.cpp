@@ -514,6 +514,22 @@ void AMyPlayer::AttackA(const FInputActionValue &value)
 
 	if (isPressed && _isAttacking == false && _KnightanimInstance != nullptr)
 	{
+		 if (bIsSkillReadyToCast) 
+        {
+            bIsSkillReadyToCast = false;
+
+            GetWorld()->GetTimerManager().ClearTimer(TimerHandle_UpdateDecal);
+			
+            if (SpawnedDecalActor)
+            {
+                SpawnedDecalActor->Destroy();
+                SpawnedDecalActor = nullptr;
+            }
+
+            ConfirmSkillLocation();
+			return;
+        }
+
 		if (bIsGuarding)
 			bIsGuarding = false;
 		_KnightanimInstance->PlayAttackMontage();
@@ -574,105 +590,13 @@ void AMyPlayer::Skill1(const FInputActionValue &value)
 	}
 }
 
-// void AMyPlayer::Skill2(const FInputActionValue &value)
-// {
-//     bool isPressed = value.Get<bool>();
-
-//     if (isPressed && _skillWidgetInstance != nullptr)
-//     {
-//         if (SkillOnCooldown[1])
-//             return;
-
-//         SkillOnCooldown[1] = true;
-
-//         FActorSpawnParameters SpawnParams;
-//         SpawnParams.Owner = this;
-//         SpawnParams.Instigator = GetInstigator();
-
-//         FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f);
-
-//         // 가장 가까운 적 찾기
-//         AActor* NearestEnemy = nullptr;
-//         float NearestDistance = FLT_MAX; // 가장 가까운 거리
-
-//         TArray<AActor*> AllEnemies;
-//         UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMonster::StaticClass(), AllEnemies); // AEnemy는 적의 클래스명 (적의 클래스명으로 변경 필요)
-
-//         for (AActor* Enemy : AllEnemies)
-//         {
-//             if (Enemy)
-//             {
-//                 FVector DirectionToEnemy = Enemy->GetActorLocation() - GetActorLocation();
-//                 float Distance = DirectionToEnemy.Size();
-
-//                 if (Distance < NearestDistance)
-//                 {
-//                     NearestDistance = Distance;
-//                     NearestEnemy = Enemy;
-//                 }
-//             }
-//         }
-
-//         FVector DecalLocation = NearestEnemy ? NearestEnemy->GetActorLocation() : GetActorLocation() + GetActorForwardVector() * 1000.0f;
-//         DecalLocation.Z = 0.0f; 
-// 		UE_LOG(LogTemp, Warning, TEXT("Z:%f"),DecalLocation.Z);
-
-//         int MeteorCount = (_StatCom->GetInt()) / 10;
-
-//         AMeteorDecal* CenterMeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
-//         if (CenterMeteorDecal)
-//         {
-//             CenterMeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);
-//         }
-
-//         for (int i = 0; i < MeteorCount - 1; i++)
-//         {
-//             float Angle = (i * (360.0f / (MeteorCount - 1))) * (PI / 180.0f);
-//             float Radius = 500.0f;
-
-//             FVector SpawnLocation = DecalLocation;
-//             SpawnLocation.X += FMath::Cos(Angle) * Radius;
-//             SpawnLocation.Y += FMath::Sin(Angle) * Radius;
-
-//             AMeteorDecal* MeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-//             if (MeteorDecal)
-//             {
-//                 MeteorDecal->StartMeteor(MeteorStartLocation, SpawnLocation, 3.0f);
-//             }
-//         }
-
-//         _skillWidgetInstance->StartCooldown(1, 5.0f);
-
-//         UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
-//         if (PlayerAnimInstance)
-//         {
-//             PlayerAnimInstance->PlaySkill02Montage();
-//         }
-//         SoundManager->PlaySound(*GetSkillSound02(), _hitPoint);
-//     }
-// }
-
 void AMyPlayer::Skill2(const FInputActionValue &value)
 {
     bool isPressed = value.Get<bool>();
 
     if (isPressed)
     {
-        if (bIsSkillReadyToCast) 
-        {
-            bIsSkillReadyToCast = false;
-
-            GetWorld()->GetTimerManager().ClearTimer(TimerHandle_UpdateDecal);
-			
-            if (SpawnedDecalActor)
-            {
-                SpawnedDecalActor->Destroy();
-                SpawnedDecalActor = nullptr;
-            }
-
-            ConfirmSkillLocation();
-        }
-        else if (_skillWidgetInstance != nullptr && !SkillOnCooldown[1]) 
+        if (_skillWidgetInstance != nullptr && !SkillOnCooldown[1]) 
         {
             if (SkillDecalActor && !SpawnedDecalActor)
             {
