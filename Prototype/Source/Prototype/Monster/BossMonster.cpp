@@ -261,10 +261,16 @@ void ABossMonster::Tick(float DeltaTime)
 				FVector ThrowForce = ThrowDirection * 1000.0f;
 				player->LaunchCharacter(ThrowForce, true, true);
 			}
-		}
-		else if (FVector::DistSquared(NewLocation, DashEndLocation) <= KINDA_SMALL_NUMBER)
-		{
-			DashEnd();
+
+			else if (HitResult.ImpactPoint.Z < GetActorLocation().Z)
+			{
+				return;
+			}
+		
+			else if (FVector::DistSquared(NewLocation, DashEndLocation) <= KINDA_SMALL_NUMBER)
+			{
+				DashEnd();
+			}
 		}
 	}
 }
