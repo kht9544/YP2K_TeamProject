@@ -15,9 +15,5 @@ class PROTOTYPE_API UMiniMapWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 
-	//UPROPERTY(meta = (BindWidget))
-	//class UImage* MiniMapImage;
-
-protected:
-	virtual void NativeConstruct() override;
+  
 };

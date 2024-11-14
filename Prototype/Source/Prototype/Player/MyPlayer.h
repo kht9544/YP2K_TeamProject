@@ -123,6 +123,9 @@ private:
 
 
 
+	////test
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	//TSubclassOf<UUserWidget> MiniMapWidgetClass;
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction *_lookAction;

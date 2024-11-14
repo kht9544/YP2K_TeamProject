@@ -209,6 +209,15 @@ void AMyPlayer::BeginPlay()
 	{
 		_MiniMap->AddToViewport();
 	}
+	//if (MiniMapWidgetClass)
+	//{
+	//	// 미니맵 위젯 생성 및 추가
+	//	UMiniMapWidget* MiniMapWidget = CreateWidget<UMiniMapWidget>(this, MiniMapWidgetClass);
+	//	if (MiniMapWidget)
+	//	{
+	//		MiniMapWidget->AddToViewport();
+	//	}
+	//}
 
 	AMyPlayerController *MyController = Cast<AMyPlayerController>(GetController());
 	if (MyController != nullptr)
@@ -216,6 +225,10 @@ void AMyPlayer::BeginPlay()
 		_skillWidgetInstance = MyController->SkillWidgetInstance;
 	}
 	SkillOnCooldown.Init(false, 4);
+
+	// 몬스터 스테이지1
+	// 가로 21700
+	// 세로 10200
 
 }
 
