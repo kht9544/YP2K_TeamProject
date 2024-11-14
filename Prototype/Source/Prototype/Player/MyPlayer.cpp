@@ -598,6 +598,18 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
     {
         if (_skillWidgetInstance != nullptr && !SkillOnCooldown[1]) 
         {
+			APlayerController *PlayerController = Cast<APlayerController>(GetController());
+			
+			if(SpawnedDecalActor)
+			{
+				bIsSkillReadyToCast = false;
+				SpawnedDecalActor->Destroy();
+				SpawnedDecalActor =  nullptr;
+				PlayerController->bShowMouseCursor = false;
+				PlayerController->SetInputMode(FInputModeGameOnly());
+				return;
+			}
+
             if (SkillDecalActor && !SpawnedDecalActor)
             {
                 SpawnedDecalActor = GetWorld()->SpawnActor<ADecalActor>(SkillDecalActor);
@@ -607,7 +619,6 @@ void AMyPlayer::Skill2(const FInputActionValue &value)
                 }
             }
 
-            APlayerController *PlayerController = Cast<APlayerController>(GetController());
 
             if (PlayerController)
             {
@@ -637,6 +648,7 @@ void AMyPlayer::UpdateDecalLocation()
 			{
 				 FVector NewLocation = HitResult.ImpactPoint;
             	TargetSkillLocation = NewLocation;
+				TargetSkillLocation.Z += 1.0f;
             	SpawnedDecalActor->SetActorLocation(TargetSkillLocation);
 			}
         }

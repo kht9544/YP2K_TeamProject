@@ -4,6 +4,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/DecalComponent.h"
 #include "Monster/Monster.h"
+#include "MyPlayer.h"
 #include "NiagaraComponent.h"
 #include "Engine/DamageEvents.h"
 #include "NiagaraFunctionLibrary.h"
@@ -47,9 +48,8 @@ void AMeteorDecal::Tick(float DeltaTime)
     if (_elapsedTime < _fallDuration)
     {
         _elapsedTime += DeltaTime;
-        UpdateMeteorPosition(DeltaTime);  // 메테오 위치 업데이트
+        UpdateMeteorPosition(DeltaTime);
 
-        // Update Decal size as the meteor falls (데칼 크기 업데이트)
         float progress = _elapsedTime / _fallDuration;
         FVector curScale = GetActorScale();
         curScale.Y = progress * _areaRadius;
@@ -58,7 +58,7 @@ void AMeteorDecal::Tick(float DeltaTime)
 
         if (_elapsedTime >= _fallDuration)
         {
-            OnMeteorImpact();  // 메테오가 바닥에 닿으면 충돌 처리
+            OnMeteorImpact();
         }
     }
 }
@@ -96,12 +96,20 @@ void AMeteorDecal::OnMeteorImpact()
         );
     }
 
-    TArray<AActor*> IgnoredActors;
+   
     float DamageAmount = 500.0f;
     FVector DecalSize = GetDecal()->DecalSize;
     float Size = DecalSize.Y;
     float DamageRadius = _areaRadius * Size;
     UE_LOG(LogTemp, Warning, TEXT("Meteor Radius :%f"),_areaRadius);
+
+    TArray<AActor*> IgnoredActors;
+
+    AMyPlayer* Player = Cast<AMyPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+    if (Player)
+    {
+        IgnoredActors.Add(Player);
+    }
 
     UGameplayStatics::ApplyRadialDamage(
         GetWorld(),
