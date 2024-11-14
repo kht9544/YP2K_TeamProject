@@ -7,6 +7,7 @@
 #include "Managers/EffectManager.h"
 #include "Managers/SoundManager.h"
 #include "Component/StatComponent.h"
+#include "Component/InventoryComponent.h"
 #include "../Item/BaseItem.h"
 #include "Item/Equip/EquipItem.h"
 #include "MyGameInstance.generated.h"
@@ -27,11 +28,12 @@ public:
 	void SavePlayerStats(class UStatComponent* StatComponent);
 	void LoadPlayerStats(class UStatComponent* StatComponent);
 
-    UPROPERTY(BlueprintReadWrite)
-    TArray<ABaseItem*> SavedInventoryItems;
+	void SaveInventory(class UInventoryComponent* InventoryComponent);
+	void LoadInventory(class UInventoryComponent* InventoryComponent);
+
+    UPROPERTY()
+    TArray<FItemData> SavedInventoryData;
     
-    UPROPERTY(BlueprintReadWrite)
-    TMap<FString, AEquipItem*> SavedEquipItems;
 
 	bool GetFirst(){return _firstIn;}
 	void SetFirst(bool first){_firstIn = first;}
@@ -99,5 +101,7 @@ private:
 	int32 _savedBonus;
 	UPROPERTY()
 	bool _firstIn = true;
+
+
 
 };

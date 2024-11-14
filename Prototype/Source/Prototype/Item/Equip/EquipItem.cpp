@@ -29,6 +29,7 @@ void AEquipItem::SetItemWithCode(int32 itemCode)
             return;
         }
 
+        _Code = data->_Code;
         _Texture = data->_Texture;
         _Mesh = data->_Mesh;
         _equipItem = data->_Skeletal;

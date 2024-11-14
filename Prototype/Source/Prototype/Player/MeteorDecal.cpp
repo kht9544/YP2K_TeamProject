@@ -101,7 +101,6 @@ void AMeteorDecal::OnMeteorImpact()
     FVector DecalSize = GetDecal()->DecalSize;
     float Size = DecalSize.Y;
     float DamageRadius = _areaRadius * Size;
-    UE_LOG(LogTemp, Warning, TEXT("Meteor Radius :%f"),_areaRadius);
 
     TArray<AActor*> IgnoredActors;
 

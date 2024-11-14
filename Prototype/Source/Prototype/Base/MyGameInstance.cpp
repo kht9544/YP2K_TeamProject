@@ -1,7 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Base/MyGameInstance.h"
-#include "../Component/StatComponent.h"
+#include "Component/StatComponent.h"
+#include "Component/InventoryComponent.h"
+#include "Item/BaseItem.h"
+#include "Item/Equip/EquipItem.h"
+#include "Item/Consumes/ConsumeItem.h"
 #include "../UI/InventoryWidget.h"
 #include "../Item/BaseItem.h"
 #include "../Item/Equip/EquipItem.h"
@@ -82,6 +86,63 @@ void UMyGameInstance::LoadPlayerStats(class UStatComponent *StatComponent)
 	}
 }
 
+void UMyGameInstance::SaveInventory(class UInventoryComponent *InventoryComponent)
+{
+	if (InventoryComponent)
+	{
+		TArray<ABaseItem *> Items = InventoryComponent->GetItemSlots();
+
+		for (ABaseItem *Item : Items)
+		{
+			if (Item)
+			{
+				FItemData ItemData;
+				ItemData._Code = Item->GetCode();
+				ItemData._Name = Item->GetName();
+				ItemData._Type = Item->GetType();
+				ItemData._ModTarget = Item->GetModStat();
+				ItemData._Description = Item->GetDesc();
+				ItemData._Price = Item->GetPrice();
+				ItemData._Value = Item->GetValue();
+				ItemData._Mesh = Item->GetSkeletalMesh();
+				ItemData._Texture = Item->GetTexture();
+
+				SavedInventoryData.Add(ItemData);
+			}
+		}
+	}
+}
+
+void UMyGameInstance::LoadInventory(class UInventoryComponent *InventoryComponent)
+{
+	if (InventoryComponent)
+	{
+		InventoryComponent->InitSlot();
+
+		for (const FItemData &ItemData : SavedInventoryData)
+		{
+			ABaseItem *NewItem = nullptr;
+
+			if (ItemData._Type == ItemType::Consume)
+			{
+				NewItem = GetWorld()->SpawnActor<ABaseItem>(ABaseItem::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+				NewItem->SetItemWithCode(ItemData._Code);
+			}
+			else if (ItemData._Type == ItemType::Equipment)
+			{
+				AEquipItem *EquipItem = GetWorld()->SpawnActor<AEquipItem>(AEquipItem::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+				EquipItem->SetItemWithCode(ItemData._Code);
+				NewItem = EquipItem;
+			}
+
+			if (NewItem)
+			{
+				InventoryComponent->AddItemToSlot(NewItem);
+				InventoryComponent->ShowItemSlots();
+			}
+		}
+	}
+}
 
 void UMyGameInstance::Init()
 {

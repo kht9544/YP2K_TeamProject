@@ -22,15 +22,18 @@ void AMyGameModeBase::BeginPlay()
 		if(GameInstance)
 		{
 			UStatComponent* StatComponent = player->FindComponentByClass<UStatComponent>();
+			UInventoryComponent* InvenComponent = player->FindComponentByClass<UInventoryComponent>();
 			if (StatComponent)
 			{
 				if(GameInstance->GetFirst())
 				{
 					player->_StatCom->SetLevelInit(1);
+					player->_inventoryComponent->InitSlot();
 					GameInstance->SetFirst(false);
 				}
 				else
 				{
+					GameInstance->LoadInventory(InvenComponent);
 					GameInstance->LoadPlayerStats(StatComponent);
 				}
 				

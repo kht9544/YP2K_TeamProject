@@ -40,15 +40,7 @@ void UInventoryComponent::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("UIManager or Inventory UI is null in UInventoryComponent::BeginPlay"));
 	}
 
-	_ItemSlots.Init(nullptr, _itemSlotMax);
-
-	_EquipSlots.Add(TEXT("Helmet"));
-	_EquipSlots.Add(TEXT("UpperArmor"));
-	_EquipSlots.Add(TEXT("ShoulderArmor"));
-	_EquipSlots.Add(TEXT("LowerArmor"));
-	_EquipSlots.Add(TEXT("Sword"));
-	_EquipSlots.Add(TEXT("Shield"));
-
+	// InitSlot();
 
 	UpdateUI();
 }
@@ -124,7 +116,6 @@ void UInventoryComponent::InitializeComponent()
 	Super::InitializeComponent();
 	UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
 }
-
 
 void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)
 {
@@ -218,13 +209,57 @@ void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem *item)
 {
 }
 
+void UInventoryComponent::InitSlot()
+{
+	_ItemSlots.Init(nullptr, _itemSlotMax);
+
+	_EquipSlots.Add(TEXT("Helmet"));
+	_EquipSlots.Add(TEXT("UpperArmor"));
+	_EquipSlots.Add(TEXT("ShoulderArmor"));
+	_EquipSlots.Add(TEXT("LowerArmor"));
+	_EquipSlots.Add(TEXT("Sword"));
+	_EquipSlots.Add(TEXT("Shield"));
+}
+
+void UInventoryComponent::AddItemToSlot(ABaseItem *Item)
+{
+	if (Item)
+	{
+		for (int i = 0; i < _itemSlotMax; i++)
+		{
+			if (_ItemSlots[i] == nullptr)
+			{
+				_ItemSlots[i] = Item;
+				break;
+			}
+		}
+	}
+}
+
+void UInventoryComponent::ShowItemSlots()
+{
+	for (int32 i = 0; i < _ItemSlots.Num(); i++)
+	{
+		ABaseItem *Item = _ItemSlots[i];
+		if (Item)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Slot %d: %s"), i, *Item->GetName());
+		}
+		else
+		{
+			// 슬롯에 아이템이 없을 경우
+			UE_LOG(LogTemp, Warning, TEXT("Slot %d: Empty"), i);
+		}
+	}
+}
+
 void UInventoryComponent::UpdateUI()
 {
 	for (int32 i = 0; i < _itemSlotMax; i++)
 	{
 		if (_ItemSlots.IsValidIndex(i) && _ItemSlots[i] != nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("itemslot : %d"), i);
+			UE_LOG(LogTemp, Warning, TEXT("updateUi itemslot : %d"), i);
 			UIupdate_Add(i, _ItemSlots[i]);
 		}
 	}

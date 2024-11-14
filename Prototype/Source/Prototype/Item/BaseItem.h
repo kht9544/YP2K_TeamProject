@@ -81,12 +81,14 @@ public:
 	void DropItem(FVector location, FRotator rotation = FRotator::ZeroRotator);
 
 	//Item Data Getter
+	int GetCode(){return _Code;}
 	FString GetName() { return _Name; }
 	ItemType GetType() { return _Type; }
 	StatType GetModStat() { return _ModStatType; }
 	FString GetDesc() { return _Description; }
 	int32 GetPrice() { return _Price; }
 	int32 GetValue() { return _Value; }
+	UStaticMesh* GetSkeletalMesh() {return _Mesh;}
 	UTexture2D* GetTexture() { return _Texture; }
 
 protected:
@@ -99,6 +101,7 @@ protected:
 	UPROPERTY()
 	class AMyPlayer* _player;
 
+	int _Code;
 	FString _Name;
 	ItemType _Type;
 	StatType _ModStatType;

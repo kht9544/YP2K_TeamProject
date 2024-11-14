@@ -30,12 +30,11 @@ void AStage1BossGameModeBase::BeginPlay()
 				GameInstance->LoadPlayerStats(StatComponent);	
 			}
 			
-			// UInventoryComponent* InvenComponent = player->FindComponentByClass<UInventoryComponent>();
-			// if (InvenComponent)
-			// {
-			// 	UE_LOG(LogTemp,Warning,TEXT("stage1 inven"));
-			// 	GameInstance->LoadInventoryData(InvenComponent);	
-			// }
+			UInventoryComponent* InvenComponent = player->FindComponentByClass<UInventoryComponent>();
+			if (InvenComponent)
+			{
+			 	GameInstance->LoadInventory(InvenComponent);	
+			}
 		
 		}
 		
