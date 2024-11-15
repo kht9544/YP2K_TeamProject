@@ -10,17 +10,25 @@ UCLASS()
 class PROTOTYPE_API AMiniMapActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AMiniMapActor();
+
+public:
+    AMiniMapActor();
+
+    virtual void Tick(float DeltaTime) override;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:
+
+
+
+
+    UPROPERTY(EditAnywhere, Category = "UI")
+    TSubclassOf<UUserWidget> MiniMapWidgetClass;
+
+    UPROPERTY()
+    UUserWidget* MiniMapWidget;
+
 
 };

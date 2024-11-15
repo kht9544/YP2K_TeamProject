@@ -17,7 +17,8 @@ public:
 
 	//UPROPERTY(meta = (BindWidget))
 	//class UImage* MiniMapImage;
-
+	UPROPERTY(meta = (BindWidget))
+	class UImage* MapImage;
 protected:
 	virtual void NativeConstruct() override;
 };
