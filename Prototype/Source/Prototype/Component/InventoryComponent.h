@@ -29,6 +29,7 @@ public:
 	void AddItem(int32 slot = 0, ABaseItem* item = nullptr);
 	virtual void InitializeComponent() override;
 	void AddItemToSlot(class ABaseItem* Item);
+	void AddItemToEquip(FString EquipSlot, class ABaseItem* NewItem);
 	
 	void ShowItemSlots();
 
@@ -40,7 +41,7 @@ public:
 
 	void UIupdate_Add(int32 slot, ABaseItem* item);
 	void UIupdate_Pop(int32 slot);
-	void UIupdate_equip(int32 slot, ABaseItem* item);
+	void UIupdate_equip(FString slot, ABaseItem* item);
 
 	TArray<ABaseItem*> GetItemSlots(){return _ItemSlots;}
 	TMap<FString, class AEquipItem*> GetEquipSlots(){return _EquipSlots;}

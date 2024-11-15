@@ -102,6 +102,50 @@ void UInventoryWidget::UpdateEquip()
 	Shield->ButtonUpdate();
 }
 
+void UInventoryWidget::UpdateEquipSlot(FString slot, ABaseItem* item)
+{
+	if (item)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateEquipSlot: %s - Item: %s"), *slot, *item->GetName());
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UpdateEquipSlot: %s - Item: None"), *slot);
+    }
+	
+    if (slot == TEXT("Helmet"))
+    {
+        Helmet->SetItem(item);
+		Helmet->ButtonUpdate();
+    }
+    else if (slot == TEXT("UpperArmor"))
+    {
+        UpperArmor->SetItem(item);
+		UpperArmor->ButtonUpdate();
+    }
+    else if (slot == TEXT("ShoulderArmor"))
+    {
+        ShoulderGuard->SetItem(item);
+		ShoulderGuard->ButtonUpdate();
+    }
+    else if (slot == TEXT("LowerArmor"))
+    {
+        LowerArmor->SetItem(item);
+		LowerArmor->ButtonUpdate();
+    }
+    else if (slot == TEXT("Sword"))
+    {
+        Sword->SetItem(item);
+		Sword->ButtonUpdate();
+    }
+    else if (slot == TEXT("Shield"))
+    {
+        Shield->SetItem(item);
+		Shield->ButtonUpdate();
+    }
+    
+}
+
 void UInventoryWidget::ShowItem()
 {
 	RefreshModStat();

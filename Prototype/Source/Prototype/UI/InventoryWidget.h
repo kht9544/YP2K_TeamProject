@@ -30,6 +30,7 @@ public:
 
 	void UpdateSlot(int32 slotIndex, ABaseItem* item = nullptr);
 	void UpdateEquip();
+	void UpdateEquipSlot(FString slot, ABaseItem* item);
 	void ShowItem();
 
 	UFUNCTION()

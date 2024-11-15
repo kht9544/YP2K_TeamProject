@@ -91,6 +91,7 @@ void UMyGameInstance::SaveInventory(class UInventoryComponent *InventoryComponen
 	if (InventoryComponent)
 	{
 		TArray<ABaseItem *> Items = InventoryComponent->GetItemSlots();
+		TMap<FString, AEquipItem *> EquipItems = InventoryComponent->GetEquipSlots();
 
 		for (ABaseItem *Item : Items)
 		{
@@ -108,6 +109,25 @@ void UMyGameInstance::SaveInventory(class UInventoryComponent *InventoryComponen
 				ItemData._Texture = Item->GetTexture();
 
 				SavedInventoryData.Add(ItemData);
+			}
+		}
+
+		for (auto &Item : EquipItems)
+		{
+			if (Item.Value)
+			{
+				FItemData ItemData;
+				ItemData._Code = Item.Value->GetCode();
+				ItemData._Name = Item.Value->GetName();
+				ItemData._Type = Item.Value->GetType();
+				ItemData._ModTarget = Item.Value->GetModStat();
+				ItemData._Description = Item.Value->GetDesc();
+				ItemData._Price = Item.Value->GetPrice();
+				ItemData._Value = Item.Value->GetValue();
+				ItemData._Mesh = Item.Value->GetSkeletalMesh();
+				ItemData._Texture = Item.Value->GetTexture();
+
+				SavedEquipData.Add(Item.Key, ItemData);
 			}
 		}
 	}
@@ -139,6 +159,25 @@ void UMyGameInstance::LoadInventory(class UInventoryComponent *InventoryComponen
 			{
 				InventoryComponent->AddItemToSlot(NewItem);
 				InventoryComponent->ShowItemSlots();
+			}
+		}
+
+		for (const auto &Item : SavedEquipData)
+		{
+			AEquipItem *NewItem = nullptr;
+			FString EquipType = Item.Key;
+			const FItemData &ItemData = Item.Value;
+
+			if (ItemData._Type == ItemType::Equipment)
+			{
+				AEquipItem* EquipItem = GetWorld()->SpawnActor<AEquipItem>(AEquipItem::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+				if (EquipItem)
+				{
+					EquipItem->SetItemWithCode(ItemData._Code);
+					NewItem = EquipItem;
+
+                    InventoryComponent->AddItemToEquip(EquipType,NewItem);
+				}
 			}
 		}
 	}

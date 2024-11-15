@@ -205,8 +205,12 @@ void UInventoryComponent::UIupdate_Pop(int32 slot)
 	UIManager->GetInventoryUI()->UpdateSlot(slot, nullptr);
 }
 
-void UInventoryComponent::UIupdate_equip(int32 slot, ABaseItem *item)
+void UInventoryComponent::UIupdate_equip(FString slot, ABaseItem *item)
 {
+	if (UIManager && UIManager->GetInventoryUI())
+    {
+        UIManager->GetInventoryUI()->UpdateEquipSlot(slot,item);
+    }
 }
 
 void UInventoryComponent::InitSlot()
@@ -236,6 +240,16 @@ void UInventoryComponent::AddItemToSlot(ABaseItem *Item)
 	}
 }
 
+void UInventoryComponent::AddItemToEquip(FString EquipSlot,class ABaseItem* NewItem)
+{
+	AEquipItem* EquipItem = Cast<AEquipItem>(NewItem);
+	if(EquipItem)
+	{
+		_EquipSlots.Add(EquipSlot,EquipItem);
+	}
+	
+}
+
 void UInventoryComponent::ShowItemSlots()
 {
 	for (int32 i = 0; i < _ItemSlots.Num(); i++)
@@ -249,6 +263,18 @@ void UInventoryComponent::ShowItemSlots()
 		{
 			// 슬롯에 아이템이 없을 경우
 			UE_LOG(LogTemp, Warning, TEXT("Slot %d: Empty"), i);
+		}
+	}
+
+	for (const auto &Item : _EquipSlots)
+	{
+		if (Item.Value)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("EquipSlot %s: %s"), *Item.Key, *Item.Value->GetName());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("EquipSlot %s: Empty"), *Item.Key);
 		}
 	}
 }
@@ -271,4 +297,23 @@ void UInventoryComponent::UpdateUI()
 			UIupdate_Pop(emptySlot);
 		}
 	}
+
+	for (const auto& EquipSlot : _EquipSlots)
+    {
+        FString SlotName = EquipSlot.Key;
+        AEquipItem* EquipItem = EquipSlot.Value;
+        
+        if (EquipItem != nullptr)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("updateUi equip slot : %s"), *SlotName);
+            UIupdate_equip(SlotName, EquipItem);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("updateUi equip slot : %s is empty"), *SlotName);
+            UIupdate_equip(SlotName, nullptr);
+        }
+    }
+
+
 }

@@ -33,6 +33,9 @@ public:
 
     UPROPERTY()
     TArray<FItemData> SavedInventoryData;
+
+	UPROPERTY()
+	TMap<FString,FItemData> SavedEquipData;
     
 
 	bool GetFirst(){return _firstIn;}
