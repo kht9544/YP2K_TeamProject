@@ -57,6 +57,8 @@ public:
 	virtual FString GetEpicSpawnSound() const;
 	virtual FString GetLevelUpSound() const;
 
+	bool GetIsAttacking() {return _isAttacking;}
+
 	UFUNCTION()
 	void OnAttackEnded(class UAnimMontage* Montage, bool bInterrupted);
 

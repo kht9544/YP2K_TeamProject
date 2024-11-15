@@ -158,7 +158,6 @@ void UMyGameInstance::LoadInventory(class UInventoryComponent *InventoryComponen
 			if (NewItem)
 			{
 				InventoryComponent->AddItemToSlot(NewItem);
-				InventoryComponent->ShowItemSlots();
 			}
 		}
 
