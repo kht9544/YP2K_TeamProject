@@ -69,11 +69,9 @@ void AMeteorDecal::StartMeteor(FVector startLocation, FVector endLocation, float
     _endLocation = endLocation;
     _fallDuration = fallDuration;
     _elapsedTime = 0.0f;
-
-    // 메테오를 하늘에 위치시킴
     _niagaraCom->SetWorldLocation(startLocation);
 
-    SetActorLocation(endLocation);  // 데칼은 바닥에 위치
+    SetActorLocation(endLocation); 
     _bIsPlay = true;
 }
 
@@ -81,18 +79,16 @@ void AMeteorDecal::OnMeteorImpact()
 {
     _fieldAttackDelegate.Broadcast(GetActorLocation());
 
-    // 메테오 메시 숨김
     _niagaraCom->SetVisibility(false);
 
     if (_additionalEffect)
     {
-        // 즉시 _additionalEffect 발동
         UNiagaraFunctionLibrary::SpawnSystemAtLocation(
             GetWorld(),
             _additionalEffect,
-            GetActorLocation(),  // 메테오 떨어진 위치
+            GetActorLocation(), 
             FRotator::ZeroRotator,
-            FVector(10.0f) // 후적용되는 나이아가라 사이즈 크기 
+            FVector(10.0f)
         );
     }
 
