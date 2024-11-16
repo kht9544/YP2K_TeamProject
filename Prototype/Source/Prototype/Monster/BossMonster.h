@@ -19,7 +19,6 @@ public:
 	// Sets default values for this character's properties
 	ABossMonster();
 
-	bool PerformGimmick();
 	void JumpAttack(FVector TargetLocation);
 	bool GetIsDashing(){return IsDashing;}
 	bool GetIsJumping(){return IsJumping;}
@@ -32,17 +31,6 @@ public:
 	void UpdateDash();
 	void StunEnd();
 	void DestroyObstacle();
-
-
-
-	//void SpawnObstacles();
-	
-	//void CheckGimmickResult();
-
-	//virtual void Jump() override;
-
-	//void OnRushCompleted();
-
 
 private:
 	virtual void BeginPlay() override;

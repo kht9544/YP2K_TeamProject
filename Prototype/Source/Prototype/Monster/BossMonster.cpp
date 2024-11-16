@@ -133,12 +133,6 @@ float ABossMonster::TakeDamage(float Damage, struct FDamageEvent const &DamageEv
 	return 0.0f;
 }
 
-bool ABossMonster::PerformGimmick()
-{
-	UE_LOG(LogTemp, Warning, TEXT("StartGimmick"));
-
-	return false;
-}
 
 void ABossMonster::JumpAttack(FVector TargetLocation)
 {
