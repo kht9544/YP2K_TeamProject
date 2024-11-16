@@ -21,6 +21,11 @@ EBTNodeResult::Type UBTTaskNode_LookTarget::ExecuteTask(UBehaviorTreeComponent &
         return EBTNodeResult::Failed;
     }
 
+    if(Boss->GetIsAttacking())
+    {
+        return EBTNodeResult::Succeeded;
+    }
+
     AActor *TargetActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject("Target"));
     if (TargetActor)
     {

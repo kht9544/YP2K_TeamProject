@@ -646,10 +646,13 @@ void AMyPlayer::UpdateDecalLocation()
         {
 			if(HitResult.ImpactNormal.Z > 0.5f)
 			{
-				 FVector NewLocation = HitResult.ImpactPoint;
+				FVector NewLocation = HitResult.ImpactPoint;
             	TargetSkillLocation = NewLocation;
 				TargetSkillLocation.Z += 1.0f;
-            	SpawnedDecalActor->SetActorLocation(TargetSkillLocation);
+
+            	SkillRotation = HitResult.ImpactNormal.Rotation();
+        		SpawnedDecalActor->SetActorLocation(TargetSkillLocation);
+        		SpawnedDecalActor->SetActorRotation( SkillRotation);
 			}
         }
     }
@@ -675,10 +678,13 @@ void AMyPlayer::ConfirmSkillLocation()
 
     FVector MeteorStartLocation = GetActorLocation() + FVector(0, 0, 5000.0f);
     FVector DecalLocation = TargetSkillLocation;
+	FRotator DecalRotation =  SkillRotation;
+	DecalRotation.Pitch -= 90.0f;
+
 
     int MeteorCount = (_StatCom->GetInt()) / 10;
 
-    AMeteorDecal *CenterMeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, FRotator::ZeroRotator, SpawnParams);
+    AMeteorDecal *CenterMeteorDecal = GetWorld()->SpawnActor<AMeteorDecal>(_decal, DecalLocation, DecalRotation, SpawnParams);
     if (CenterMeteorDecal)
     {
         CenterMeteorDecal->StartMeteor(MeteorStartLocation, DecalLocation, 3.0f);

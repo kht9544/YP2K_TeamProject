@@ -108,12 +108,20 @@ private:
 
 	//TODO : FIX
 	void UpdateDecalLocation();
+
     void ConfirmSkillLocation();
+
 	FVector TargetSkillLocation;
+
+	FRotator SkillRotation;
+
     bool bIsSkillReadyToCast;
+
 	UPROPERTY()
 	TSubclassOf<class ADecalActor> SkillDecalActor;
+
 	class ADecalActor* SpawnedDecalActor = nullptr;
+
     FTimerHandle TimerHandle_UpdateDecal;
 
 
