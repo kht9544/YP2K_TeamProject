@@ -4,6 +4,7 @@
 #include "Base/Managers/UIManager.h"
 
 #include "UI/InventoryWidget.h"
+#include "UI/Boss1Widget.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -21,6 +22,15 @@ AUIManager::AUIManager()
 		_inventoryUI = CreateWidget<UInventoryWidget>(GetWorld(), inventory.Class);
 	}
 
+	static ConstructorHelpers::FClassFinder<UUserWidget> boss1widget(
+		TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/Boss_UI.Boss_UI_C'")
+	);
+	if (boss1widget.Succeeded())
+	{
+		_bossUI = CreateWidget<UBoss1Widget>(GetWorld(), boss1widget.Class);
+	}
+
+
 	static ConstructorHelpers::FObjectFinder<UTexture2D> defaultTexture(
 		TEXT("/Script/Engine.Texture2D'/Game/CraftResourcesIcons/Textures/T_Default.T_Default'")
 	);
@@ -32,6 +42,10 @@ AUIManager::AUIManager()
 	_uiList.Add(_inventoryUI);
 	_uiIsOpen.Add(false);
 	_isPauseWhenOpen.Add(true);
+
+	_uiList.Add(_bossUI);
+	_uiIsOpen.Add(false);
+	_isPauseWhenOpen.Add(false);
 }
 
 // Called when the game starts or when spawned

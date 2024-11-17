@@ -10,7 +10,9 @@ UENUM()
 enum class UI_LIST
 {
 	Inventory,
-	Status,
+	Boss,
+	Status
+	
 };
 
 DECLARE_MULTICAST_DELEGATE(PAUSE_GAME);
@@ -18,6 +20,7 @@ DECLARE_MULTICAST_DELEGATE(RESUM_GAME);
 
 class UInventoryWidget;
 class UTexture2D;
+class UBoss1Widget;
 
 UCLASS()
 class PROTOTYPE_API AUIManager : public AActor
@@ -42,6 +45,7 @@ public:
 	void ToggleUI(UI_LIST ui);
 
 	UInventoryWidget* GetInventoryUI() { return _inventoryUI; }
+	UBoss1Widget* GetBossUI() {return _bossUI;}
 
 	UTexture2D* GetDefaultTexture() { return _defaultTexture; }
 
@@ -66,4 +70,7 @@ private:
 
 	UPROPERTY()
 	UTexture2D* _defaultTexture;
+
+	UPROPERTY(AdvancedDisplay)
+	UBoss1Widget* _bossUI;
 };
