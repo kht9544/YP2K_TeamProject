@@ -2,9 +2,6 @@
 
 
 #include "UI/PlayerBarWidget.h"
-
-
-#include "UI/PlayerBarWidget.h"
 #include "Components/ProgressBar.h"
 
 void UPlayerBarWidget::SetPlHPBar(float ratio)

@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Base/MyGameInstance.h"
 #include "../Base/Managers/SoundManager.h"
+#include "../Base/Managers/UIManager.h"
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -311,6 +312,12 @@ void ABossMonster::DestroyObstacle()
 {
 	IsStun = true;
 	ObstacleDestroyCount++;
+	if(UIManager->GetBossUI())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DestroyObstacle : %d"),ObstacleDestroyCount);
+		UIManager->GetBossUI()->UpdateObstacleIcons(ObstacleDestroyCount);
+		UIManager->GetBossUI()->UpdateHPBarColor(ObstacleDestroyCount);
+	}
 	_bossMonster01_AnimInstance->PlayStunMontage();
 	GetCharacterMovement()->StopMovementImmediately();
 }
