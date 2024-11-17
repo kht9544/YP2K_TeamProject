@@ -22,16 +22,17 @@
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyPlayerController.h"
+#include "../Animation/BaseAnimInstance.h"
 
 
 
 ADragon::ADragon()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	KnightInstance = nullptr;
+	_knightInstance = nullptr;
 
     // 드래곤의 비행을 위해 중력 제거
-    GetCharacterMovement()->GravityScale = 0.0f;
+    
 
     GetCapsuleComponent()->InitCapsuleSize(100.0f, 150.0f);
 
@@ -64,17 +65,19 @@ void ADragon::BeginPlay()
 {
 	Super::BeginPlay();
 
+    bUseControllerRotationYaw = true;
+
     for (TActorIterator<AMyPlayer> It(GetWorld()); It; ++It)
     {
-        KnightInstance = *It;
-        if (KnightInstance)
+        _knightInstance = *It;
+        if (_knightInstance)
         {
             UE_LOG(LogTemp, Warning, TEXT("KnightInstance found and assigned!"));
             break;
         }
     }
 
-    if (!KnightInstance)
+    if (!_knightInstance)
     {
         UE_LOG(LogTemp, Error, TEXT("KnightInstance not found in the world!"));
         return;
@@ -89,59 +92,36 @@ void ADragon::BeginPlay()
 
 void ADragon::TransformToHuman()
 {
-    if (!_isTransformed)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Not in transformed state, cannot revert!"));
-        return;
-    }
-
-    if (!KnightInstance)
-    {
-        UE_LOG(LogTemp, Error, TEXT("KnightInstance does not exist, cannot revert to human state!"));
-        return;
-    }
-
-    if (APlayerController* PC = Cast<APlayerController>(GetController()))
+     if (APlayerController* PC = Cast<APlayerController>(GetController()))
     {
         // 상태 복원
-        KnightInstance->SetActorLocation(SavedLocation);
-        KnightInstance->SetActorRotation(SavedRotation);
+        _knightInstance->SetActorLocation(GetActorLocation());  // 현재 Dragon의 위치로 복원
+        _knightInstance->SetActorRotation(GetActorRotation());
 
         // MyPlayer 활성화
-        KnightInstance->SetActorHiddenInGame(false);
-        KnightInstance->SetActorEnableCollision(true);
+        _knightInstance->SetActorHiddenInGame(false);
+        _knightInstance->SetActorEnableCollision(true);
 
         // Dragon 비활성화
         SetActorHiddenInGame(true);
         SetActorEnableCollision(false);
 
         // 컨트롤 전환
-        PC->Possess(KnightInstance);
+        PC->Possess(_knightInstance);
 
         // 상태 업데이트
         _isTransformed = false;
-        KnightInstance->_isTransformed = false;
+        _knightInstance->_isTransformed = false;
 
         UE_LOG(LogTemp, Warning, TEXT("Transformed back to MyPlayer!"));
     }
+
 }
 
 void ADragon::TransformToDragon()
 {
-    if (_isTransformed)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Already transformed!"));
-        return;
-    }
-
-    if (!KnightInstance)
-    {
-        UE_LOG(LogTemp, Error, TEXT("KnightInstance does not exist!"));
-        return;
-    }
-
     // MyPlayer에서 Dragon으로 복귀
-    KnightInstance->TransformToDragon();
+    _knightInstance->TransformToDragon();
 }
 
 void ADragon::ToggleTransformation()
@@ -193,6 +173,8 @@ void ADragon::JumpA(const FInputActionValue& value)
 {
     bool isPressed = value.Get<bool>();
 
+    GetCharacterMovement()->GravityScale = 0.0f;
+
     if (isPressed)
     {
         if (!_isAttacking)
@@ -233,5 +215,7 @@ void ADragon::PostInitializeComponents()
 void ADragon::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+ 
 
 }

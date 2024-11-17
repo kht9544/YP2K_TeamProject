@@ -279,11 +279,6 @@ public:
 	TSubclassOf<ADragon> DragonClass;
 
 private:
-	class ADragon* DragonInstance; // Dragon 참조
+	class ADragon* _dragonInstance; // Dragon 참조
 
-
-	FVector SavedLocation;         // 변신 전 위치
-	FRotator SavedRotation;        // 변신 전 회전
-
-	
 };

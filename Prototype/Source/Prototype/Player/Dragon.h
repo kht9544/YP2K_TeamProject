@@ -60,9 +60,6 @@ public:
     class UCameraComponent* _camera;
 
 private:
-    // MyPlayer 참조
-  /*  UPROPERTY()
-    AMyPlayer* KnightInstance;*/
 
     void Move(const FInputActionValue& value);
     void Look(const FInputActionValue& value);
@@ -74,10 +71,8 @@ private:
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
     TSubclassOf<UAnimInstance> DragonAnimInstanceClass;
 
-    // MyPlayer 상태 저장
-    FVector SavedLocation;
-    FRotator SavedRotation;
-    class AMyPlayer* KnightInstance;
+   
+    class AMyPlayer* _knightInstance;
 };
 	
 
