@@ -25,6 +25,8 @@
 #include "../Animation/BaseAnimInstance.h"
 
 
+#include "UI/StatWidget.h"
+#include "UI/PlayerBarWidget.h"
 
 ADragon::ADragon()
 {
@@ -36,8 +38,8 @@ ADragon::ADragon()
 
     GetCapsuleComponent()->InitCapsuleSize(100.0f, 150.0f);
 
-   /* GetCharacterMovement()->bOrientRotationToMovement = true;
-    GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);*/
+    GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
     
     _springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
     _camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -64,6 +66,8 @@ ADragon::ADragon()
 void ADragon::BeginPlay()
 {
 	Super::BeginPlay();
+
+ 
 
     bUseControllerRotationYaw = true;
 
@@ -173,18 +177,83 @@ void ADragon::JumpA(const FInputActionValue& value)
 {
     bool isPressed = value.Get<bool>();
 
-    GetCharacterMovement()->GravityScale = 0.0f;
+    /*GetCharacterMovement()->GravityScale = 0.0f;*/
 
     if (isPressed)
     {
-        if (!_isAttacking)
-            ACharacter::Jump();
+     /*   if (!_isAttacking)
+            ACharacter::Jump();*/
+
+        if (!_isAttacking) // 공격 중이 아니면 점프 가능
+        {
+            if (GetCharacterMovement()->IsFalling())
+            {
+                // 공중에서 추가 비행
+                FVector JumpImpulse = FVector(0.0f, 0.0f, 500.0f); // 상승 힘
+                LaunchCharacter(JumpImpulse, false, false);
+
+                UE_LOG(LogTemp, Warning, TEXT("Dragon flapped its wings!"));
+            }
+            else
+            {
+                // 지상에서 점프
+                ACharacter::Jump();
+
+                // 중력을 약하게 설정
+                GetCharacterMovement()->GravityScale = 0.2f; // 느린 하강
+                UE_LOG(LogTemp, Warning, TEXT("Dragon jumped!"));
+            }
+
+            // 애니메이션 상태 업데이트: 점프 시작
+            if (UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance()))
+            {
+                AnimInstance->SetJumping(true);
+            }
+        }
+    }
+    else
+    {
+        // 점프 키가 떼어질 때 착지 여부 확인
+        if (!GetCharacterMovement()->IsFalling())
+        {
+            // 중력을 원래 값으로 복원
+            GetCharacterMovement()->GravityScale = 1.0f;
+
+            // 애니메이션 상태 업데이트: 착지 상태
+            if (UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance()))
+            {
+                AnimInstance->SetJumping(false);
+            }
+
+            UE_LOG(LogTemp, Warning, TEXT("Dragon landed!"));
+        }
     }
 }
 
 void ADragon::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
+
+    if (_Widget)
+    {
+        auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+        if (PlWidget)
+        {
+            float CurrentHP = _StatCom->GetCurHp();
+            float CurrentMP = _StatCom->GetCurMp();
+            float CurrentEXP = _StatCom->GetExp();
+
+            // 플레이어 스탯
+            UE_LOG(LogTemp, Warning, TEXT("Current HP: %f, Current MP: %f, Current EXP: %f"), CurrentHP, CurrentMP, CurrentEXP);
+
+            _StatCom->_PlHPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlHPBar);
+            _StatCom->_PlMPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlMPBar);
+            _StatCom->_PlEXPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlExpBar);
+        }
+    }
+
+
+
 
     // 애니메이션 인스턴스 클래스를 설정
     if (DragonAnimInstanceClass)
@@ -216,6 +285,37 @@ void ADragon::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
- 
+    if (_StatCom->IsDead())
+        return;
+
+    //if (_Widget)
+    //{
+    //    auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+    //    if (PlWidget)
+    //    {
+    //        int32 PlMaxHp = _StatCom->GetMaxHp();
+    //        int32 PlMaxMp = _StatCom->GetMaxMp();
+    //        int32 PlCurHp = _StatCom->GetCurHp();
+    //        int32 PlCurMp = _StatCom->GetCurMp();
+
+    //        float HPPercent = float(PlCurHp) / float(PlMaxHp);
+    //        float MPPercent = float(PlCurMp) / float(PlMaxMp);
+
+    //        float NewHPScaleX = float(PlMaxHp) / 1000.0f;
+    //        float NewMPScaleX = float(PlMaxMp) / 50.0f;
+
+    //        if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
+    //        {
+    //            PlWidget->Pl_HPBar->SetPercent(HPPercent);
+    //            PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
+    //        }
+
+    //        if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
+    //        {
+    //            PlWidget->Pl_MPBar->SetPercent(MPPercent);
+    //            PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
+    //        }
+    //    }
+    //}
 
 }

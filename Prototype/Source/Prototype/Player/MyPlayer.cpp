@@ -38,7 +38,7 @@
 // Animation
 #include "../Animation/PlayerAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "UI/PlayerBarWidget.h"
+
 
 // hp
 #include "Components/ProgressBar.h"
@@ -53,6 +53,10 @@
 #include "Components/DecalComponent.h"
 
 #include "Player/Dragon.h"
+
+
+#include "UI/StatWidget.h"
+#include "UI/PlayerBarWidget.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()

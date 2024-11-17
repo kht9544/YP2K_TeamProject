@@ -27,5 +27,10 @@ public:
 	UFUNCTION()
 	virtual void AnimNotify_Death();
 
+	//추가시도...
+	void SetJumping(bool bJumping) { bIsJumping = bJumping; }
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Animation")
+	bool bIsJumping;
 
 };
