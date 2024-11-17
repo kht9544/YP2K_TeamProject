@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Player/Creature.h"
 //-----추가-----
+#include "Creature.h"
 #include "../Animation/DragonAnimInstance.h"
 #include "../Player/MyPlayer.h"
+
 
 #include "Dragon.generated.h"
 
@@ -73,6 +75,14 @@ private:
 
    
     class AMyPlayer* _knightInstance;
+
+
+    // 추가 필요 스텟 등
+public:
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
+    class UStatWidget* _statWidget;
+
 };
 	
 

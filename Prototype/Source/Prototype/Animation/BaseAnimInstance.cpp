@@ -36,6 +36,14 @@ void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		_vertical = _vertical + (myCharacter->GetVertical() - _vertical) * (DeltaSeconds);
 
 	}
+
+	//추가시도...
+	APawn* OwningPawn = TryGetPawnOwner();
+	if (OwningPawn && OwningPawn->GetMovementComponent())
+	{
+		_isFalling = OwningPawn->GetMovementComponent()->IsFalling();
+	}
+
 }
 
 void UBaseAnimInstance::JumpToSection(int32 sectionIndex)
