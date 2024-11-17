@@ -25,8 +25,12 @@
 #include "../Animation/BaseAnimInstance.h"
 
 
+#include "Base/Managers/UIManager.h"
 #include "UI/StatWidget.h"
 #include "UI/PlayerBarWidget.h"
+#include "Components/WidgetComponent.h"
+#include "Components/ProgressBar.h"
+
 
 ADragon::ADragon()
 {
@@ -60,6 +64,23 @@ ADragon::ADragon()
     GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f)); // 예: 메쉬를 살짝 아래로 배치
     GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 
+
+
+    static ConstructorHelpers::FClassFinder<UStatWidget> StatClass(
+        TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/UI/PlayerStat_UI.PlayerStat_UI_C'"));
+    if (StatClass.Succeeded())
+    {
+        _statWidget = CreateWidget<UStatWidget>(GetWorld(), StatClass.Class);
+    }
+
+    if (WidgetClass)
+    {
+        _Widget = CreateWidget<UPlayerBarWidget>(GetWorld(), WidgetClass);
+        if (_Widget)
+        {
+            _Widget->AddToViewport();
+        }
+    }
 
 }
 
@@ -234,28 +255,7 @@ void ADragon::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
-    if (_Widget)
-    {
-        auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
-        if (PlWidget)
-        {
-            float CurrentHP = _StatCom->GetCurHp();
-            float CurrentMP = _StatCom->GetCurMp();
-            float CurrentEXP = _StatCom->GetExp();
-
-            // 플레이어 스탯
-            UE_LOG(LogTemp, Warning, TEXT("Current HP: %f, Current MP: %f, Current EXP: %f"), CurrentHP, CurrentMP, CurrentEXP);
-
-            _StatCom->_PlHPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlHPBar);
-            _StatCom->_PlMPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlMPBar);
-            _StatCom->_PlEXPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlExpBar);
-        }
-    }
-
-
-
-
-    // 애니메이션 인스턴스 클래스를 설정
+      // 애니메이션 인스턴스 클래스를 설정
     if (DragonAnimInstanceClass)
     {
         USkeletalMeshComponent* MeshComp = GetMesh();
@@ -279,6 +279,28 @@ void ADragon::PostInitializeComponents()
     {
         UE_LOG(LogTemp, Warning, TEXT("Failed to initialize _dragonAnimInstance for ADragon!"));
     }
+
+
+
+
+    if (_Widget)
+    {
+        auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+        if (PlWidget)
+        {
+            float CurrentHP = _StatCom->GetCurHp();
+            float CurrentMP = _StatCom->GetCurMp();
+            float CurrentEXP = _StatCom->GetExp();
+
+            // 플레이어 스탯
+            UE_LOG(LogTemp, Warning, TEXT("Current HP: %f, Current MP: %f, Current EXP: %f"), CurrentHP, CurrentMP, CurrentEXP);
+
+            _StatCom->_PlHPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlHPBar);
+            _StatCom->_PlMPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlMPBar);
+            _StatCom->_PlEXPDelegate.AddUObject(PlWidget, &UPlayerBarWidget::SetPlExpBar);
+        }
+    }
+
 }
 
 void ADragon::Tick(float DeltaTime)
@@ -288,34 +310,34 @@ void ADragon::Tick(float DeltaTime)
     if (_StatCom->IsDead())
         return;
 
-    //if (_Widget)
-    //{
-    //    auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
-    //    if (PlWidget)
-    //    {
-    //        int32 PlMaxHp = _StatCom->GetMaxHp();
-    //        int32 PlMaxMp = _StatCom->GetMaxMp();
-    //        int32 PlCurHp = _StatCom->GetCurHp();
-    //        int32 PlCurMp = _StatCom->GetCurMp();
+    if (_Widget)
+    {
+        auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
+        if (PlWidget)
+        {
+            int32 PlMaxHp = _StatCom->GetMaxHp();
+            int32 PlMaxMp = _StatCom->GetMaxMp();
+            int32 PlCurHp = _StatCom->GetCurHp();
+            int32 PlCurMp = _StatCom->GetCurMp();
 
-    //        float HPPercent = float(PlCurHp) / float(PlMaxHp);
-    //        float MPPercent = float(PlCurMp) / float(PlMaxMp);
+            float HPPercent = float(PlCurHp) / float(PlMaxHp);
+            float MPPercent = float(PlCurMp) / float(PlMaxMp);
 
-    //        float NewHPScaleX = float(PlMaxHp) / 1000.0f;
-    //        float NewMPScaleX = float(PlMaxMp) / 50.0f;
+            float NewHPScaleX = float(PlMaxHp) / 1000.0f;
+            float NewMPScaleX = float(PlMaxMp) / 50.0f;
 
-    //        if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
-    //        {
-    //            PlWidget->Pl_HPBar->SetPercent(HPPercent);
-    //            PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
-    //        }
+            if (_StatCom->GetMaxHp() > _StatCom->GetCurHp())
+            {
+                PlWidget->Pl_HPBar->SetPercent(HPPercent);
+                PlWidget->Pl_HPBar->SetRenderScale(FVector2D(NewHPScaleX, 3.0f));
+            }
 
-    //        if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
-    //        {
-    //            PlWidget->Pl_MPBar->SetPercent(MPPercent);
-    //            PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
-    //        }
-    //    }
-    //}
+            if (_StatCom->GetMaxMp() > _StatCom->GetCurMp())
+            {
+                PlWidget->Pl_MPBar->SetPercent(MPPercent);
+                PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
+            }
+        }
+    }
 
 }

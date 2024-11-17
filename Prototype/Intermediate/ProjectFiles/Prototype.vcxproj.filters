@@ -460,6 +460,12 @@
     <Filter Include="Source\Prototype\UI">
       <UniqueIdentifier>{827D1D71-97A9-33A2-80BE-8FD75D929603}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Prototype\UI\Boss1Widget.cpp">
+      <Filter>Source\Prototype\UI</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\UI\Boss1Widget.h">
+      <Filter>Source\Prototype\UI</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\UI\InventoryWidget.cpp">
       <Filter>Source\Prototype\UI</Filter>
     </ClCompile>
