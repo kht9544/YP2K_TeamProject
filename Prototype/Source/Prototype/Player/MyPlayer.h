@@ -15,6 +15,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemEquipped, AEquipItem*, EquipI
 
 struct FInputActionValue;
 class ABaseItem;
+class ADragon;
 
 UENUM(BlueprintType)
 enum class EPlayerState : uint8
@@ -194,7 +195,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class USkillWidget_test *_skillWidgetInstance;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* _Change;
 
 	//  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Parkour, meta = (AllowPrivateAccess = "true"))
 	//  class UParkourComponent_Test* _parkourComp;
@@ -264,6 +266,24 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Skills")
 	TSubclassOf<class AFireball> _fireball;
 
+
+	//------- Dragon 변신 -------
+
+public:
+	void TransformToDragon(); // Dragon으로 변신
+	void TransformToHuman();  // Dragon에서 복귀
+
+	void ToggleTransformation();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Transformation")
+	TSubclassOf<ADragon> DragonClass;
+
+private:
+	class ADragon* DragonInstance; // Dragon 참조
+
+
+	FVector SavedLocation;         // 변신 전 위치
+	FRotator SavedRotation;        // 변신 전 회전
 
 	
 };

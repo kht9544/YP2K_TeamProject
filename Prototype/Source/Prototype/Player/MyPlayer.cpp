@@ -52,6 +52,8 @@
 #include "Components/AudioComponent.h"
 #include "Components/DecalComponent.h"
 
+#include "Player/Dragon.h"
+
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
@@ -223,6 +225,22 @@ void AMyPlayer::BeginPlay()
 	}
 	SkillOnCooldown.Init(false, 4);
 
+
+
+
+
+	if (DragonClass)
+	{
+		// DragonClass가 설정되었으면 DragonInstance를 생성
+		FVector SpawnLocation = GetActorLocation();
+		FRotator SpawnRotation = GetActorRotation();
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+
+		// 드래곤 인스턴스 스폰
+		DragonInstance = GetWorld()->SpawnActor<ADragon>(DragonClass, SpawnLocation, SpawnRotation, SpawnParams);
+	}
+
 }
 
 void AMyPlayer::PostInitializeComponents()
@@ -333,6 +351,8 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Started, this, &AMyPlayer::GuardStart);
 		EnhancedInputComponent->BindAction(_guardAction, ETriggerEvent::Completed, this, &AMyPlayer::GuardEnd);
 		EnhancedInputComponent->BindAction(_LockOnAction, ETriggerEvent::Started, this, &AMyPlayer::LockOn);
+
+		EnhancedInputComponent->BindAction(_Change, ETriggerEvent::Started, this, &AMyPlayer::ToggleTransformation);
 	}
 }
 
@@ -968,6 +988,121 @@ void AMyPlayer::StartScreenShake()
 		UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraShake(_cameraShakeClass, MaxShakeStrength * 2.0f);
 		GetWorld()->GetTimerManager().ClearTimer(ScreenShakeTimerHandle);
 		ElapsedTime = 0.0f;
+	}
+}
+
+void AMyPlayer::TransformToDragon()
+{
+	//if (_isTransformed) // 부모 클래스의 _isTransformed 사용
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Already transformed!"));
+	//	return;
+	//}
+
+	//if (!DragonInstance)
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("DragonInstance does not exist!"));
+	//	return;
+	//}
+
+	//if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	//{
+	//	// 상태 저장
+	//	SavedLocation = GetActorLocation();
+	//	SavedRotation = GetActorRotation();
+
+	//	// Dragon 활성화
+	//	DragonInstance->SetActorHiddenInGame(false);
+	//	DragonInstance->SetActorEnableCollision(true);
+
+	//	// MyPlayer 비활성화
+	//	SetActorHiddenInGame(true);
+	//	SetActorEnableCollision(false);
+
+	//	// 컨트롤 전환
+	//	PC->Possess(DragonInstance);
+
+	//	// 상태 업데이트
+	//	_isTransformed = true;
+	//	DragonInstance->_isTransformed = true;
+
+	//	UE_LOG(LogTemp, Warning, TEXT("Transformed to Dragon!"));
+	//}
+
+	if (_isTransformed)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Already transformed!"));
+		return;
+	}
+
+	if (!DragonInstance)
+	{
+		// 드래곤 인스턴스 생성
+		FVector SpawnLocation = GetActorLocation();
+		FRotator SpawnRotation = GetActorRotation();
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+
+		// 드래곤 스폰
+		DragonInstance = GetWorld()->SpawnActor<ADragon>(DragonClass, SpawnLocation, SpawnRotation, SpawnParams);
+		if (!DragonInstance)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to spawn DragonInstance!"));
+			return;
+		}
+	}
+
+	// 상태 저장 및 변환 로직
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		SavedLocation = GetActorLocation();
+		SavedRotation = GetActorRotation();
+
+		// Dragon 활성화
+		DragonInstance->SetActorHiddenInGame(false);
+		DragonInstance->SetActorEnableCollision(true);
+
+		// MyPlayer 비활성화
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+
+		// 컨트롤 전환
+		PC->Possess(DragonInstance);
+
+		_isTransformed = true;
+		DragonInstance->_isTransformed = true;
+
+		UE_LOG(LogTemp, Warning, TEXT("Transformed to Dragon!"));
+	}
+}
+
+void AMyPlayer::TransformToHuman()
+{
+	if (!_isTransformed)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Not in transformed state, cannot revert!"));
+		return;
+	}
+
+	if (!DragonInstance)
+	{
+		UE_LOG(LogTemp, Error, TEXT("DragonInstance does not exist!"));
+		return;
+	}
+
+	// Dragon에서 MyPlayer로 복귀
+	DragonInstance->TransformToHuman();
+}
+
+void AMyPlayer::ToggleTransformation()
+{
+	if (_isTransformed) // 현재 변환된 상태이면 인간으로 복귀
+	{
+		TransformToHuman();
+	}
+	else // 그렇지 않으면 드래곤으로 변환
+	{
+		TransformToDragon();
 	}
 }
 

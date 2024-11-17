@@ -58,6 +58,12 @@
     <ClInclude Include="..\..\Source\Prototype\Animation\BaseAnimInstance.h">
       <Filter>Source\Prototype\Animation</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Animation\DragonAnimInstance.cpp">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Animation\DragonAnimInstance.h">
+      <Filter>Source\Prototype\Animation</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Animation\Monster_Boss01_AnimInstance.cpp">
       <Filter>Source\Prototype\Animation</Filter>
     </ClCompile>
@@ -392,6 +398,12 @@
       <Filter>Source\Prototype\Player</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Player\Creature.h">
+      <Filter>Source\Prototype\Player</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Prototype\Player\Dragon.cpp">
+      <Filter>Source\Prototype\Player</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Player\Dragon.h">
       <Filter>Source\Prototype\Player</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\Prototype\Player\Fireball.cpp">

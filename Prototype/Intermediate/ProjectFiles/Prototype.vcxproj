@@ -272,6 +272,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Animation\BaseAnimInstance.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Animation\DragonAnimInstance.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Animation\DragonAnimInstance.h"/>
     <ClCompile Include="..\..\Source\Prototype\Animation\Monster_Boss01_AnimInstance.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -477,6 +481,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\Prototype\Player\Creature.h"/>
+    <ClCompile Include="..\..\Source\Prototype\Player\Dragon.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\Player\Dragon.h"/>
     <ClCompile Include="..\..\Source\Prototype\Player\Fireball.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

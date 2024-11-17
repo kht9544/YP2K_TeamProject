@@ -21,6 +21,8 @@ ACreature::ACreature()
 	bIsGuarding = false;
 	// cheol
 	_StatCom = CreateDefaultSubobject<UStatComponent>(TEXT("StatCom"));
+
+	_isTransformed = false;
 }
 
 // Called when the game starts or when spawned

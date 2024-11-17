@@ -111,4 +111,5 @@ public:
 	TSubclassOf<UUserWidget> WidgetClass;
 
 	
+	bool _isTransformed;
 };
