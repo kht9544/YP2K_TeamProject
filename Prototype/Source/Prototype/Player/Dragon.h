@@ -29,6 +29,7 @@ public:
 protected:
     virtual void BeginPlay() override;
 
+ 
 public:
     // 상태 전환 함수
     void TransformToHuman();
