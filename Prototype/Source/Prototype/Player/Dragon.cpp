@@ -34,15 +34,13 @@
 
 ADragon::ADragon()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	_knightInstance = nullptr;
 
     // 드래곤의 비행을 위해 중력 제거
     
-
     GetCapsuleComponent()->InitCapsuleSize(230.0f, 230.0f);
-
-    GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->bOrientRotationToMovement = false;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
     
     _springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
@@ -54,6 +52,10 @@ ADragon::ADragon()
     _springArm->TargetArmLength = 1200.0f;
     _springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 
+    _springArm->bUsePawnControlRotation = false;
+    _camera->bUsePawnControlRotation = false;
+
+    bUseControllerRotationYaw = false;
 
     static ConstructorHelpers::FObjectFinder<USkeletalMesh> DragonMeshAsset(TEXT("/Script/Engine.SkeletalMesh'/Game/QuadrapedCreatures/MountainDragon/Meshes/SK_MOUNTAIN_DRAGON.SK_MOUNTAIN_DRAGON'"));
     if (DragonMeshAsset.Succeeded())
@@ -88,10 +90,6 @@ void ADragon::BeginPlay()
 {
 	Super::BeginPlay();
 
- 
-
-    bUseControllerRotationYaw = true;
-
     for (TActorIterator<AMyPlayer> It(GetWorld()); It; ++It)
     {
         _knightInstance = *It;
@@ -114,6 +112,9 @@ void ADragon::BeginPlay()
     _isTransformed = false;
 
 }
+
+
+
 
 void ADragon::TransformToHuman()
 {
@@ -171,7 +172,7 @@ void ADragon::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
         EnhancedInputComponent->BindAction(_lookAction, ETriggerEvent::Triggered, this, &ADragon::Look);
         EnhancedInputComponent->BindAction(_jumpAction, ETriggerEvent::Started, this, &ADragon::JumpA);     
         EnhancedInputComponent->BindAction(_Change, ETriggerEvent::Started, this, &ADragon::ToggleTransformation);
-     
+    
     }
 }
 
@@ -179,70 +180,33 @@ void ADragon::Move(const FInputActionValue& value)
 {
     // fly할때 isFalling 통해서 생각해볼것..
     FVector2D MovementVector = value.Get<FVector2D>();
+           
+    if (Controller && MovementVector.Size() > 0.0f)
+    {
+        // 이동 방향 벡터 계산
+        const FRotator ControlRotation = Controller->GetControlRotation();
+        const FRotator YawRotation(0, ControlRotation.Yaw, 0);
 
-    //_moveVector = MovementVector;
+        const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+        const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-    AddMovementInput(GetActorForwardVector(), MovementVector.Y);
-    AddMovementInput(GetActorRightVector(), MovementVector.X);
+        AddMovementInput(ForwardDirection, MovementVector.Y); // 전진/후진
+        AddMovementInput(RightDirection, MovementVector.X);   // 좌우 이동
+    }
 }
 
 void ADragon::Look(const FInputActionValue& value)
 {
     FVector2D LookAxisVector = value.Get<FVector2D>();
 
-    AddControllerYawInput(LookAxisVector.X);
-    AddControllerPitchInput(LookAxisVector.Y);
+    AddControllerYawInput(LookAxisVector.X); // 좌우 회전
+    AddControllerPitchInput(LookAxisVector.Y); // 상하 회전
+
 }
 
 void ADragon::JumpA(const FInputActionValue& value)
 {
     bool isPressed = value.Get<bool>();
-
-    //if (isPressed)
-    //{
-    // /*   if (!_isAttacking)
-    //        ACharacter::Jump();*/
-
-    //    if (!_isAttacking) // 공격 중이 아니면 점프 가능
-    //    {
-    //        if (GetCharacterMovement()->IsFalling())
-    //        {
-    //            // 공중에서 추가 비행
-    //            FVector JumpImpulse = FVector(0.0f, 0.0f, 500.0f); // 상승 힘
-    //            LaunchCharacter(JumpImpulse, false, false);
-
-    //            UE_LOG(LogTemp, Warning, TEXT("Dragon flapped its wings!"));
-    //        }
-    //        else
-    //        {
-    //            // 지상에서 점프
-    //            ACharacter::Jump();
-
-    //            // 중력을 약하게 설정
-    //            GetCharacterMovement()->GravityScale = 0.2f; // 느린 하강
-    //            UE_LOG(LogTemp, Warning, TEXT("Dragon jumped!"));
-    //        }
-
-    //        // 애니메이션 상태 업데이트: 점프 시작
-    //        _dragonAnimInstance->SetJumping(true);
-    //     
-    //    }
-    //}
-    //else
-    //{
-    //    // 점프 키가 떼어질 때 착지 여부 확인
-    //    if (!GetCharacterMovement()->IsFalling())
-    //    {
-    //        // 중력을 원래 값으로 복원
-    //        GetCharacterMovement()->GravityScale = 1.0f;
-
-    //        // 애니메이션 상태 업데이트: 착지 상태
-    //        _dragonAnimInstance->SetJumping(false);
-
-    //        UE_LOG(LogTemp, Warning, TEXT("Dragon landed!"));
-    //    }
-    //}
-
 
     if (isPressed)
     {
@@ -352,6 +316,7 @@ void ADragon::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+
     if (_StatCom->IsDead())
         return;
 
@@ -383,6 +348,14 @@ void ADragon::Tick(float DeltaTime)
                 PlWidget->Pl_MPBar->SetRenderScale(FVector2D(NewMPScaleX, 3.0f));
             }
         }
+    }
+
+
+    if (GetVelocity().Size() > 0.0f)
+    {
+        FRotator NewRotation = GetActorRotation();
+        NewRotation.Yaw = FMath::Atan2(GetVelocity().Y, GetVelocity().X) * 180.0f / PI;  // 이동 방향에 맞게 회전
+        SetActorRotation(NewRotation); // 회전 적용
     }
 
 }
