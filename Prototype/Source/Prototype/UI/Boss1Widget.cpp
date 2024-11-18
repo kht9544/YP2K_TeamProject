@@ -6,6 +6,24 @@
 #include "Components/Image.h"
 #include "Components/HorizontalBox.h"
 
+void UBoss1Widget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	if(ObstacleIconBox)
+	{
+		for (int32 i = 0; i < ObstacleIconBox->GetChildrenCount(); i++)
+		{
+			UWidget* ChildWidget = ObstacleIconBox->GetChildAt(i);
+			if (UImage* ImageWidget = Cast<UImage>(ChildWidget))
+			{
+				ObstacleIcons.Add(ImageWidget);
+			}
+		}
+	}
+
+}
+
 
 void UBoss1Widget::UpdateBossHPBar(float Ratio)
 {
@@ -16,8 +34,7 @@ void UBoss1Widget::UpdateHPBarColor(int32 DestroyCount)
 {
     if (BossHPBar)
 	{
-		FLinearColor NewColor = FLinearColor::Gray;
-		UE_LOG(LogTemp, Warning, TEXT("updatehp"));
+		FLinearColor NewColor;
 		switch (DestroyCount)
 		{
 		case 1:
@@ -44,8 +61,7 @@ void UBoss1Widget::UpdateObstacleIcons(int32 DestroyCount)
 {
     if (ObstacleIcons.Num() > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("updateicon"));
-		for (int32 i = 0; i < ObstacleIcons.Num(); i++)
+		for (int32 i = ObstacleIcons.Num()-1; i >= 0 ; i--)
 		{
 			if (i < DestroyCount)
 			{
@@ -58,3 +74,4 @@ void UBoss1Widget::UpdateObstacleIcons(int32 DestroyCount)
 		}
 	}
 }
+

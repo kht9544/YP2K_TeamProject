@@ -95,7 +95,6 @@ void ACreature::AttackHit()
 	}
 	else
 	{
-		
 		FVector missLocation = GetActorLocation();
 		
 		SoundManager->PlaySound(*GetSwingSoundName(), missLocation);
@@ -225,7 +224,6 @@ float ACreature::TakeDamage(float Damage, struct FDamageEvent const &DamageEvent
 
 	if (bIsGuarding)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Guard"));
 		SoundManager->PlaySound(*GetGuardOn(), _hitPoint);
 	}
 	else

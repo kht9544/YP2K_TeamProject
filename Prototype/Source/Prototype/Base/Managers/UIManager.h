@@ -71,6 +71,6 @@ private:
 	UPROPERTY()
 	UTexture2D* _defaultTexture;
 
-	UPROPERTY(AdvancedDisplay)
+	UPROPERTY()
 	UBoss1Widget* _bossUI;
 };

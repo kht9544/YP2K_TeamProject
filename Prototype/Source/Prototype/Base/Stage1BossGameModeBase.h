@@ -20,5 +20,9 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void PostInitializeComponents() override;
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ABossMonster> _boss;
 	
 };

@@ -15,6 +15,8 @@ class PROTOTYPE_API UBoss1Widget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	virtual void NativeConstruct() override;
+	
 	void UpdateBossHPBar(float Ratio);
 
 	void UpdateHPBarColor(int32 DestroyCount);
@@ -31,4 +33,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boss UI", meta = (AllowPrivateAccess = "true"))
 	TArray<class UImage *> ObstacleIcons;
+
+	class UImage *ObstacleIcon1;
+	class UImage *ObstacleIcon2;
+	class UImage *ObstacleIcon3;
+	class UImage *ObstacleIcon4;
+
+
+
 };

@@ -14,6 +14,7 @@
 #include "../Base/Managers/UIManager.h"
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
+#include "UI/Boss1Widget.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "DrawDebugHelpers.h"
 
@@ -63,6 +64,8 @@ void ABossMonster::PostInitializeComponents()
 		_bossMonster01_AnimInstance->_deathDelegate.AddUObject(this, &AMonster::Disable);
 		_bossMonster01_AnimInstance->_stunDelegate.AddUObject(this, &ABossMonster::StunEnd);
 	}
+
+
 }
 
 void ABossMonster::Attack_AI()
