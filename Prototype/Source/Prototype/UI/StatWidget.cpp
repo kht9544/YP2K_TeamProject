@@ -85,84 +85,101 @@ void UStatWidget::NativeConstruct()
 
 void UStatWidget::StatUpdate(StatType type, int amount)
 {
-	switch (type)
+	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+
+	if (player && player->_StatCom)
 	{
-	case StatType::HP:
-		// 여기서 각 함수내용들 넣어서 처리
-		//  UI 변수 함수 간편화
-		break;
-	case StatType::MP:
-		break;
-	case StatType::STR:
-		break;
-	case StatType::DEX:
-		break;
-	case StatType::INT:
-		break;
-	case StatType::CurHP:
-		break;
-	case StatType::CurMP:
-		break;
-	default:
-		break;
+		int32 currentStat = 0;
+		int32 baseStat = player->_StatCom->GetBaseStat(type);
+		int32 bonusPoints = player->_StatCom->GetBonusPoint();
+
+		// 현재 스탯 값을 가져오기
+		switch (type)
+		{
+		case StatType::HP:
+			currentStat = player->_StatCom->GetMaxHp();
+			break;
+		case StatType::MP:
+			currentStat = player->_StatCom->GetMaxMp();
+			break;
+		case StatType::STR:
+			currentStat = player->_StatCom->GetStr();
+			break;
+		case StatType::DEX:
+			currentStat = player->_StatCom->GetDex();
+			break;
+		case StatType::INT:
+			currentStat = player->_StatCom->GetInt();
+			break;
+		default:
+			return; // 처리하지 않는 타입
+		}
+
+		// 증가/감소 처리
+		if (amount > 0) // 증가
+		{
+			if (bonusPoints > 0)
+			{
+				switch (type)
+				{
+				case StatType::HP:
+					player->_StatCom->SetMaxHp(currentStat + amount);
+					break;
+				case StatType::MP:
+					player->_StatCom->SetMaxMp(currentStat + amount);
+					break;
+				case StatType::STR:
+					player->_StatCom->SetStr(currentStat + amount);
+					break;
+				case StatType::DEX:
+					player->_StatCom->SetDex(currentStat + amount);
+					break;
+				case StatType::INT:
+					player->_StatCom->SetInt(currentStat + amount);
+					break;
+				}
+
+				player->_StatCom->SetBonusPoint(bonusPoints - 1);
+			}
+		}
+		else if (amount < 0) // 감소
+		{
+			if (currentStat > baseStat) // 기준 스탯 이하로 감소하지 않도록
+			{
+				switch (type)
+				{
+				case StatType::HP:
+					player->_StatCom->SetMaxHp(currentStat + amount);
+					break;
+				case StatType::MP:
+					player->_StatCom->SetMaxMp(currentStat + amount);
+					break;
+				case StatType::STR:
+					player->_StatCom->SetStr(currentStat + amount);
+					break;
+				case StatType::DEX:
+					player->_StatCom->SetDex(currentStat + amount);
+					break;
+				case StatType::INT:
+					player->_StatCom->SetInt(currentStat + amount);
+					break;
+				}
+
+				player->_StatCom->SetBonusPoint(bonusPoints + 1);
+			}
+		}
+
+		// 스탯 UI 업데이트
+		UpdateStatDisplay();
 	}
 }
 
 void UStatWidget::PlLevelUpdate(int32 Level)
 {
-	if (PlLevel)
-	{
-		PlLevel->SetText(FText::AsNumber(Level));
-	}
-}
-
-void UStatWidget::HPUpdate(int32 HP)
-{
-	if (HPNum)
-	{
-		HPNum->SetText(FText::AsNumber(HP));
-		
-	}
-}
-
-void UStatWidget::MPUpdate(int32 MP)
-{
-	if (MPNum != nullptr)
-	{
-		MPNum->SetText(FText::AsNumber(MP));
-	}
-}
-
-void UStatWidget::STRUpdate(int32 STR)
-{
-	if (STRNum != nullptr)
-	{
-		STRNum->SetText(FText::AsNumber(STR));
-	}
-}
-
-void UStatWidget::DEXUpdate(int32 DEX)
-{
-	if (DEXNum != nullptr)
-	{
-		DEXNum->SetText(FText::AsNumber(DEX));
-	}
-}
-
-void UStatWidget::INTUpdate(int32 INT)
-{
-	if (INTNum != nullptr)
-	{
-		INTNum->SetText(FText::AsNumber(INT));
-	}
 }
 
 void UStatWidget::BonusPointUpdate(int32 BonusPoint)
 {
-	if (BonusNum != nullptr)
-	{
-		BonusNum->SetText(FText::AsNumber(BonusPoint));
-	}
 }
 
 
@@ -172,11 +189,11 @@ void UStatWidget::UpdateStatDisplay()
 
 	if (player && player->_StatCom)
 	{
-		HPUpdate(player->_StatCom->GetMaxHp());
-		MPUpdate(player->_StatCom->GetMaxMp());
-		STRUpdate(player->_StatCom->GetStr());
-		DEXUpdate(player->_StatCom->GetDex());
-		INTUpdate(player->_StatCom->GetInt());
+		StatUpdate(StatType::HP, player->_StatCom->GetMaxHp());
+		StatUpdate(StatType::MP, player->_StatCom->GetMaxMp());
+		StatUpdate(StatType::STR, player->_StatCom->GetStr());
+		StatUpdate(StatType::DEX, player->_StatCom->GetDex());
+		StatUpdate(StatType::INT, player->_StatCom->GetInt());
 		
 		BonusPointUpdate(player->_StatCom->GetBonusPoint());
 		PlLevelUpdate(player->_StatCom->GetLevel());
@@ -197,193 +214,62 @@ void UStatWidget::UpdateStatDisplay()
 void UStatWidget::HPDownClick()
 {
 	
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::HP, -100); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatHp = player->_StatCom->GetMaxHp();
-		int32 baseHp = player->_StatCom->GetBaseStat(StatType::HP); 
-		int32 bonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (StatHp > baseHp)
-		{
-			player->_StatCom->SetMaxHp(StatHp - 100);
-			player->_StatCom->SetBonusPoint(bonusPoints + 1);
-		}
-		UpdateStatDisplay();
-	}
 }
 
 
 void UStatWidget::HPUpClick()
 {
 
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
-
-	if (player && player->_StatCom)
-	{
-		int32 StatHp = player->_StatCom->GetMaxHp();
-		int32 BonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (BonusPoints > 0)
-		{
-			player->_StatCom->SetMaxHp(StatHp + 100);
-			player->_StatCom->SetBonusPoint(BonusPoints - 1);
-
-		}
-		UpdateStatDisplay();
-
-
-	}
+	StatUpdate(StatType::HP, 100); // HP를 100 증가
 }
 
 void UStatWidget::MPDownClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::MP, -10); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatMp = player->_StatCom->GetMaxMp();
-		int32 baseHp = player->_StatCom->GetBaseStat(StatType::MP);
-		int32 bonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (StatMp > baseHp)
-		{
-			player->_StatCom->SetMaxMp(StatMp - 10);
-			player->_StatCom->SetBonusPoint(bonusPoints + 1);
-		}
-		UpdateStatDisplay();
-	}
 }
 
 void UStatWidget::MpUpClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::MP, 10); // HP를 100 증가
 
-	if (player && player->_StatCom)
-	{
-		int32 StatMp = player->_StatCom->GetMaxMp();
-		int32 BonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (BonusPoints > 0)
-		{
-			player->_StatCom->SetMaxMp(StatMp + 10);
-			player->_StatCom->SetBonusPoint(BonusPoints - 1);
-		}
-		UpdateStatDisplay();
-
-
-	}
 }
 
 void UStatWidget::STRDownClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::STR, -1); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatStr = player->_StatCom->GetStr();
-		int32 baseHp = player->_StatCom->GetBaseStat(StatType::STR);
-		int32 bonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (StatStr > baseHp)
-		{
-			player->_StatCom->SetStr(StatStr - 1);
-			player->_StatCom->SetBonusPoint(bonusPoints + 1);
-		}
-		UpdateStatDisplay();
-	}
 }
 
 
 void UStatWidget::STRUpClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::STR, 1); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatStr = player->_StatCom->GetStr();
-		int32 BonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (BonusPoints > 0)
-		{
-			player->_StatCom->SetStr(StatStr + 1);
-			player->_StatCom->SetBonusPoint(BonusPoints - 1);
-		}
-		UpdateStatDisplay();
-	}
 }
 
 void UStatWidget::DEXDownClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::DEX, -1); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatDex = player->_StatCom->GetDex();
-		int32 baseHp = player->_StatCom->GetBaseStat(StatType::DEX);
-		int32 bonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (StatDex > baseHp)
-		{
-			player->_StatCom->SetDex(StatDex - 1);
-			player->_StatCom->SetBonusPoint(bonusPoints + 1);
-		}
-		UpdateStatDisplay();
-	}
 }
 
 void UStatWidget::DEXUpClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::DEX, 1); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatDex = player->_StatCom->GetDex();
-		int32 StatBonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (StatBonusPoints > 0)
-		{
-			player->_StatCom->SetDex(StatDex + 1);
-			player->_StatCom->SetBonusPoint(StatBonusPoints - 1);
-		}
-		UpdateStatDisplay();
-	}
 }
 
 void UStatWidget::INTDownClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::INT, -1); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatInt = player->_StatCom->GetInt();
-		int32 baseHp = player->_StatCom->GetBaseStat(StatType::INT);
-		int32 bonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (StatInt > baseHp)
-		{
-			player->_StatCom->SetInt(StatInt - 1);
-			player->_StatCom->SetBonusPoint(bonusPoints + 1);
-		}
-		UpdateStatDisplay();
-	}
 }
 
 void UStatWidget::INTUpClick()
 {
-	AMyPlayer* player = Cast<AMyPlayer>(GetOwningPlayerPawn());
+	StatUpdate(StatType::INT, 1); // HP를 100 감소
 
-	if (player && player->_StatCom)
-	{
-		int32 StatInt = player->_StatCom->GetInt();
-		int32 StatBonusPoints = player->_StatCom->GetBonusPoint();
-
-		if (StatBonusPoints > 0)
-		{
-			player->_StatCom->SetInt(StatInt + 1);
-			player->_StatCom->SetBonusPoint(StatBonusPoints - 1);
-		}
-		UpdateStatDisplay();
-	}
 }

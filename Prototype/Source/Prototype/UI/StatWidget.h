@@ -23,16 +23,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void PlLevelUpdate(int32 Level);
-	UFUNCTION(BlueprintCallable)
-	void HPUpdate(int32 HP);
-	UFUNCTION(BlueprintCallable)
-	void MPUpdate(int32 MP);
-	UFUNCTION(BlueprintCallable)
-	void STRUpdate(int32 STR);
-	UFUNCTION(BlueprintCallable)
-	void DEXUpdate(int32 DEX);
-	UFUNCTION(BlueprintCallable)
-	void INTUpdate(int32 INT);
+
 	UFUNCTION(BlueprintCallable)
 	void BonusPointUpdate(int32 BonusPoint);
 

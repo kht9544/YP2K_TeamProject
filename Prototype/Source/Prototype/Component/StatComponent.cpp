@@ -181,34 +181,7 @@ int32 UStatComponent::GetBaseStat(StatType statType) const
 	}
 }
 
-void UStatComponent::DecreaseStat(StatType stat, int32 amount)
-{
-	switch (stat)
-	{
-	case StatType::HP:
-		if (_maxHp - amount >= _ogHp)
-			_maxHp -= amount;
-		break;
-	case StatType::MP:
-		if (_maxMp - amount >= _ogMp)
-			_maxMp -= amount;
-		break;
-	case StatType::STR:
-		if (_str - amount >= _ogStr)
-			_str -= amount;
-		break;
-	case StatType::DEX:
-		if (_dex - amount >= _ogDex)
-			_dex -= amount;
-		break;
-	case StatType::INT:
-		if (_int - amount >= _ogInt)
-			_int -= amount;
-		break;
-	default:
-		break;
-	}
-}
+
 
 FString UStatComponent::GetLevelUpName() const
 {
