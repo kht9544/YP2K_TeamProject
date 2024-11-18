@@ -198,8 +198,6 @@ void ADragon::JumpA(const FInputActionValue& value)
 {
     bool isPressed = value.Get<bool>();
 
-    /*GetCharacterMovement()->GravityScale = 0.0f;*/
-
     if (isPressed)
     {
      /*   if (!_isAttacking)
@@ -226,10 +224,8 @@ void ADragon::JumpA(const FInputActionValue& value)
             }
 
             // 애니메이션 상태 업데이트: 점프 시작
-            if (UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance()))
-            {
-                AnimInstance->SetJumping(true);
-            }
+            _dragonAnimInstance->SetJumping(true);
+         
         }
     }
     else
@@ -241,10 +237,7 @@ void ADragon::JumpA(const FInputActionValue& value)
             GetCharacterMovement()->GravityScale = 1.0f;
 
             // 애니메이션 상태 업데이트: 착지 상태
-            if (UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance()))
-            {
-                AnimInstance->SetJumping(false);
-            }
+            _dragonAnimInstance->SetJumping(false);
 
             UE_LOG(LogTemp, Warning, TEXT("Dragon landed!"));
         }
