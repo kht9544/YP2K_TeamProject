@@ -3,6 +3,7 @@
 #include "Base/MyGameInstance.h"
 #include "Base/MyPlayerSaveGame.h"
 
+#include "MotionWarpingComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Component/InventoryComponent.h"
@@ -67,6 +68,7 @@ AMyPlayer::AMyPlayer()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
+	MotionWarpComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarping"));
 	_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	_inventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));

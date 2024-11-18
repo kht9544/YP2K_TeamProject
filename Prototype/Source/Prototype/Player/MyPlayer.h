@@ -265,6 +265,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Skills")
 	TSubclassOf<class AFireball> _fireball;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UMotionWarpingComponent> MotionWarpComponent;
 
 
 	//------- Dragon 변신 -------
