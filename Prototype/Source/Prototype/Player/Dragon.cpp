@@ -40,7 +40,7 @@ ADragon::ADragon()
     // 드래곤의 비행을 위해 중력 제거
     
 
-    GetCapsuleComponent()->InitCapsuleSize(100.0f, 150.0f);
+    GetCapsuleComponent()->InitCapsuleSize(230.0f, 230.0f);
 
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
@@ -61,7 +61,7 @@ ADragon::ADragon()
         GetMesh()->SetSkeletalMesh(DragonMeshAsset.Object);
     }
 
-    GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f)); // 예: 메쉬를 살짝 아래로 배치
+    GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -230.0f)); // 예: 메쉬를 살짝 아래로 배치
     GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 
 
@@ -198,50 +198,99 @@ void ADragon::JumpA(const FInputActionValue& value)
 {
     bool isPressed = value.Get<bool>();
 
+    //if (isPressed)
+    //{
+    // /*   if (!_isAttacking)
+    //        ACharacter::Jump();*/
+
+    //    if (!_isAttacking) // 공격 중이 아니면 점프 가능
+    //    {
+    //        if (GetCharacterMovement()->IsFalling())
+    //        {
+    //            // 공중에서 추가 비행
+    //            FVector JumpImpulse = FVector(0.0f, 0.0f, 500.0f); // 상승 힘
+    //            LaunchCharacter(JumpImpulse, false, false);
+
+    //            UE_LOG(LogTemp, Warning, TEXT("Dragon flapped its wings!"));
+    //        }
+    //        else
+    //        {
+    //            // 지상에서 점프
+    //            ACharacter::Jump();
+
+    //            // 중력을 약하게 설정
+    //            GetCharacterMovement()->GravityScale = 0.2f; // 느린 하강
+    //            UE_LOG(LogTemp, Warning, TEXT("Dragon jumped!"));
+    //        }
+
+    //        // 애니메이션 상태 업데이트: 점프 시작
+    //        _dragonAnimInstance->SetJumping(true);
+    //     
+    //    }
+    //}
+    //else
+    //{
+    //    // 점프 키가 떼어질 때 착지 여부 확인
+    //    if (!GetCharacterMovement()->IsFalling())
+    //    {
+    //        // 중력을 원래 값으로 복원
+    //        GetCharacterMovement()->GravityScale = 1.0f;
+
+    //        // 애니메이션 상태 업데이트: 착지 상태
+    //        _dragonAnimInstance->SetJumping(false);
+
+    //        UE_LOG(LogTemp, Warning, TEXT("Dragon landed!"));
+    //    }
+    //}
+
+
     if (isPressed)
     {
-     /*   if (!_isAttacking)
-            ACharacter::Jump();*/
-
-        if (!_isAttacking) // 공격 중이 아니면 점프 가능
+        if (GetCharacterMovement()->IsFalling())
         {
-            if (GetCharacterMovement()->IsFalling())
-            {
-                // 공중에서 추가 비행
-                FVector JumpImpulse = FVector(0.0f, 0.0f, 500.0f); // 상승 힘
-                LaunchCharacter(JumpImpulse, false, false);
+            // 공중에서 추가 비행 (날갯짓)
+            FVector ForwardInput = GetActorForwardVector() * GetInputAxisValue("MoveForward");
+            FVector RightInput = GetActorRightVector() * GetInputAxisValue("MoveRight");
+            FVector JumpImpulse = ForwardInput * 300.0f + RightInput * 300.0f + FVector(0.0f, 0.0f, 500.0f);
 
-                UE_LOG(LogTemp, Warning, TEXT("Dragon flapped its wings!"));
-            }
-            else
-            {
-                // 지상에서 점프
-                ACharacter::Jump();
+            LaunchCharacter(JumpImpulse, true, true);
 
-                // 중력을 약하게 설정
-                GetCharacterMovement()->GravityScale = 0.2f; // 느린 하강
-                UE_LOG(LogTemp, Warning, TEXT("Dragon jumped!"));
-            }
-
-            // 애니메이션 상태 업데이트: 점프 시작
-            _dragonAnimInstance->SetJumping(true);
-         
+            UE_LOG(LogTemp, Warning, TEXT("Dragon flapped its wings!"));
         }
+        else
+        {
+            // 지상에서 점프
+            ACharacter::Jump();
+
+            // 공중 제어 및 중력 설정
+            GetCharacterMovement()->GravityScale = 0.5f; // 느린 하강
+            GetCharacterMovement()->AirControl = 0.8f;    // 공중 제어 강화
+            GetCharacterMovement()->MaxFlySpeed = 800.0f; // 공중 속도 증가
+
+            UE_LOG(LogTemp, Warning, TEXT("Dragon jumped!"));
+        }
+
+        // 애니메이션 상태 업데이트: 점프 시작
+        _dragonAnimInstance->SetJumping(true);
     }
     else
     {
-        // 점프 키가 떼어질 때 착지 여부 확인
         if (!GetCharacterMovement()->IsFalling())
         {
-            // 중력을 원래 값으로 복원
+            // 착지 시 중력 및 이동 속도 복원
             GetCharacterMovement()->GravityScale = 1.0f;
+            GetCharacterMovement()->AirControl = 0.2f; // 기본 공중 제어 값
+            GetCharacterMovement()->MaxFlySpeed = 600.0f; // 기본 속도 복원
 
-            // 애니메이션 상태 업데이트: 착지 상태
+            // 애니메이션 상태 업데이트: 착지
             _dragonAnimInstance->SetJumping(false);
 
             UE_LOG(LogTemp, Warning, TEXT("Dragon landed!"));
         }
     }
+
+
+
 }
 
 void ADragon::PostInitializeComponents()
@@ -273,9 +322,12 @@ void ADragon::PostInitializeComponents()
         UE_LOG(LogTemp, Warning, TEXT("Failed to initialize _dragonAnimInstance for ADragon!"));
     }
 
-
-
-
+    //----------------------------------------------보스몹으로 일단세팅----------------------
+    if (_StatCom)
+    {
+        _StatCom->SetBossLevelInit(1);
+    }
+    //------------------------------------------------------------------------------------------
     if (_Widget)
     {
         auto PlWidget = Cast<UPlayerBarWidget>(_Widget);
