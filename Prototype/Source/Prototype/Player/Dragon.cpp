@@ -219,6 +219,11 @@ void ADragon::JumpA(const FInputActionValue& value)
 
             LaunchCharacter(JumpImpulse, true, true);
 
+    /*        if (_dragonAnimInstance)
+            {
+                _dragonAnimInstance->SetSpeed(GetVelocity().Size());
+            }*/
+
             UE_LOG(LogTemp, Warning, TEXT("Dragon flapped its wings!"));
         }
         else
@@ -232,7 +237,15 @@ void ADragon::JumpA(const FInputActionValue& value)
             GetCharacterMovement()->MaxFlySpeed = 800.0f; // 공중 속도 증가
 
             UE_LOG(LogTemp, Warning, TEXT("Dragon jumped!"));
+
+   /*         if (_dragonAnimInstance)
+            {
+                _dragonAnimInstance->SetSpeed(GetVelocity().Size());
+            }*/
+
         }
+
+
 
         // 애니메이션 상태 업데이트: 점프 시작
         _dragonAnimInstance->SetJumping(true);
@@ -245,9 +258,14 @@ void ADragon::JumpA(const FInputActionValue& value)
             GetCharacterMovement()->GravityScale = 1.0f;
             GetCharacterMovement()->AirControl = 0.2f; // 기본 공중 제어 값
             GetCharacterMovement()->MaxFlySpeed = 600.0f; // 기본 속도 복원
-
+            
             // 애니메이션 상태 업데이트: 착지
             _dragonAnimInstance->SetJumping(false);
+
+       /*     if (_dragonAnimInstance)
+            {
+                _dragonAnimInstance->SetSpeed(GetVelocity().Size());
+            }*/
 
             UE_LOG(LogTemp, Warning, TEXT("Dragon landed!"));
         }

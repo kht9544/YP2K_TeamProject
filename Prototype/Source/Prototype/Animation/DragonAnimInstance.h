@@ -20,7 +20,7 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void JumpToSection(int32 sectionIndex) override;
-
+	/*void SetSpeed(float NewSpeed);*/
 
 	DeathDelegate _deathDelegate_Dragon;
 
