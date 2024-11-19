@@ -52,7 +52,7 @@ void USkillWidget_test::UpdateCooldownText(int32 SkillIndex, float RemainingTime
 
 void USkillWidget_test::StartCooldown(int32 SkillIndex, float InMaxCooldownTime)
 {
-   /* if (SkillIndex < 0 || SkillIndex >= CooldownOverlays.Num()) return;
+    /*if (SkillIndex < 0 || SkillIndex >= CooldownOverlays.Num()) return;
 
     MaxCooldownTimes[SkillIndex] = InMaxCooldownTime;
     CooldownTimes[SkillIndex] = MaxCooldownTimes[SkillIndex];
