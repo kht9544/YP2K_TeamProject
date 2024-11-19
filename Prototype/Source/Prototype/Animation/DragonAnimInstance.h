@@ -22,6 +22,7 @@ public:
 	virtual void JumpToSection(int32 sectionIndex) override;
 	/*void SetSpeed(float NewSpeed);*/
 
+	AttackDelegate _attackDelegate;
 	DeathDelegate _deathDelegate_Dragon;
 
 	UFUNCTION()
