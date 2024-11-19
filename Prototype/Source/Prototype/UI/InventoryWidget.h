@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "../Item/Equip/EquipItem.h"
 #include "InventoryWidget.generated.h"
 
 class ABaseItem;
@@ -12,7 +13,6 @@ class UIndexedButton;
 DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32, bool);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemUseDelegate, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemEquipDelegate, int32);
-
 
 UCLASS()
 class PROTOTYPE_API UInventoryWidget : public UUserWidget
@@ -48,6 +48,8 @@ public:
 
 private:
 	void SetTargetItem(int32 slotIndex);
+	void SetTargetEquip(EItemType equip);
+
 	UFUNCTION()
 	void TargetItem0();
 	UFUNCTION()
@@ -72,6 +74,24 @@ private:
 	void TargetItem10();
 	UFUNCTION()
 	void TargetItem11();
+
+	UFUNCTION()
+	void TargetHemet();
+
+	UFUNCTION()
+	void TargetShoulder();
+
+	UFUNCTION()
+	void TargetUpper();
+
+	UFUNCTION()
+	void TargetLower();
+
+	UFUNCTION()
+	void TargetSword();
+
+	UFUNCTION()
+	void TargetShield();
 
 public:
 	//Delegate
