@@ -457,6 +457,15 @@
     <ClInclude Include="..\..\Source\Prototype\Player\Portal\Portal_Stage1.h">
       <Filter>Source\Prototype\Player\Portal</Filter>
     </ClInclude>
+    <Filter Include="Source\Prototype\TriggerBox_StageSequnce">
+      <UniqueIdentifier>{12C4424A-1C5B-338C-A606-4653F08DF755}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Prototype\TriggerBox_StageSequnce\StageSequence_Trigger.cpp">
+      <Filter>Source\Prototype\TriggerBox_StageSequnce</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Prototype\TriggerBox_StageSequnce\StageSequence_Trigger.h">
+      <Filter>Source\Prototype\TriggerBox_StageSequnce</Filter>
+    </ClInclude>
     <Filter Include="Source\Prototype\UI">
       <UniqueIdentifier>{827D1D71-97A9-33A2-80BE-8FD75D929603}</UniqueIdentifier>
     </Filter>
