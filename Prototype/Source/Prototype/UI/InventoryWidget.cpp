@@ -228,7 +228,6 @@ void UInventoryWidget::DropItem()
 		}
 		if (!part.IsEmpty())
 			EquipDrop.Broadcast(part);
-		//TODO : Mod Stat & Player Update
 	}
 
 	_targetItem = nullptr;
@@ -246,7 +245,36 @@ void UInventoryWidget::UseItem()
 	{
 		if (_targetIndex == -1)
 		{
-			//TODO : Strip(Put back equipment into Inventory
+			FString part;
+			AEquipItem* target = Cast<AEquipItem>(_targetItem);
+			switch (target->GetEquipType())
+			{
+			case EItemType::Helmet:
+				part = TEXT("Helmet");
+				break;
+			case EItemType::UpperArmor:
+				part = TEXT("UpperArmor");
+				break;
+			case EItemType::LowerArmor:
+				part = TEXT("LowerArmor");
+				break;
+			case EItemType::ShoulderArmor:
+				part = TEXT("ShoulderArmor");
+				break;
+			case EItemType::Sword:
+				part = TEXT("Sword");
+				break;
+			case EItemType::Shield:
+				part = TEXT("Shield");
+				break;
+			default:
+				break;
+			}
+			if (!part.IsEmpty())
+			{
+				EquipStrip.Broadcast(part);
+				UpdateStat();
+			}
 		}
 		else
 		{

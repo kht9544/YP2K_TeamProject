@@ -14,6 +14,7 @@ DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32, bool);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemUseDelegate, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemEquipDelegate, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(EquipDropDelegate, FString);
+DECLARE_MULTICAST_DELEGATE_OneParam(EquipStripDelegate, FString);
 
 UCLASS()
 class PROTOTYPE_API UInventoryWidget : public UUserWidget
@@ -100,6 +101,7 @@ public:
 	ItemUseDelegate   ItemUse;
 	ItemEquipDelegate ItemEquip;
 	EquipDropDelegate EquipDrop;
+	EquipStripDelegate EquipStrip;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
