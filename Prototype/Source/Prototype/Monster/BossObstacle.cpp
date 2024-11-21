@@ -35,9 +35,6 @@ void ABossObstacle::BeginPlay()
     //     EffectManager = *It;
     //     break;
     // }	
-	//OnDestroyed.AddDynamic(this, &ABossObstacle::OnHit);
-
-	//this->OnDestroyed.AddDynamic(this, &ABossObstacle::OnHit);
 }
 
 // Called every frame
@@ -62,11 +59,7 @@ void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 
 		EffectManager->Play(*GetObstacleBreakEffect(), ObstacleMesh->GetComponentLocation());
 		SoundManager->PlaySound(*GetObstacleBreakSound(), ObstacleMesh->GetComponentLocation());
-	
-		OnDestroyedEvent.Broadcast();
 		Destroy();
-
-		
 	}
 	
 }

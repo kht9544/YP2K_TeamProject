@@ -24,9 +24,6 @@ public:
 	void UpdateObstacleIcons(int32 DestroyCount);
 
 
-	UPROPERTY(meta = (BindWidget))
-	class UCanvasPanel* CanvasPanel_15;
-
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar *BossHPBar;
@@ -41,6 +38,7 @@ private:
 	class UImage *ObstacleIcon2;
 	class UImage *ObstacleIcon3;
 	class UImage *ObstacleIcon4;
+
 
 
 };
