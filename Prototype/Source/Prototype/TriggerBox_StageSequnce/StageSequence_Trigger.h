@@ -14,7 +14,7 @@
 #include "StageSequence_Trigger.generated.h"
 
 
-
+//class UBoss1Widget;
 
 UCLASS()
 class PROTOTYPE_API AStageSequence_Trigger : public AActor
@@ -35,6 +35,31 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+    // 트리거 박스
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UBoxComponent* TriggerBox;
 
+    // 레벨 시퀀스 에셋
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sequence")
+    TSoftObjectPtr<ULevelSequence> LevelSequenceAsset;
+
+    // 시퀀스 액터
+    UPROPERTY()
+    ALevelSequenceActor* SequenceActor;
+
+    // 트리거 진입 시 실행될 함수
+    UFUNCTION()
+    void OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+    // 시퀀스 재생 함수
+    UFUNCTION()
+    void PlaySequence();
+
+    // 시퀀스 종료 처리 함수
+    UFUNCTION()
+    void OnSequenceFinished();
+
+    AActor* TriggeredActor;
 
 };

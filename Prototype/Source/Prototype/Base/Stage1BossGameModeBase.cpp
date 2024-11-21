@@ -11,6 +11,9 @@
 #include "UI/Boss1Widget.h"
 #include "Kismet/GameplayStatics.h"
 
+
+
+
 AStage1BossGameModeBase::AStage1BossGameModeBase()
 {
 	static ConstructorHelpers::FClassFinder<ABossMonster> BM(TEXT("/Script/Engine.Blueprint'/Game/Blueprint/Monster/BossMonster/BossMonster_BP.BossMonster_BP_C'"));
@@ -18,6 +21,7 @@ AStage1BossGameModeBase::AStage1BossGameModeBase()
     {
         _boss = BM.Class;
     }
+
 }
 
 void AStage1BossGameModeBase::BeginPlay()
@@ -61,10 +65,14 @@ void AStage1BossGameModeBase::BeginPlay()
 		Boss->_StatCom->_PlHPDelegate.AddUObject(UIManager->GetBossUI(), &UBoss1Widget::UpdateBossHPBar);
 	}
 
-
 }
+
 
 void AStage1BossGameModeBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 }
+
+
+
+

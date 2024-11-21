@@ -5,8 +5,9 @@
 
 #include "UI/InventoryWidget.h"
 #include "UI/Boss1Widget.h"
-
 #include "Kismet/GameplayStatics.h"
+
+#include  "TriggerBox_StageSequnce/StageSequence_Trigger.h"
 
 // Sets default values
 AUIManager::AUIManager()

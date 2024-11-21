@@ -144,7 +144,7 @@ private:
 	void PerformDash(float DeltaTime);
 	void StartScreenShake();
 
-
+	
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
