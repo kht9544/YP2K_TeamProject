@@ -39,36 +39,46 @@ public:
 
 
 private:
-
-	UPROPERTY(EditAnywhere, Category = "TriggerBox")
-	UBoxComponent* _boxComponent;
-
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TArray<UUserWidget*> UIWidgets;
-
-	UPROPERTY(EditAnywhere, Category = "Sequence")
-	FString SequencePath;
-
-	UPROPERTY()
-	ULevelSequencePlayer* _sequencePlayer;
-	
-
-	UFUNCTION()
-	void OnOverlapBegin(
-		UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult
-	);
-
-	UFUNCTION()
-	void OnSequenceFinished();
-
-	void HideUIWidgets();
-	void ShowUIWidgets();
-	void DestroyTriggerBox();
+//
+//	UPROPERTY(EditAnywhere, Category = "TriggerBox")
+//	UBoxComponent* _boxComponent;
+//
+//	UPROPERTY(EditAnywhere, Category = "UI")
+//	TArray<UUserWidget*> UIWidgets;
+//
+//	UPROPERTY(EditAnywhere, Category = "Sequence")
+//	FString SequencePath;
+//
+//	UPROPERTY()
+//	ULevelSequencePlayer* _sequencePlayer;
+//	
+//
+//	UFUNCTION()
+//	void OnOverlapBegin(
+//		UPrimitiveComponent* OverlappedComponent,
+//		AActor* OtherActor,
+//		UPrimitiveComponent* OtherComp,
+//		int32 OtherBodyIndex,
+//		bool bFromSweep,
+//		const FHitResult& SweepResult
+//	);
+//
+//	UFUNCTION()
+//	void OnSequenceFinished();
+//
+//	void HideUIWidgets();
+//	void ShowUIWidgets();
+//	void DestroyTriggerBox();
+//
+//	void FindBossWidget();
+//
+//	
+//private:
+//	UPROPERTY(EditAnywhere, Category = "UI")
+//	TSubclassOf<class UBoss1Widget> _bossHpBarUI;
+//
+//	UPROPERTY()
+//	class UBoss1Widget* Boss1WidgetInstance;
 
 
 };
