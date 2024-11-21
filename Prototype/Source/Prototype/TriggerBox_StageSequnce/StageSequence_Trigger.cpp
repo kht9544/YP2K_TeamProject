@@ -161,12 +161,8 @@ void AStageSequence_Trigger::OnOverlapBegin(
     FMovieSceneSequencePlaybackSettings PlaybackSettings;
     ALevelSequenceActor* SequenceActor = nullptr;
 
-    _sequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
-        GetWorld(),
-        LevelSequence,
-        PlaybackSettings,
-        SequenceActor
-    );
+    _sequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), LevelSequence, PlaybackSettings, SequenceActor);
+
 
     if (_sequencePlayer)
     {
