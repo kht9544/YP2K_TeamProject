@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BossObstacle.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDestroyedDelegate);
+
 UCLASS()
 class PROTOTYPE_API ABossObstacle : public AActor
 {
@@ -22,6 +24,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnDestroyedDelegate OnDestroyedEvent;
 
 	UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
