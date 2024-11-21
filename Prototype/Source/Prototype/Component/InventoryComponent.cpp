@@ -35,6 +35,7 @@ void UInventoryComponent::BeginPlay()
 		UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
 		UIManager->GetInventoryUI()->ItemEquip.AddUObject(this, &UInventoryComponent::EquipItem);
 		UIManager->GetInventoryUI()->EquipDrop.AddUObject(this, &UInventoryComponent::ExcuteEquip);
+		UIManager->GetInventoryUI()->EquipStrip.AddUObject(this, &UInventoryComponent::StripEquip);
 	}
 	else
 	{
@@ -236,7 +237,6 @@ void UInventoryComponent::StripEquip(FString part)
 		return;
 
 	AEquipItem* equipment = _EquipSlots[part];
-	_EquipSlots[part] = nullptr;
 
 	if (_isSlotFull)
 	{
@@ -244,8 +244,11 @@ void UInventoryComponent::StripEquip(FString part)
 	}
 	else
 	{
+		_EquipSlots[part]->UnEquip();
+		UIupdate_Pop(part);
 		AddItemToSlot(equipment);
 	}
+	_EquipSlots[part] = nullptr;
 }
 
 void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem *item)
