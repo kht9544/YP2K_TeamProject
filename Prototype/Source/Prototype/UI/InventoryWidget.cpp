@@ -99,13 +99,13 @@ void UInventoryWidget::SetStats()
 	}
 }
 
-void UInventoryWidget::UpdateSlot(int32 slotIndex, ABaseItem* item)
+void UInventoryWidget::UpdateItemSlot(int32 slotIndex, ABaseItem* item)
 {
 	Button_[slotIndex]->SetItem(item);
 	Button_[slotIndex]->ButtonUpdate();
 }
 
-void UInventoryWidget::UpdateEquip()
+void UInventoryWidget::UpdateAllEquipBtn()
 {
 	Helmet->ButtonUpdate();
 	ShoulderGuard->ButtonUpdate();
@@ -197,13 +197,44 @@ void UInventoryWidget::DropItem()
 {
 	if (_targetItem == nullptr)
 		return;
-
-	ItemDrop.Broadcast(_targetIndex, true);
+	if (_targetIndex != -1)
+		ItemDrop.Broadcast(_targetIndex, true);
+	else
+	{
+		FString part;
+		AEquipItem* target = Cast<AEquipItem>(_targetItem);
+		switch (target->GetEquipType())
+		{
+		case EItemType::Helmet:
+			part = TEXT("Helmet");
+			break;
+		case EItemType::UpperArmor:
+			part = TEXT("UpperArmor");
+			break;
+		case EItemType::LowerArmor:
+			part = TEXT("LowerArmor");
+			break;
+		case EItemType::ShoulderArmor:
+			part = TEXT("ShoulderArmor");
+			break;
+		case EItemType::Sword:
+			part = TEXT("Sword");
+			break;
+		case EItemType::Shield:
+			part = TEXT("Shield");
+			break;
+		default:
+			break;
+		}
+		if (!part.IsEmpty())
+			EquipDrop.Broadcast(part);
+		//TODO : Mod Stat & Player Update
+	}
 
 	_targetItem = nullptr;
 	ShowItem();
-	UpdateSlot(_targetIndex, nullptr);
 	_targetIndex = -1;
+	
 }
 
 void UInventoryWidget::UseItem()
@@ -231,7 +262,7 @@ void UInventoryWidget::UseItem()
 		_targetItem = nullptr;
 	}
 	ShowItem();
-	UpdateSlot(_targetIndex, _targetItem);
+	//UpdateSlot(_targetIndex, _targetItem);
 }
 
 void UInventoryWidget::CheckCanEquip()
@@ -270,7 +301,7 @@ void UInventoryWidget::CheckCanEquip()
 		break;
 	}
 
-	UpdateEquip();
+	UpdateAllEquipBtn();
 }
 
 void UInventoryWidget::UpdateStat()

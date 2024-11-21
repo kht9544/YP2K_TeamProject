@@ -13,6 +13,7 @@ class UIndexedButton;
 DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32, bool);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemUseDelegate, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemEquipDelegate, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(EquipDropDelegate, FString);
 
 UCLASS()
 class PROTOTYPE_API UInventoryWidget : public UUserWidget
@@ -28,9 +29,9 @@ public:
 	void SetItemButtons();
 	void SetStats();
 
-	void UpdateSlot(int32 slotIndex, ABaseItem* item = nullptr);
-	void UpdateEquip();
-	void UpdateEquipSlot(FString slot, ABaseItem* item);
+	void UpdateItemSlot(int32 slotIndex, ABaseItem* item = nullptr);
+	void UpdateAllEquipBtn();
+	void UpdateEquipSlot(FString slot, ABaseItem* item = nullptr);
 	void ShowItem();
 
 	UFUNCTION()
@@ -98,6 +99,7 @@ public:
 	ItemDropDelegate  ItemDrop;
 	ItemUseDelegate   ItemUse;
 	ItemEquipDelegate ItemEquip;
+	EquipDropDelegate EquipDrop;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))
