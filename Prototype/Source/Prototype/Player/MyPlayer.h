@@ -144,7 +144,7 @@ private:
 	void PerformDash(float DeltaTime);
 	void StartScreenShake();
 
-
+	
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -205,6 +205,11 @@ public:
 	// class USkeletalMeshComponent* _upperBodyMesh;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* _inventoryComponent;
+
+	/////////////////////////////////////////
+	///TODO : Make Default Skeletal Mesh///
+	/////////////////////////////////////////
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class USkeletalMeshComponent* _lowerBodyMesh;

@@ -78,7 +78,7 @@ public:
 
 	virtual void GetItem();
 	virtual void UseItem();
-	void DropItem(FVector location, FRotator rotation = FRotator::ZeroRotator);
+	virtual void DropItem(FVector location, FRotator rotation = FRotator::ZeroRotator);
 
 	//Item Data Getter
 	int GetCode(){return _Code;}

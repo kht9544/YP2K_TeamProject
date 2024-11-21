@@ -84,6 +84,38 @@ void AEquipItem::EquipPlayer()
             break;
         }
     }
+    _isEquipped = true;
+}
+
+void AEquipItem::UnEquip()
+{
+    if (_player == nullptr)
+        return;
+
+    //TODO : if put DEFAULT, recover to default skeletal mesh
+    switch (_equipItemType)
+    {
+    case EItemType::UpperArmor:
+        _player->GetMesh()->SetSkeletalMesh(nullptr);
+        break;
+    case EItemType::LowerArmor:
+        _player->_lowerBodyMesh->SetSkeletalMesh(nullptr);
+        break;
+    case EItemType::ShoulderArmor:
+        _player->_shoulderBodyMesh->SetSkeletalMesh(nullptr);
+        break;
+    case EItemType::Sword:
+        _player->_swordBodyMesh->SetSkeletalMesh(nullptr);
+        break;
+    case EItemType::Shield:
+        _player->_shieldBodyMesh->SetSkeletalMesh(nullptr);
+        break;
+    default:
+        break;
+    }
+
+    _player->GetStatComponent()->ModStat(_ModStatType, -_Value);
+    _isEquipped = false;
 }
 
 void AEquipItem::UseItem()
@@ -97,7 +129,11 @@ void AEquipItem::UseItem()
     }
 }
 
-void AEquipItem::UnEquip()
+void AEquipItem::DropItem(FVector location, FRotator rotation)
 {
-    _player->GetStatComponent()->ModStat(_ModStatType, -_Value);
+    Super::DropItem(location, rotation);
+
+    if(_isEquipped)
+        UnEquip();
 }
+

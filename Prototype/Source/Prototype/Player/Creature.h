@@ -112,4 +112,8 @@ public:
 
 	
 	bool _isTransformed;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	UUserWidget* GetWidget() const { return _Widget; }
+
 };

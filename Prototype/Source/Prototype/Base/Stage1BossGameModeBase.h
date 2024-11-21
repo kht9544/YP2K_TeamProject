@@ -8,7 +8,10 @@
 
 /**
  * 
+ * 
  */
+
+
 UCLASS()
 class PROTOTYPE_API AStage1BossGameModeBase : public AGameModeBase
 {
@@ -20,6 +23,10 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void PostInitializeComponents() override;
+
+
+
+
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

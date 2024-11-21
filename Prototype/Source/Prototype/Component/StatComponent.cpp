@@ -92,11 +92,11 @@ void UStatComponent::SetLevelInit(int level)
 
 		if (Cast<AMyPlayer>(GetOwner()))
 		{
-			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::HP, _maxHp);
-			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::MP, _maxMp);
-			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::STR, _str);
-			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::DEX, _dex);
-			UIManager->GetInventoryUI()->UpdateModStat((int32)StatType::INT, _int);
+			UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::HP, _maxHp);
+			UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::MP, _maxMp);
+			UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::STR, _str);
+			UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::DEX, _dex);
+			UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::INT, _int);
 
 			UIManager->GetInventoryUI()->UpdateStat();
 		}
@@ -468,27 +468,34 @@ void UStatComponent::AddExp(int32 amount)
 
 void UStatComponent::ModStat(StatType stat, int32 amount)
 {
+	auto invenUI = GAMEINSTANCE->GetUIManager()->GetInventoryUI();
+
 	switch (stat)
 	{
 	case StatType::HP:
 		_modHp += amount;
 		_maxHp = _ogHp + _modHp;
+		invenUI->UpdateOriginStat((int32)(StatType::HP), _maxHp);
 		break;
 	case StatType::MP:
 		_modMp += amount;
 		_maxMp = _ogMp + _modMp;
+		invenUI->UpdateOriginStat((int32)(StatType::MP), _maxMp);
 		break;
 	case StatType::STR:
 		_modStr += amount;
 		_str = _ogStr + _modStr;
+		invenUI->UpdateOriginStat((int32)(StatType::STR), _str);
 		break;
 	case StatType::DEX:
 		_modDex += amount;
 		_dex = _ogDex + _modDex;
+		invenUI->UpdateOriginStat((int32)(StatType::DEX), _dex);
 		break;
 	case StatType::INT:
 		_modInt += amount;
 		_int = _ogInt + _modInt;
+		invenUI->UpdateOriginStat((int32)(StatType::INT), _int);
 		break;
 	case StatType::CurHP:
 		AddCurHp(amount);
