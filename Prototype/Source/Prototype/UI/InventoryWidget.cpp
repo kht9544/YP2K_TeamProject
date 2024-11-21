@@ -250,8 +250,8 @@ void UInventoryWidget::UseItem()
 		}
 		else
 		{
-			ItemEquip.Broadcast(_targetIndex);
 			CheckCanEquip();
+			ItemEquip.Broadcast(_targetIndex);
 			UpdateStat();
 		}
 	}
@@ -308,7 +308,7 @@ void UInventoryWidget::UpdateStat()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		_originStat[i]->SetText(_modStat[i]->GetText());
+		_modStat[i]->SetText(_originStat[i]->GetText());
 		_modStat[i]->SetColorAndOpacity(FSlateColor(FColor(255, 255, 255)));
 	}
 }

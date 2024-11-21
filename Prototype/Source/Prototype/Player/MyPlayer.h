@@ -206,6 +206,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* _inventoryComponent;
 
+	/////////////////////////////////////////
+	///TODO : Make Default Skeletal Mesh///
+	/////////////////////////////////////////
+
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class USkeletalMeshComponent* _lowerBodyMesh;
 
