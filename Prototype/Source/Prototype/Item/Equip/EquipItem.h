@@ -39,9 +39,10 @@ public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void EquipPlayer();
+    void UnEquip();
 
     virtual void UseItem() override;
-    void UnEquip();
+    virtual void DropItem(FVector location, FRotator rotation = FRotator::ZeroRotator) override;
 
 protected:
 
@@ -50,6 +51,9 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EquipItem")
     EItemType _equipItemType;
+
+private:
+    bool _isEquipped = false;
 
 public:  
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EquipItem")

@@ -8,6 +8,7 @@
 
 class ABaseItem;
 class UInventoryWidget;
+enum class EItemType : uint8;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROTOTYPE_API UInventoryComponent : public UActorComponent
@@ -23,6 +24,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	void InitSlot();
+
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -31,22 +34,26 @@ public:
 	void AddItemToSlot(class ABaseItem* Item);
 	void AddItemToEquip(FString EquipSlot, class ABaseItem* NewItem);
 	
+
 	void ShowItemSlots();
 
 
 	UFUNCTION()
 	void ExcuteItem(int32 slot, bool isDrop);
+	void ExcuteEquip(FString part);
 	void EquipItem(int32 slot);
 	void TryEquip(FString part, int32 slot);
+	void StripEquip(FString part);
 
+	//TODO : UI업데이트를 인벤에서만 호출해서 업데이트 되도록 하기
 	void UIupdate_Add(int32 slot, ABaseItem* item);
 	void UIupdate_Pop(int32 slot);
+	void UIupdate_Pop(FString part);
 	void UIupdate_equip(FString slot, ABaseItem* item);
 
 	TArray<ABaseItem*> GetItemSlots(){return _ItemSlots;}
 	TMap<FString, class AEquipItem*> GetEquipSlots(){return _EquipSlots;}
 
-	void InitSlot();
 
 	void UpdateUI();
 

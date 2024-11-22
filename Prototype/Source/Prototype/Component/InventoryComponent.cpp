@@ -34,6 +34,8 @@ void UInventoryComponent::BeginPlay()
 	{
 		UIManager->GetInventoryUI()->ItemDrop.AddUObject(this, &UInventoryComponent::ExcuteItem);
 		UIManager->GetInventoryUI()->ItemEquip.AddUObject(this, &UInventoryComponent::EquipItem);
+		UIManager->GetInventoryUI()->EquipDrop.AddUObject(this, &UInventoryComponent::ExcuteEquip);
+		UIManager->GetInventoryUI()->EquipStrip.AddUObject(this, &UInventoryComponent::StripEquip);
 	}
 	else
 	{
@@ -45,6 +47,17 @@ void UInventoryComponent::BeginPlay()
 	UpdateUI();
 }
 
+void UInventoryComponent::InitSlot()
+{
+	_ItemSlots.Init(nullptr, _itemSlotMax);
+
+	_EquipSlots.Add(TEXT("Helmet"));
+	_EquipSlots.Add(TEXT("UpperArmor"));
+	_EquipSlots.Add(TEXT("ShoulderArmor"));
+	_EquipSlots.Add(TEXT("LowerArmor"));
+	_EquipSlots.Add(TEXT("Sword"));
+	_EquipSlots.Add(TEXT("Shield"));
+}
 // Called every frame
 void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
@@ -144,6 +157,26 @@ void UInventoryComponent::ExcuteItem(int32 slot, bool isDrop)
 	_EmptySlots.Add(slot);
 }
 
+void UInventoryComponent::ExcuteEquip(FString part)
+{
+	if (_EquipSlots[part] == nullptr)
+		return;
+
+	FVector playerPlos = GetOwner()->GetActorLocation();
+
+	float randFloat = FMath::FRandRange(0, PI * 2.0f);
+
+	float X = cosf(randFloat) * 300.0f;
+	float Y = sinf(randFloat) * 300.0f;
+	FVector itemPos = playerPlos + FVector(X, Y, 0.0f);
+	itemPos.Z = 50.0f;
+
+	_EquipSlots[part]->DropItem(itemPos);
+	_EquipSlots[part] = nullptr;
+
+	UIupdate_Pop(part);
+}
+
 void UInventoryComponent::EquipItem(int32 slot)
 {
 	// TODO : Switch-case with EquipType Enum later
@@ -193,16 +226,44 @@ void UInventoryComponent::TryEquip(FString part, int32 slot)
 
 	_EquipSlots[part] = equipment;
 	_EquipSlots[part]->UseItem();
+
+	UIupdate_Add(slot, _ItemSlots[slot]);
+	UIupdate_equip(part, equipment);
+}
+
+void UInventoryComponent::StripEquip(FString part)
+{
+	if (_EquipSlots[part] == nullptr)
+		return;
+
+	AEquipItem* equipment = _EquipSlots[part];
+
+	if (_isSlotFull)
+	{
+		ExcuteEquip(part);
+	}
+	else
+	{
+		_EquipSlots[part]->UnEquip();
+		UIupdate_Pop(part);
+		AddItemToSlot(equipment);
+	}
+	_EquipSlots[part] = nullptr;
 }
 
 void UInventoryComponent::UIupdate_Add(int32 slot, ABaseItem *item)
 {
-	UIManager->GetInventoryUI()->UpdateSlot(slot, item);
+	UIManager->GetInventoryUI()->UpdateItemSlot(slot, item);
 }
 
 void UInventoryComponent::UIupdate_Pop(int32 slot)
 {
-	UIManager->GetInventoryUI()->UpdateSlot(slot, nullptr);
+	UIManager->GetInventoryUI()->UpdateItemSlot(slot, nullptr);
+}
+
+void UInventoryComponent::UIupdate_Pop(FString part)
+{
+	UIManager->GetInventoryUI()->UpdateEquipSlot(part, nullptr);
 }
 
 void UInventoryComponent::UIupdate_equip(FString slot, ABaseItem *item)
@@ -213,29 +274,21 @@ void UInventoryComponent::UIupdate_equip(FString slot, ABaseItem *item)
     }
 }
 
-void UInventoryComponent::InitSlot()
-{
-	_ItemSlots.Init(nullptr, _itemSlotMax);
-
-	_EquipSlots.Add(TEXT("Helmet"));
-	_EquipSlots.Add(TEXT("UpperArmor"));
-	_EquipSlots.Add(TEXT("ShoulderArmor"));
-	_EquipSlots.Add(TEXT("LowerArmor"));
-	_EquipSlots.Add(TEXT("Sword"));
-	_EquipSlots.Add(TEXT("Shield"));
-}
 
 void UInventoryComponent::AddItemToSlot(ABaseItem *Item)
 {
-	if (Item)
+	if (Item == nullptr)
+		return;
+	if (_isSlotFull)
+		return;
+
+	for (int i = 0; i < _itemSlotMax; i++)
 	{
-		for (int i = 0; i < _itemSlotMax; i++)
+		if (_ItemSlots[i] == nullptr)
 		{
-			if (_ItemSlots[i] == nullptr)
-			{
-				_ItemSlots[i] = Item;
-				break;
-			}
+			_ItemSlots[i] = Item;
+			UIupdate_Add(i, Item);
+			break;
 		}
 	}
 }

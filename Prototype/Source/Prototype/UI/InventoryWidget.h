@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "../Item/Equip/EquipItem.h"
 #include "InventoryWidget.generated.h"
 
 class ABaseItem;
@@ -12,7 +13,8 @@ class UIndexedButton;
 DECLARE_MULTICAST_DELEGATE_TwoParams(ItemDropDelegate, int32, bool);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemUseDelegate, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(ItemEquipDelegate, int32);
-
+DECLARE_MULTICAST_DELEGATE_OneParam(EquipDropDelegate, FString);
+DECLARE_MULTICAST_DELEGATE_OneParam(EquipStripDelegate, FString);
 
 UCLASS()
 class PROTOTYPE_API UInventoryWidget : public UUserWidget
@@ -28,9 +30,9 @@ public:
 	void SetItemButtons();
 	void SetStats();
 
-	void UpdateSlot(int32 slotIndex, ABaseItem* item = nullptr);
-	void UpdateEquip();
-	void UpdateEquipSlot(FString slot, ABaseItem* item);
+	void UpdateItemSlot(int32 slotIndex, ABaseItem* item = nullptr);
+	void UpdateAllEquipBtn();
+	void UpdateEquipSlot(FString slot, ABaseItem* item = nullptr);
 	void ShowItem();
 
 	UFUNCTION()
@@ -48,6 +50,8 @@ public:
 
 private:
 	void SetTargetItem(int32 slotIndex);
+	void SetTargetEquip(EItemType equip);
+
 	UFUNCTION()
 	void TargetItem0();
 	UFUNCTION()
@@ -73,11 +77,31 @@ private:
 	UFUNCTION()
 	void TargetItem11();
 
+	UFUNCTION()
+	void TargetHemet();
+
+	UFUNCTION()
+	void TargetShoulder();
+
+	UFUNCTION()
+	void TargetUpper();
+
+	UFUNCTION()
+	void TargetLower();
+
+	UFUNCTION()
+	void TargetSword();
+
+	UFUNCTION()
+	void TargetShield();
+
 public:
 	//Delegate
 	ItemDropDelegate  ItemDrop;
 	ItemUseDelegate   ItemUse;
 	ItemEquipDelegate ItemEquip;
+	EquipDropDelegate EquipDrop;
+	EquipStripDelegate EquipStrip;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Texture, meta = (AllowPrivateAccess = "true"))

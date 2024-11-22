@@ -14,7 +14,6 @@
 #include "Components/TextBlock.h"
 
 #include "Item/BaseItem.h"
-#include "Item/Equip/EquipItem.h"
 #include "Item/Consumes/ConsumeItem.h"
 #include "Component/StatComponent.h"
 
@@ -43,6 +42,13 @@ bool UInventoryWidget::Initialize()
 	Button_[10]->OnClicked.AddDynamic(this, &UInventoryWidget::TargetItem10);
 	Button_[11]->OnClicked.AddDynamic(this, &UInventoryWidget::TargetItem11);
 
+	Helmet->OnClicked.AddDynamic(this, &UInventoryWidget::TargetHemet);
+	ShoulderGuard->OnClicked.AddDynamic(this, &UInventoryWidget::TargetShoulder);
+	UpperArmor->OnClicked.AddDynamic(this, &UInventoryWidget::TargetUpper);
+	LowerArmor->OnClicked.AddDynamic(this, &UInventoryWidget::TargetLower);
+	Sword->OnClicked.AddDynamic(this, &UInventoryWidget::TargetSword);
+	Shield->OnClicked.AddDynamic(this, &UInventoryWidget::TargetShield);
+
 	DropBtn->OnClicked.AddDynamic(this, &UInventoryWidget::DropItem);
 	UseBtn->OnClicked.AddDynamic(this, &UInventoryWidget::UseItem);
 
@@ -61,12 +67,19 @@ void UInventoryWidget::SetItemButtons()
 		if (button)
 		{
 			button->SetIndex(index);
+			button->SetSlotType(SlotType::Inventory);
 			button->SetIsEnabled(true);
 			Button_.Add(button);
 
 			index++;
 		}
 	}
+	Helmet->SetSlotType(SlotType::Equip);
+	ShoulderGuard->SetSlotType(SlotType::Equip);
+	UpperArmor->SetSlotType(SlotType::Equip);
+	LowerArmor->SetSlotType(SlotType::Equip);
+	Sword->SetSlotType(SlotType::Equip);
+	Shield->SetSlotType(SlotType::Equip);
 }
 
 void UInventoryWidget::SetStats()
@@ -86,13 +99,13 @@ void UInventoryWidget::SetStats()
 	}
 }
 
-void UInventoryWidget::UpdateSlot(int32 slotIndex, ABaseItem* item)
+void UInventoryWidget::UpdateItemSlot(int32 slotIndex, ABaseItem* item)
 {
 	Button_[slotIndex]->SetItem(item);
 	Button_[slotIndex]->ButtonUpdate();
 }
 
-void UInventoryWidget::UpdateEquip()
+void UInventoryWidget::UpdateAllEquipBtn()
 {
 	Helmet->ButtonUpdate();
 	ShoulderGuard->ButtonUpdate();
@@ -159,8 +172,16 @@ void UInventoryWidget::ShowItem()
 	{
 		if (Cast<AEquipItem>(_targetItem))
 		{
-			UseBtnText->SetText(FText::FromString(TEXT("Equip")));
-			UpdateModStat((int32)_targetItem->GetModStat(), _targetItem->GetValue());
+			if (_targetIndex == -1)
+			{
+				UseBtnText->SetText(FText::FromString(TEXT("Strip")));
+				UpdateModStat((int32)_targetItem->GetModStat(), -_targetItem->GetValue());
+			}
+			else
+			{
+				UseBtnText->SetText(FText::FromString(TEXT("Equip")));
+				UpdateModStat((int32)_targetItem->GetModStat(), _targetItem->GetValue());
+			}
 		}
 		else
 		{
@@ -176,13 +197,43 @@ void UInventoryWidget::DropItem()
 {
 	if (_targetItem == nullptr)
 		return;
-
-	ItemDrop.Broadcast(_targetIndex, true);
+	if (_targetIndex != -1)
+		ItemDrop.Broadcast(_targetIndex, true);
+	else
+	{
+		FString part;
+		AEquipItem* target = Cast<AEquipItem>(_targetItem);
+		switch (target->GetEquipType())
+		{
+		case EItemType::Helmet:
+			part = TEXT("Helmet");
+			break;
+		case EItemType::UpperArmor:
+			part = TEXT("UpperArmor");
+			break;
+		case EItemType::LowerArmor:
+			part = TEXT("LowerArmor");
+			break;
+		case EItemType::ShoulderArmor:
+			part = TEXT("ShoulderArmor");
+			break;
+		case EItemType::Sword:
+			part = TEXT("Sword");
+			break;
+		case EItemType::Shield:
+			part = TEXT("Shield");
+			break;
+		default:
+			break;
+		}
+		if (!part.IsEmpty())
+			EquipDrop.Broadcast(part);
+	}
 
 	_targetItem = nullptr;
 	ShowItem();
-	UpdateSlot(_targetIndex, nullptr);
 	_targetIndex = -1;
+	
 }
 
 void UInventoryWidget::UseItem()
@@ -192,9 +243,45 @@ void UInventoryWidget::UseItem()
 
 	if (Cast<AEquipItem>(_targetItem))
 	{
-		ItemEquip.Broadcast(_targetIndex);
-		CheckCanEquip();
-		UpdateStat();
+		if (_targetIndex == -1)
+		{
+			FString part;
+			AEquipItem* target = Cast<AEquipItem>(_targetItem);
+			switch (target->GetEquipType())
+			{
+			case EItemType::Helmet:
+				part = TEXT("Helmet");
+				break;
+			case EItemType::UpperArmor:
+				part = TEXT("UpperArmor");
+				break;
+			case EItemType::LowerArmor:
+				part = TEXT("LowerArmor");
+				break;
+			case EItemType::ShoulderArmor:
+				part = TEXT("ShoulderArmor");
+				break;
+			case EItemType::Sword:
+				part = TEXT("Sword");
+				break;
+			case EItemType::Shield:
+				part = TEXT("Shield");
+				break;
+			default:
+				break;
+			}
+			if (!part.IsEmpty())
+			{
+				EquipStrip.Broadcast(part);
+				UpdateStat();
+			}
+		}
+		else
+		{
+			CheckCanEquip();
+			ItemEquip.Broadcast(_targetIndex);
+			UpdateStat();
+		}
 	}
 	if (Cast<AConsumeItem>(_targetItem))
 	{
@@ -203,7 +290,7 @@ void UInventoryWidget::UseItem()
 		_targetItem = nullptr;
 	}
 	ShowItem();
-	UpdateSlot(_targetIndex, _targetItem);
+	//UpdateSlot(_targetIndex, _targetItem);
 }
 
 void UInventoryWidget::CheckCanEquip()
@@ -242,14 +329,14 @@ void UInventoryWidget::CheckCanEquip()
 		break;
 	}
 
-	UpdateEquip();
+	UpdateAllEquipBtn();
 }
 
 void UInventoryWidget::UpdateStat()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		_originStat[i]->SetText(_modStat[i]->GetText());
+		_modStat[i]->SetText(_originStat[i]->GetText());
 		_modStat[i]->SetColorAndOpacity(FSlateColor(FColor(255, 255, 255)));
 	}
 }
@@ -292,6 +379,38 @@ void UInventoryWidget::SetTargetItem(int32 slotIndex)
 
 	_targetItem = item;
 	_targetIndex = slotIndex;
+	ShowItem();
+}
+
+void UInventoryWidget::SetTargetEquip(EItemType equip)
+{
+	ABaseItem* item = nullptr;
+
+	switch (equip)
+	{
+	case EItemType::Helmet:
+		item = Helmet->GetItem();
+		break;
+	case EItemType::UpperArmor:
+		item = UpperArmor->GetItem();
+		break;
+	case EItemType::LowerArmor:
+		item = LowerArmor->GetItem();
+		break;
+	case EItemType::ShoulderArmor:
+		item = ShoulderGuard->GetItem();
+		break;
+	case EItemType::Sword:
+		item = Sword->GetItem();
+		break;
+	case EItemType::Shield:
+		item = Shield->GetItem();
+		break;
+	}
+	if (item == nullptr) return;
+
+	_targetItem = item;
+	_targetIndex = -1;
 	ShowItem();
 }
 
@@ -353,4 +472,34 @@ void UInventoryWidget::TargetItem10()
 void UInventoryWidget::TargetItem11()
 {
 	SetTargetItem(11);
+}
+
+void UInventoryWidget::TargetHemet()
+{
+	SetTargetEquip(EItemType::Helmet);
+}
+
+void UInventoryWidget::TargetShoulder()
+{
+	SetTargetEquip(EItemType::ShoulderArmor);
+}
+
+void UInventoryWidget::TargetUpper()
+{
+	SetTargetEquip(EItemType::UpperArmor);
+}
+
+void UInventoryWidget::TargetLower()
+{
+	SetTargetEquip(EItemType::LowerArmor);
+}
+
+void UInventoryWidget::TargetSword()
+{
+	SetTargetEquip(EItemType::Sword);
+}
+
+void UInventoryWidget::TargetShield()
+{
+	SetTargetEquip(EItemType::Shield);
 }
