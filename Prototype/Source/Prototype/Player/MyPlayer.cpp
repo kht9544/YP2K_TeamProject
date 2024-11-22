@@ -280,6 +280,8 @@ void AMyPlayer::PostInitializeComponents()
 		_KnightanimInstance->_attackDelegate.AddUObject(this, &ACreature::AttackHit);
 		_KnightanimInstance->_deathDelegate_Knight.AddUObject(this, &AMyPlayer::Disable);
 	}
+
+	
 }
 
 // Called every frame
@@ -1085,62 +1087,5 @@ void AMyPlayer::ToggleTransformation()
 	else // 그렇지 않으면 드래곤으로 변환
 	{
 		TransformToDragon();
-	}
-}
-
-void AMyPlayer::SavePlayerState()
-{
-	UMyPlayerSaveGame* SaveGameInstance = Cast<UMyPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UMyPlayerSaveGame::StaticClass()));
-
-	if (GetMesh() && GetMesh()->GetSkeletalMeshAsset())
-	{
-		SaveGameInstance->BodyMeshName = GetMesh()->GetSkeletalMeshAsset()->GetPathName();
-	}
-
-	if (_lowerBodyMesh && _lowerBodyMesh->GetSkeletalMeshAsset())
-	{
-		SaveGameInstance->LowerBodyMeshName = _lowerBodyMesh->GetSkeletalMeshAsset()->GetPathName();
-	}
-	if (_shoulderBodyMesh && _shoulderBodyMesh->GetSkeletalMeshAsset())
-	{
-		SaveGameInstance->ShoulderBodyMeshName = _shoulderBodyMesh->GetSkeletalMeshAsset()->GetPathName();
-	}
-	if (_swordBodyMesh && _swordBodyMesh->GetSkeletalMeshAsset())
-	{
-		SaveGameInstance->SwordBodyMeshName = _swordBodyMesh->GetSkeletalMeshAsset()->GetPathName();
-	}
-	if (_shieldBodyMesh && _shieldBodyMesh->GetSkeletalMeshAsset())
-	{
-		SaveGameInstance->ShieldBodyMeshName = _shieldBodyMesh->GetSkeletalMeshAsset()->GetPathName();
-	}
-
-	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("PlayerSaveSlot"), 0);
-}
-
-void AMyPlayer::LoadPlayerState()
-{
-	UMyPlayerSaveGame* LoadGameInstance = Cast<UMyPlayerSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveSlot"), 0));
-	if (LoadGameInstance)
-	{
-		if (!LoadGameInstance->BodyMeshName.IsEmpty())
-		{
-			GetMesh()->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->BodyMeshName));
-		}
-		if (!LoadGameInstance->LowerBodyMeshName.IsEmpty())
-		{
-			_lowerBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->LowerBodyMeshName));
-		}
-		if (!LoadGameInstance->ShoulderBodyMeshName.IsEmpty())
-		{
-			_shoulderBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->ShoulderBodyMeshName));
-		}
-		if (!LoadGameInstance->SwordBodyMeshName.IsEmpty())
-		{
-			_swordBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->SwordBodyMeshName));
-		}
-		if (!LoadGameInstance->ShieldBodyMeshName.IsEmpty())
-		{
-			_shieldBodyMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *LoadGameInstance->ShieldBodyMeshName));
-		}
 	}
 }

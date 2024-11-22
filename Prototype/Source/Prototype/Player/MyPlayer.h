@@ -91,8 +91,6 @@ public:
 	virtual FString GetUIBaseSound() const override;
 	virtual FString GetLevelUpSound() const override;
 
-	void SavePlayerState();
-	void LoadPlayerState();
 
 private:
 	void Move(const FInputActionValue &value);
@@ -144,12 +142,8 @@ private:
 	float DashTimeElapsed;
 	float DashDuration;
 
-	
-
 	void PerformDash(float DeltaTime);
 	void StartScreenShake();
-
-	
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

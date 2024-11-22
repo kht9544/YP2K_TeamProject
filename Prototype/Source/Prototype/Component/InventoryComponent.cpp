@@ -367,6 +367,18 @@ void UInventoryComponent::UpdateUI()
             UIupdate_equip(SlotName, nullptr);
         }
     }
-
-
 }
+
+void UInventoryComponent::EquipAllItem()
+{
+	UE_LOG(LogTemp, Warning, TEXT("EquipAllItem invencomponent"));
+	for(auto& item : _EquipSlots)
+	{
+		if(item.Value != nullptr)
+		{
+			item.Value->EquipPlayer();
+		}
+		
+	}
+}
+

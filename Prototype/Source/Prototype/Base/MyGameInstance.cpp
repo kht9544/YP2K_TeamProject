@@ -174,7 +174,6 @@ void UMyGameInstance::LoadInventory(class UInventoryComponent *InventoryComponen
 				{
 					EquipItem->SetItemWithCode(ItemData._Code);
 					NewItem = EquipItem;
-
                     InventoryComponent->AddItemToEquip(EquipType,NewItem);
 				}
 			}

@@ -57,6 +57,8 @@ public:
 
 	void UpdateUI();
 
+	void EquipAllItem();
+
 private:
 	//Trigger
 	bool _isSlotFull = false;
