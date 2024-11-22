@@ -96,13 +96,13 @@ void AEquipItem::UnEquip()
     switch (_equipItemType)
     {
     case EItemType::UpperArmor:
-        _player->GetMesh()->SetSkeletalMesh(nullptr);
+        _player->EquipBaseBody();
         break;
     case EItemType::LowerArmor:
-        _player->_lowerBodyMesh->SetSkeletalMesh(nullptr);
+        _player->EquipBaseLower();
         break;
     case EItemType::ShoulderArmor:
-        _player->_shoulderBodyMesh->SetSkeletalMesh(nullptr);
+        _player->EquipBaseShoulder();
         break;
     case EItemType::Sword:
         _player->_swordBodyMesh->SetSkeletalMesh(nullptr);

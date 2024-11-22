@@ -65,6 +65,11 @@ public:
 
 	void SetEquipItem(EItemType equiptype, AEquipItem* equipitem);
 
+	
+	void EquipBaseBody();
+	void EquipBaseLower();
+	void EquipBaseShoulder();
+
 	// Animation
 	float GetVertical() { return _vertical; }
 	float GetHorizontal() { return _horizontal; }
@@ -222,6 +227,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class USkeletalMeshComponent* _shieldBodyMesh;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Decal, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class AMyDecal> _decal;

@@ -416,6 +416,36 @@ void AMyPlayer::SetEquipItem(EItemType equiptype, AEquipItem *equipitem)
 	// TODO:Update UI
 }
 
+void AMyPlayer::EquipBaseBody()
+{
+	USkeletalMesh* LoadedMesh = Cast<USkeletalMesh>(StaticLoadObject(USkeletalMesh::StaticClass(), nullptr, TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Face_Pos.Free_Body_Face_Pos'")));
+    if (LoadedMesh)
+    {
+       GetMesh()->SetSkeletalMesh(LoadedMesh);
+    }	 
+}
+
+void AMyPlayer::EquipBaseLower()
+{
+	USkeletalMesh* LoadedMesh = Cast<USkeletalMesh>(StaticLoadObject(USkeletalMesh::StaticClass(), nullptr, TEXT("/Script/Engine.SkeletalMesh'/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Bottom_Pos.Free_Body_Bottom_Pos'")));
+    if (LoadedMesh)
+    {
+       _lowerBodyMesh->SetSkeletalMesh(LoadedMesh);
+    }
+
+	
+}
+
+void AMyPlayer::EquipBaseShoulder()
+{
+	USkeletalMesh* LoadedMesh = Cast<USkeletalMesh>(StaticLoadObject(USkeletalMesh::StaticClass(), nullptr, TEXT("/Game/ParagonGreystone/Characters/Heroes/Greystone/Source/Free_WhiteTiger_Detach/Free_Body_Arms_Pos.Free_Body_Arms_Pos")));
+    if (LoadedMesh)
+    {
+        _shoulderBodyMesh->SetSkeletalMesh(LoadedMesh);
+    }
+
+}
+
 FString AMyPlayer::GetSwingSoundName() const
 {
 	return "SwingSound_Sword_01";
