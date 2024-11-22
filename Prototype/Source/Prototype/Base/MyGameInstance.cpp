@@ -188,7 +188,6 @@ void UMyGameInstance::SavePlayerSkeletal(class AMyPlayer* player)
 {
     if (player)
     {
-        // 스켈레탈 메시 저장
         _savedBodyMesh = player->GetMesh() ? player->GetMesh()->SkeletalMesh : nullptr;
         _savedLowerBodyMesh = player->_lowerBodyMesh ? player->_lowerBodyMesh->SkeletalMesh : nullptr;
         _savedShoulderBodyMesh = player->_shoulderBodyMesh ? player->_shoulderBodyMesh->SkeletalMesh : nullptr;
@@ -201,7 +200,6 @@ void UMyGameInstance::LoadPlayerSkeletal(class AMyPlayer* player)
 {
     if (player)
     {
-        // 저장된 스켈레탈 메시가 있으면 설정
         if (_savedBodyMesh && player->GetMesh())
         {
             player->GetMesh()->SetSkeletalMesh(_savedBodyMesh);
