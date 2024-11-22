@@ -59,6 +59,9 @@ void ABossObstacle::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 
 		EffectManager->Play(*GetObstacleBreakEffect(), ObstacleMesh->GetComponentLocation());
 		SoundManager->PlaySound(*GetObstacleBreakSound(), ObstacleMesh->GetComponentLocation());
+
+		OnDestroyedEvent.Broadcast();
+
 		Destroy();
 	}
 	
