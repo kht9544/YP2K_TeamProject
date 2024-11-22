@@ -230,9 +230,6 @@ void AMyPlayer::BeginPlay()
 	SkillOnCooldown.Init(false, 4);
 
 
-
-
-
 	if (DragonClass)
 	{
 		// DragonClass가 설정되었으면 DragonInstance를 생성
@@ -244,6 +241,7 @@ void AMyPlayer::BeginPlay()
 		// 드래곤 인스턴스 스폰
 		_dragonInstance = GetWorld()->SpawnActor<ADragon>(DragonClass, SpawnLocation, SpawnRotation, SpawnParams);
 	}
+
 
 }
 
@@ -281,7 +279,6 @@ void AMyPlayer::PostInitializeComponents()
 		_KnightanimInstance->_deathDelegate_Knight.AddUObject(this, &AMyPlayer::Disable);
 	}
 
-	
 }
 
 // Called every frame
@@ -533,6 +530,7 @@ FString AMyPlayer::GetLevelUpSound() const
 
 void AMyPlayer::Move(const FInputActionValue &value)
 {
+	
 	if (bIsGuarding)
 		return;
 	FVector2D MovementVector = value.Get<FVector2D>();

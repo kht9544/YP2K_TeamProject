@@ -44,6 +44,7 @@ void AStage1BossGameModeBase::BeginPlay()
 			{
 				GameInstance->LoadInventory(InvenComponent);
 			}
+			GameInstance->LoadPlayerSkeletal(player);
 		}
 	}
 

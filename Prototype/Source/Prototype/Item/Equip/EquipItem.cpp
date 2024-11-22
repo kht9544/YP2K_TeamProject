@@ -66,18 +66,23 @@ void AEquipItem::EquipPlayer()
         switch (_equipItemType)
         {
         case EItemType::UpperArmor:
+            UE_LOG(LogTemp, Warning, TEXT("Upper"));
             _player->GetMesh()->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::LowerArmor:
+            UE_LOG(LogTemp, Warning, TEXT("Lower"));
             _player->_lowerBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::ShoulderArmor:
+            UE_LOG(LogTemp, Warning, TEXT("Shoulder"));
             _player->_shoulderBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::Sword:
+             UE_LOG(LogTemp, Warning, TEXT("Sword"));
             _player->_swordBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         case EItemType::Shield:
+            UE_LOG(LogTemp, Warning, TEXT("Sheid"));
             _player->_shieldBodyMesh->SetSkeletalMesh(_equipItem);
             break;
         default:

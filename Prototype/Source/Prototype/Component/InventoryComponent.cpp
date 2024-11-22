@@ -6,6 +6,7 @@
 #include "Base/MyGameInstance.h"
 #include "Base/Managers/UIManager.h"
 #include "UI/InventoryWidget.h"
+#include "Player/MyPlayer.h"
 
 #include "Item/BaseItem.h"
 #include "Item/Equip/EquipItem.h"
@@ -236,7 +237,7 @@ void UInventoryComponent::StripEquip(FString part)
 	if (_EquipSlots[part] == nullptr)
 		return;
 
-	AEquipItem* equipment = _EquipSlots[part];
+	AEquipItem *equipment = _EquipSlots[part];
 
 	if (_isSlotFull)
 	{
@@ -269,11 +270,10 @@ void UInventoryComponent::UIupdate_Pop(FString part)
 void UInventoryComponent::UIupdate_equip(FString slot, ABaseItem *item)
 {
 	if (UIManager && UIManager->GetInventoryUI())
-    {
-        UIManager->GetInventoryUI()->UpdateEquipSlot(slot,item);
-    }
+	{
+		UIManager->GetInventoryUI()->UpdateEquipSlot(slot, item);
+	}
 }
-
 
 void UInventoryComponent::AddItemToSlot(ABaseItem *Item)
 {
@@ -293,14 +293,13 @@ void UInventoryComponent::AddItemToSlot(ABaseItem *Item)
 	}
 }
 
-void UInventoryComponent::AddItemToEquip(FString EquipSlot,class ABaseItem* NewItem)
+void UInventoryComponent::AddItemToEquip(FString EquipSlot, class ABaseItem *NewItem)
 {
-	AEquipItem* EquipItem = Cast<AEquipItem>(NewItem);
-	if(EquipItem)
+	AEquipItem *EquipItem = Cast<AEquipItem>(NewItem);
+	if (EquipItem)
 	{
-		_EquipSlots.Add(EquipSlot,EquipItem);
+		_EquipSlots.Add(EquipSlot, EquipItem);
 	}
-	
 }
 
 void UInventoryComponent::ShowItemSlots()
@@ -314,7 +313,6 @@ void UInventoryComponent::ShowItemSlots()
 		}
 		else
 		{
-			// 슬롯에 아이템이 없을 경우
 			UE_LOG(LogTemp, Warning, TEXT("Slot %d: Empty"), i);
 		}
 	}
@@ -338,7 +336,6 @@ void UInventoryComponent::UpdateUI()
 	{
 		if (_ItemSlots.IsValidIndex(i) && _ItemSlots[i] != nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("updateUi itemslot : %d"), i);
 			UIupdate_Add(i, _ItemSlots[i]);
 		}
 	}
@@ -351,34 +348,35 @@ void UInventoryComponent::UpdateUI()
 		}
 	}
 
-	for (const auto& EquipSlot : _EquipSlots)
-    {
-        FString SlotName = EquipSlot.Key;
-        AEquipItem* EquipItem = EquipSlot.Value;
-        
-        if (EquipItem != nullptr)
-        {
-            UE_LOG(LogTemp, Warning, TEXT("updateUi equip slot : %s"), *SlotName);
-            UIupdate_equip(SlotName, EquipItem);
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("updateUi equip slot : %s is empty"), *SlotName);
-            UIupdate_equip(SlotName, nullptr);
-        }
-    }
+	for (const auto &EquipSlot : _EquipSlots)
+	{
+		FString SlotName = EquipSlot.Key;
+		AEquipItem *EquipItem = EquipSlot.Value;
+
+		if (EquipItem != nullptr)
+		{
+			UIupdate_equip(SlotName, EquipItem);
+		}
+		else
+		{
+			UIupdate_equip(SlotName, nullptr);
+		}
+	}
 }
 
 void UInventoryComponent::EquipAllItem()
 {
-	UE_LOG(LogTemp, Warning, TEXT("EquipAllItem invencomponent"));
-	for(auto& item : _EquipSlots)
+	AMyPlayer *player = Cast<AMyPlayer>(GetOwner());
+
+	if (player != nullptr)
 	{
-		if(item.Value != nullptr)
+		for (auto &item : _EquipSlots)
 		{
-			item.Value->EquipPlayer();
+			if (item.Value != nullptr)
+			{
+				item.Value->SetOwner(player);
+				item.Value->EquipPlayer();
+			}
 		}
-		
 	}
 }
-

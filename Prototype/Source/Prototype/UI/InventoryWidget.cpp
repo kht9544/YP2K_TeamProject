@@ -116,16 +116,7 @@ void UInventoryWidget::UpdateAllEquipBtn()
 }
 
 void UInventoryWidget::UpdateEquipSlot(FString slot, ABaseItem* item)
-{
-	if (item)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateEquipSlot: %s - Item: %s"), *slot, *item->GetName());
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("UpdateEquipSlot: %s - Item: None"), *slot);
-    }
-	
+{	
     if (slot == TEXT("Helmet"))
     {
         Helmet->SetItem(item);
