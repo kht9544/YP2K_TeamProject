@@ -88,20 +88,19 @@ void UStatWidget::StatUpdate(StatType type, int amount)
 	switch (type)
 	{
 	case StatType::HP:
-		// 여기서 각 함수내용들 넣어서 처리
-		//  UI 변수 함수 간편화
+		HPNum->SetText(FText::AsNumber(amount));
 		break;
 	case StatType::MP:
+		MPNum->SetText(FText::AsNumber(amount));
 		break;
 	case StatType::STR:
+		STRNum->SetText(FText::AsNumber(amount));
 		break;
 	case StatType::DEX:
+		DEXNum->SetText(FText::AsNumber(amount));
 		break;
 	case StatType::INT:
-		break;
-	case StatType::CurHP:
-		break;
-	case StatType::CurMP:
+		INTNum->SetText(FText::AsNumber(amount));
 		break;
 	default:
 		break;
