@@ -273,6 +273,7 @@ void UInventoryWidget::UseItem()
 			if (!part.IsEmpty())
 			{
 				EquipStrip.Broadcast(part);
+				_targetItem = nullptr;
 				UpdateStat();
 			}
 		}

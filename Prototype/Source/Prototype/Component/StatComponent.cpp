@@ -240,6 +240,8 @@ void UStatComponent::SetMaxHp(int32 newMaxHp)
 	_maxHp = Data->MaxHP;
 	_maxHp = FMath::Clamp(newMaxHp, 0, 10000);
 
+	UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::HP, _maxHp);
+	UIManager->GetInventoryUI()->UpdateStat();
 }
 
 void UStatComponent::SetMaxMp(int32 newMaxMp)
@@ -252,6 +254,8 @@ void UStatComponent::SetMaxMp(int32 newMaxMp)
 	_maxMp = Data->MaxMP;
 	_maxMp = FMath::Clamp(newMaxMp, 0, 10000);
 
+	UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::MP, _maxMp);
+	UIManager->GetInventoryUI()->UpdateStat();
 }
 
 void UStatComponent::SetBonusPoint(int32 newBp)
@@ -273,6 +277,9 @@ void UStatComponent::SetStr(int32 newstr)
 
 	_str = Data->STR;
 	_str = FMath::Clamp(newstr, 0, 100);
+
+	UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::STR, _str);
+	UIManager->GetInventoryUI()->UpdateStat();
 }
 
 void UStatComponent::SetDex(int32 newdex)
@@ -284,6 +291,9 @@ void UStatComponent::SetDex(int32 newdex)
 
 	_dex = Data->DEX;
 	_dex = FMath::Clamp(newdex, 0, 100);
+
+	UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::DEX, _dex);
+	UIManager->GetInventoryUI()->UpdateStat();
 }
 
 void UStatComponent::SetInt(int32 newint)
@@ -294,6 +304,9 @@ void UStatComponent::SetInt(int32 newint)
 
 	_int = Data->INT;
 	_int = FMath::Clamp(newint, 0, 100);
+
+	UIManager->GetInventoryUI()->UpdateOriginStat((int32)StatType::INT, _int);
+	UIManager->GetInventoryUI()->UpdateStat();
 }
 
 void UStatComponent::SetExp(int32 newexp)
