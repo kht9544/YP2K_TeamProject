@@ -61,17 +61,8 @@ void UBoss1Widget::UpdateObstacleIcons(int32 DestroyCount)
 {
     if (ObstacleIcons.Num() > 0)
 	{
-		for (int32 i = ObstacleIcons.Num()-1; i >= 0 ; i--)
-		{
-			if (i < DestroyCount)
-			{
-				ObstacleIcons[i]->SetVisibility(ESlateVisibility::Hidden);
-			}
-			else
-			{
-				ObstacleIcons[i]->SetVisibility(ESlateVisibility::Visible);
-			}
-		}
+		ObstacleIcons[ObstacleIcons.Num()-1]->SetVisibility(ESlateVisibility::Hidden);
+		ObstacleIcons.Pop();
 	}
 }
 
