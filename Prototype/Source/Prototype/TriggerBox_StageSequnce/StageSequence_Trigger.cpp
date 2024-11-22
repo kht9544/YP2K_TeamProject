@@ -30,6 +30,10 @@
 #include "Player/Creature.h"
 #include "Blueprint/UserWidget.h"
 
+#include "GameFramework/PlayerController.h"
+#include "Player/MyPlayerController.h"
+
+
 // Sets default values
 AStageSequence_Trigger::AStageSequence_Trigger()
 {
@@ -92,8 +96,10 @@ void AStageSequence_Trigger::Tick(float DeltaTime)
 
 void AStageSequence_Trigger::OnTriggerEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+    // 보스 체력바 위젯
     UIManager->CloseUI(UI_LIST::Boss);
   
+    // 기사 체력바 위젯
     ACreature* Creature = Cast<ACreature>(OtherActor);
     if (Creature)
     {
@@ -107,6 +113,8 @@ void AStageSequence_Trigger::OnTriggerEnter(UPrimitiveComponent* OverlappedCompo
         // 트리거된 액터를 기록
         TriggeredActor = OtherActor;
 
+        // 스킬 위젯
+        HideSkillWidget();
 
         if (OtherActor && OtherActor->IsA(ACharacter::StaticClass()))
         {
@@ -129,8 +137,10 @@ void AStageSequence_Trigger::PlaySequence()
 
 void AStageSequence_Trigger::OnSequenceFinished()
 {
+    // 보스 체력바 위젯
     UIManager->OpenUI(UI_LIST::Boss);
 
+    // 기사 체력바 위젯
     if(TriggeredActor && TriggeredActor->IsA(ACreature::StaticClass()))
     {
         ACreature* Creature = Cast<ACreature>(TriggeredActor);
@@ -140,7 +150,38 @@ void AStageSequence_Trigger::OnSequenceFinished()
         }
     }
  
+    // 스킬 위젯
+    ShowSkillWidget();
+
     Destroy();
+}
+
+void AStageSequence_Trigger::HideSkillWidget()
+{
+    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+    if (PlayerController)
+    {
+        AMyPlayerController* MyPlayerController = Cast<AMyPlayerController>(PlayerController);
+        if (MyPlayerController && MyPlayerController->SkillWidgetInstance)
+        {
+            MyPlayerController->SkillWidgetInstance->SetVisibility(ESlateVisibility::Hidden);
+            UE_LOG(LogTemp, Log, TEXT("SkillWidgetInstance hidden"));
+        }
+    }
+}
+
+void AStageSequence_Trigger::ShowSkillWidget()
+{
+    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+    if (PlayerController)
+    {
+        AMyPlayerController* MyPlayerController = Cast<AMyPlayerController>(PlayerController);
+        if (MyPlayerController && MyPlayerController->SkillWidgetInstance)
+        {
+            MyPlayerController->SkillWidgetInstance->SetVisibility(ESlateVisibility::Visible);
+            UE_LOG(LogTemp, Log, TEXT("SkillWidgetInstance visible"));
+        }
+    }
 }
 
 

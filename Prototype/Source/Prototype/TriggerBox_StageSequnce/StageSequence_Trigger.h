@@ -62,4 +62,8 @@ public:
 
     AActor* TriggeredActor;
 
+private:
+    void HideSkillWidget();
+    void ShowSkillWidget();
+
 };
