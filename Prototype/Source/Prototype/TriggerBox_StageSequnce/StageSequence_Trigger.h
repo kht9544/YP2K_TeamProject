@@ -14,8 +14,9 @@
 #include "StageSequence_Trigger.generated.h"
 
 
-//class UBoss1Widget;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMinimapVisibilityChanged);
 
+class UUserWidget;
 UCLASS()
 class PROTOTYPE_API AStageSequence_Trigger : public AActor
 {
@@ -24,6 +25,14 @@ class PROTOTYPE_API AStageSequence_Trigger : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AStageSequence_Trigger();
+
+    // Minimap의 표시 상태 변경 이벤트
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnMinimapVisibilityChanged OnHideMinimap;
+
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnMinimapVisibilityChanged OnShowMinimap;
+
 
 protected:
 	// Called when the game starts or when spawned

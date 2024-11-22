@@ -51,6 +51,7 @@ AStageSequence_Trigger::AStageSequence_Trigger()
 
 }
 
+
 // Called when the game starts or when spawned
 void AStageSequence_Trigger::BeginPlay()
 {
@@ -85,6 +86,9 @@ void AStageSequence_Trigger::BeginPlay()
         }
     }
  
+
+
+
 }
 
 // Called every frame
@@ -115,6 +119,11 @@ void AStageSequence_Trigger::OnTriggerEnter(UPrimitiveComponent* OverlappedCompo
 
         // 스킬 위젯
         HideSkillWidget();
+
+        // 미니맵 블루프린트 시도
+        UE_LOG(LogTemp, Error, TEXT("Broadcasting OnHideMinimap Delegate"));
+        OnHideMinimap.Broadcast();
+
 
         if (OtherActor && OtherActor->IsA(ACharacter::StaticClass()))
         {
@@ -153,6 +162,13 @@ void AStageSequence_Trigger::OnSequenceFinished()
     // 스킬 위젯
     ShowSkillWidget();
 
+    // 미니맵 블루프린트 시도
+    UE_LOG(LogTemp, Error, TEXT("Broadcasting OnShowMinimap Delegate"));
+    OnShowMinimap.Broadcast();
+
+
+
+
     Destroy();
 }
 
@@ -165,7 +181,6 @@ void AStageSequence_Trigger::HideSkillWidget()
         if (MyPlayerController && MyPlayerController->SkillWidgetInstance)
         {
             MyPlayerController->SkillWidgetInstance->SetVisibility(ESlateVisibility::Hidden);
-            UE_LOG(LogTemp, Log, TEXT("SkillWidgetInstance hidden"));
         }
     }
 }
@@ -179,7 +194,6 @@ void AStageSequence_Trigger::ShowSkillWidget()
         if (MyPlayerController && MyPlayerController->SkillWidgetInstance)
         {
             MyPlayerController->SkillWidgetInstance->SetVisibility(ESlateVisibility::Visible);
-            UE_LOG(LogTemp, Log, TEXT("SkillWidgetInstance visible"));
         }
     }
 }
