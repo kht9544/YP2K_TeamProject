@@ -3,3 +3,4 @@
 /DerivedDataCache
 /.vscode
 /Intermediate
+GIT_LFS_SKIP_SMUDGE=1 git pull origin main
