@@ -1,0 +1,11 @@
+Large_Volcanic_Rock_001/T_GDC_LargeVocanicRock_001_D2_R.uasset filter=lfs diff=lfs merge=lfs -text
+Large_Volcanic_Rock_001/T_GDC_LargeVolcanicRock_001_N.uasset filter=lfs diff=lfs merge=lfs -text
+Mountain_RockFace_002/T_MountainRock_Closed_D2.uasset filter=lfs diff=lfs merge=lfs -text
+Mountain_RockFace_002/T_MountainRock_Closed_N.uasset filter=lfs diff=lfs merge=lfs -text
+Mountain_RockFace_002/T_MountainRock_D.uasset filter=lfs diff=lfs merge=lfs -text
+Mountain_RockFace_002/T_MountainRock_N.uasset filter=lfs diff=lfs merge=lfs -text
+Large_Volcanic_Rock_001/T_GDC_LargeVolcanicRock_001_D2_R.uasset filter=lfs diff=lfs merge=lfs -text
+Scree001/T_Scree_001_D_CC.uasset filter=lfs diff=lfs merge=lfs -text
+Scree001/T_Scree_001_N.uasset filter=lfs diff=lfs merge=lfs -text
+Scree002/T_Scree002_D_R.uasset filter=lfs diff=lfs merge=lfs -text
+Scree002/T_Scree002_N.uasset filter=lfs diff=lfs merge=lfs -text
